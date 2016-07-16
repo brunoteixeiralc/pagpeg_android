@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:layout_marginBottom="12dp">
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/logoStore"
+        android:src="@drawable/carrefour_img"
+        tools:ignore="ContentDescription"
+        android:scaleType="fitXY"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginLeft="8dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="Carrefour"
+                android:gravity="start"
+                android:textAlignment="viewStart"
+                android:textColor="@android:color/black"/>
+
+            <TextView
+                android:id="@+id/km"
+                android:layout_width="0dp"
+                android:layout_weight="0.5"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:text="3.2 km"
+                android:gravity="end"
+                fontPath="fonts/Nexa-Bold.ttf"
+                tools:ignore="MissingPrefix"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Av. Fernão Dias Paes Leme, 391 - Centro - Várzea Pta"
+            android:textSize="12sp"
+            android:gravity="start"/>
+
+         <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal">-->
+
+<!--            <ImageView
+                android:layout_width="24dp"
+                android:src="@drawable/ic_shoppers"
+                android:id="@+id/iconShopper"
+                android:layout_height="24dp"
+                tools:ignore="ContentDescription" />-->
+
+            <TextView
+                android:id="@+id/shoppers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="10 shoppers"
+                android:textSize="12sp"
+                android:gravity="end"
+                android:textColor="@color/colorPrimary"
+                android:textStyle="normal|bold"/>
+
+            <!-- </LinearLayout>-->
+
+      </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>
