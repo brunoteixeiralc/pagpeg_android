@@ -4,11 +4,13 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.ClusterMarkerLocation;
@@ -17,11 +19,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdate;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterManager;
 
@@ -38,21 +37,36 @@ import permissions.dispatcher.RuntimePermissions;
 public class MapFragment extends Fragment implements com.google.android.gms.maps.OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     private GoogleMap gMap;
-    private static View view;
+    private View view;
     private SupportMapFragment mapFragment;
     private GoogleApiClient googleApiClient;
     protected LatLng mCenterLocation;
+    private ImageView mIconListImageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.map_frag, container, false);
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+        try {
+            view = inflater.inflate(R.layout.map_frag, container, false);
+        } catch (InflateException e) {
+        }
 
         setRetainInstance(true);
 
+        //Toolbar MainActivity
+        Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
+        toolbarMainActivity.setVisibility(View.VISIBLE);
+        toolbarMainActivity.setTitle("Lojas nas proximidades");
+        mIconListImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_listStore);
+        mIconListImageView.setVisibility(View.VISIBLE);
+
         mapFragment = (com.google.android.gms.maps.SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(MapFragment.this);
-
         googleApiClient = new GoogleApiClient.Builder(MapFragment.this.getActivity())
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)

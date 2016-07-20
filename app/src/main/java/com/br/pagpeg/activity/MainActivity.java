@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.br.pagpeg.R;
+import com.br.pagpeg.fragment.CartFragment;
 import com.br.pagpeg.fragment.MapFragment;
 import com.br.pagpeg.fragment.StoreListFragment;
 import com.roughike.bottombar.BottomBar;
@@ -26,7 +27,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity {
 
-    private BottomBar mBottomBar;
+    public BottomBar mBottomBar;
     private Toolbar toolbar;
     private Fragment fragment;
     private ImageView mIconListImageView;
@@ -67,56 +68,64 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
         mBottomBar = BottomBar.attach(this, savedInstanceState);
+        mBottomBar.noNavBarGoodness();
         mBottomBar.setActiveTabColor(getResources().getColor(R.color.colorPrimary));
-        mBottomBar.useFixedMode();
-        mBottomBar.noTopOffset();
-
         mBottomBar.setItems(R.menu.bottombar_menu);
+        mBottomBar.selectTabAtPosition(1,true);
+
         mBottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
             @Override
             public void onMenuTabSelected(@IdRes int menuItemId) {
                 switch (menuItemId){
+
                     case R.id.bottomBarItemOne:
-                        toolbar.setTitle("Bruno Lemgruber");
+                        mIconMapImageView.setVisibility(View.GONE);
+                        mIconListImageView.setVisibility(View.GONE);
                         //fragment = new BarCodeFragment();
                         break;
                     case R.id.bottomBarItemTwo:
-                        toolbar.setTitle("Lojas nas proximidades");
+                        mIconMapImageView.setVisibility(View.GONE);
+                        mIconListImageView.setVisibility(View.VISIBLE);
                         fragment = new MapFragment();
                         break;
                     case R.id.bottomBarItemThree:
-                        toolbar.setTitle("Carrinho");
-                        //fragment = new ComprasFragment();
+                        mIconMapImageView.setVisibility(View.GONE);
+                        mIconListImageView.setVisibility(View.GONE);
+                        fragment = new CartFragment();
                         break;
                 }
 
                 if(fragment != null)
-                    getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
             }
 
             @Override
             public void onMenuTabReSelected(@IdRes int menuItemId) {
                 switch (menuItemId){
                     case R.id.bottomBarItemOne:
+                        mIconMapImageView.setVisibility(View.GONE);
+                        mIconListImageView.setVisibility(View.GONE);
                         //fragment = new BarCodeFragment();
                         break;
                     case R.id.bottomBarItemTwo:
+                        mIconMapImageView.setVisibility(View.GONE);
+                        mIconListImageView.setVisibility(View.VISIBLE);
                         fragment = new MapFragment();
                         break;
                     case R.id.bottomBarItemThree:
-                        //fragment = new ComprasFragment();
+                        mIconMapImageView.setVisibility(View.GONE);
+                        mIconListImageView.setVisibility(View.GONE);
+                        fragment = new CartFragment();
                         break;
                     default:break;
                 }
 
                 if(fragment != null)
-                    getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
             }
         });
 
-        mBottomBar.selectTabAtPosition(1,true);
         BottomBarBadge unreadMessages = mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), 13);
         unreadMessages.setAutoShowAfterUnSelection(true);
     }
@@ -124,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
-
         mBottomBar.onSaveInstanceState(outState);
     }
 

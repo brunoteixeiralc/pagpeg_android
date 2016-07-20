@@ -12,40 +12,40 @@ import com.br.pagpeg.model.Store;
 import java.util.List;
 
 /**
- * Created by brunolemgruber on 15/07/16.
+ * Created by brunolemgruber on 19/07/16.
  */
 
-public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHolder> {
+public class CCAdapter extends RecyclerView.Adapter<CCAdapter.CCViewHolder>{
 
     protected static final String TAG = "pagpeg";
     private final List<Store> stores;
-    private StoreOnClickListener storeOnClickListener;
+    private CCAdapter.CCOnClickListener ccOnClickListener;
     private final Context context;
 
-    public StoreAdapter(StoreOnClickListener storeOnClickListener,Context context, List<Store> stores) {
+    public CCAdapter(CCAdapter.CCOnClickListener ccOnClickListener, Context context, List<Store> stores) {
         this.context = context;
         this.stores = stores;
-        this.storeOnClickListener = storeOnClickListener;
+        this.ccOnClickListener = ccOnClickListener;
     }
 
     @Override
     public int getItemCount() {
         //return this.stores.size();
-        return 10;
+        return 3;
     }
 
     @Override
-    public StoreViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public CCAdapter.CCViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Infla a view do layout
-        View view = LayoutInflater.from(context).inflate(R.layout.storelist_item, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.cc_manage_item, viewGroup, false);
 
         // Cria o ViewHolder
-        StoreViewHolder holder = new StoreViewHolder(view);
+        CCAdapter.CCViewHolder holder = new CCAdapter.CCViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(final StoreViewHolder holder, final int position) {
+    public void onBindViewHolder(final CCAdapter.CCViewHolder holder, final int position) {
         // Atualiza a view
 //        Friend a = friends.get(position);
 //
@@ -54,11 +54,11 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
 //        holder.img.setImageResource(a.getImg());
 
         // Click
-        if (storeOnClickListener != null) {
+        if (ccOnClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    storeOnClickListener.onClickSticker(holder.itemView, position); // A variável position é final
+                    ccOnClickListener.onClickSticker(holder.itemView, position); // A variável position é final
                 }
             });
 
@@ -68,19 +68,19 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
 
     }
 
-    public interface StoreOnClickListener  {
+    public interface CCOnClickListener  {
         public void onClickSticker(View view, int idx);
     }
 
 
     // ViewHolder com as views
-    public static class StoreViewHolder extends RecyclerView.ViewHolder {
+    public static class CCViewHolder extends RecyclerView.ViewHolder {
 
         //        public TextView nome;
 //        public ImageView img;
 //
 //
-        public StoreViewHolder(View view) {
+        public CCViewHolder(View view) {
             super(view);
 //            // Cria as views para salvar no ViewHolder
 //            nome = (TextView) view.findViewById(R.id.nome);
@@ -88,5 +88,4 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
 //
         }
     }
-
 }
