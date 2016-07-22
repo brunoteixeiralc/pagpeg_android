@@ -11,14 +11,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.br.pagpeg.R;
-import com.br.pagpeg.adapter.CCAdapter;
+import com.br.pagpeg.adapter.CreditCardAdapter;
 import com.br.pagpeg.utils.DividerItemDecoration;
 
 /**
  * Created by brunolemgruber on 19/07/16.
  */
 
-public class CCManageFragment extends Fragment {
+public class CreditCardFragment extends Fragment {
 
 
     private static View view;
@@ -30,24 +30,24 @@ public class CCManageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.cc_manage_frag, container, false);
+        view = inflater.inflate(R.layout.content_credit_card, container, false);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mLayoutManager = new LinearLayoutManager(CCManageFragment.this.getActivity());
+        mLayoutManager = new LinearLayoutManager(CreditCardFragment.this.getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
 
-        mAdapter = new CCAdapter(onClickListener(),CCManageFragment.this.getContext(),null);
+        mAdapter = new CreditCardAdapter(onClickListener(),CreditCardFragment.this.getContext(),null);
         recyclerView.setAdapter(mAdapter);
 
-        recyclerView.addItemDecoration(new DividerItemDecoration(CCManageFragment.this.getContext(),LinearLayoutManager.VERTICAL));
+        recyclerView.addItemDecoration(new DividerItemDecoration(CreditCardFragment.this.getContext(),LinearLayoutManager.VERTICAL));
 
         return  view;
     }
 
-    private CCAdapter.CCOnClickListener onClickListener() {
-        return new CCAdapter.CCOnClickListener() {
+    private CreditCardAdapter.CCOnClickListener onClickListener() {
+        return new CreditCardAdapter.CCOnClickListener() {
             @Override
             public void onClickSticker(View view, int idx) {
 

@@ -15,14 +15,14 @@ import java.util.List;
  * Created by brunolemgruber on 19/07/16.
  */
 
-public class CCAdapter extends RecyclerView.Adapter<CCAdapter.CCViewHolder>{
+public class CreditCardAdapter extends RecyclerView.Adapter<CreditCardAdapter.CCViewHolder>{
 
     protected static final String TAG = "pagpeg";
     private final List<Store> stores;
-    private CCAdapter.CCOnClickListener ccOnClickListener;
+    private CreditCardAdapter.CCOnClickListener ccOnClickListener;
     private final Context context;
 
-    public CCAdapter(CCAdapter.CCOnClickListener ccOnClickListener, Context context, List<Store> stores) {
+    public CreditCardAdapter(CreditCardAdapter.CCOnClickListener ccOnClickListener, Context context, List<Store> stores) {
         this.context = context;
         this.stores = stores;
         this.ccOnClickListener = ccOnClickListener;
@@ -35,17 +35,17 @@ public class CCAdapter extends RecyclerView.Adapter<CCAdapter.CCViewHolder>{
     }
 
     @Override
-    public CCAdapter.CCViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public CreditCardAdapter.CCViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Infla a view do layout
-        View view = LayoutInflater.from(context).inflate(R.layout.cc_manage_item, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_credit_card, viewGroup, false);
 
         // Cria o ViewHolder
-        CCAdapter.CCViewHolder holder = new CCAdapter.CCViewHolder(view);
+        CreditCardAdapter.CCViewHolder holder = new CreditCardAdapter.CCViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(final CCAdapter.CCViewHolder holder, final int position) {
+    public void onBindViewHolder(final CreditCardAdapter.CCViewHolder holder, final int position) {
         // Atualiza a view
 //        Friend a = friends.get(position);
 //

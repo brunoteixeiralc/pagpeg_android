@@ -10,18 +10,17 @@ import android.view.ViewGroup;
 import com.br.pagpeg.R;
 
 /**
- * Created by brunolemgruber on 19/07/16.
+ * Created by brunolemgruber on 21/07/16.
  */
 
-public class FindShopperFragment extends Fragment {
+public class PickUpReadyFragment extends Fragment {
 
     private View view;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-        view = inflater.inflate(R.layout.content_find_shopper, container, false);
+        view = inflater.inflate(R.layout.content_pickup_ready, container, false);
 
         return view;
     }

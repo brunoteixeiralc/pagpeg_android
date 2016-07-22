@@ -53,7 +53,7 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback{
                 parent.removeView(view);
         }
         try {
-            view = inflater.inflate(R.layout.storedetailcat_frag, container, false);
+            view = inflater.inflate(R.layout.content_store_detail, container, false);
         } catch (InflateException e) {
         }
 

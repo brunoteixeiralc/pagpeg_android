@@ -52,7 +52,7 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
                 parent.removeView(view);
         }
         try {
-            view = inflater.inflate(R.layout.map_frag, container, false);
+            view = inflater.inflate(R.layout.content_map, container, false);
         } catch (InflateException e) {
         }
 

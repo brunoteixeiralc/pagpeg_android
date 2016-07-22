@@ -21,9 +21,9 @@ public class IntroActivity extends AppIntro2 {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addSlide(SlideFragment.newInstance(R.layout.intro1));
-        addSlide(SlideFragment.newInstance(R.layout.intro2));
-        addSlide(SlideFragment.newInstance(R.layout.intro3));
+        addSlide(SlideFragment.newInstance(R.layout.wizard1));
+        addSlide(SlideFragment.newInstance(R.layout.wizard2));
+        addSlide(SlideFragment.newInstance(R.layout.wizard3));
 
     }
 

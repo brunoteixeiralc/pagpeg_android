@@ -1,7 +1,6 @@
 <resources>
 
     <string name="API_KEY_MAPS">AIzaSyBA0_YHih-j6VuOuaL6Kfx0MPT4zaptIt8</string>
-
     <string name="app_name">pagpeg</string>
     <string name="intro1">O usuário seleciona a loja e já pode ir adicionando os produtos no carrinho e ao final paga pelo próprio aplicativo</string>
     <string name="intro2">No horário agendado, o usuário se dirige até a loja desejada para pegar a sua compra que estará pronto para ser entregue</string>
@@ -9,7 +8,9 @@
     <string name="intro1_title">Crie sua lista de compra</string>
     <string name="intro2_title">Ir até a loja</string>
     <string name="intro3_title">Pegar a compra</string>
-    <string name="desc_teste">bla bla bla blabla bla bla blabla bla bla blabla bla bla blabla bla bla blabla bla bla bla
+    <string name="desc_product_test">bla bla bla blabla bla bla blabla bla bla blabla bla bla blabla bla bla blabla bla bla bla
     bla bla bla blavbla bla bla blabla bla bla bla
     bla bla bla blabla bla bla blabla bla bla blabla bla bla blabla bla bla blabla bla bla bla</string>
+
 </resources>
+

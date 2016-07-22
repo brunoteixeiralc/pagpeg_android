@@ -34,7 +34,7 @@ public class StoreListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.storelist_frag, container, false);
+        view = inflater.inflate(R.layout.list_store, container, false);
 
         //Toolbar MainActivity
         Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);

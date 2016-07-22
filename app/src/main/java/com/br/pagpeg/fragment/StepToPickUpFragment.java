@@ -21,10 +21,10 @@ import java.util.List;
  * Created by brunolemgruber on 19/07/16.
  */
 
-public class StepViewFragment extends Fragment{
+public class StepToPickUpFragment extends Fragment{
 
     private View view;
-    private HorizontalStepView stepView;
+    public HorizontalStepView stepView;
     private Fragment fragment;
     private Handler myhandler;
     private Toolbar toolbarMainActivity;
@@ -33,7 +33,7 @@ public class StepViewFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.step_frag, container, false);
+        view = inflater.inflate(R.layout.content_step_to_pickup, container, false);
 
         myhandler = new Handler();
 
@@ -50,9 +50,25 @@ public class StepViewFragment extends Fragment{
                 stepView.setStepsViewIndicatorComplectingPosition(1);
                 toolbarMainActivity.setTitle("Achamos seu shopper ideal");
 
-            }
+                myhandler.postDelayed(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        fragment = new PickUpReadyFragment();
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment_container_step, fragment).commit();
 
-        }, 10000);
+                        stepView.setStepsViewIndicatorComplectingPosition(2);
+                        toolbarMainActivity.setTitle("Sua entrega está pronta!");
+
+
+                    }
+
+                },5000);
+          }
+
+        }, 5000);
 
         //Toolbar MainActivity
         toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);

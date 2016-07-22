@@ -37,7 +37,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
     @Override
     public StoreViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Infla a view do layout
-        View view = LayoutInflater.from(context).inflate(R.layout.storelist_item, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_store, viewGroup, false);
 
         // Cria o ViewHolder
         StoreViewHolder holder = new StoreViewHolder(view);

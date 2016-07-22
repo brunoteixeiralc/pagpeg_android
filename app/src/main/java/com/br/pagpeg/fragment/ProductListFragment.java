@@ -35,7 +35,7 @@ public class ProductListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.productlist_frag, container, false);
+        view = inflater.inflate(R.layout.list_product, container, false);
 
         //Toolbar MainActivity
         Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);

@@ -34,11 +34,11 @@ public class ProductDetailFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.productdetail_frag, container, false);
+        view = inflater.inflate(R.layout.content_product_detail, container, false);
 
         coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorLayout);
 
-        final AlertDialog builder = new AlertDialog.Builder(getActivity(), R.style.Dialog_quantity)
+        final AlertDialog builder = new AlertDialog.Builder(getActivity(), R.style.Dialog_Quantity)
                 .setPositiveButton("OK", null)
                 .setNegativeButton("Cancelar", null)
                 .setTitle("PagPeg")

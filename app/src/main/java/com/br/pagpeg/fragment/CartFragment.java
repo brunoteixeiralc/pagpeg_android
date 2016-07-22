@@ -37,14 +37,14 @@ public class CartFragment  extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.cartlist_frag, container, false);
+        view = inflater.inflate(R.layout.list_cart, container, false);
 
         //Toolbar MainActivity
         Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbarMainActivity.setVisibility(View.VISIBLE);
         toolbarMainActivity.setTitle("Resumo do pedido (13 itens)");
 
-        final AlertDialog builder = new AlertDialog.Builder(getActivity(), R.style.Dialog_quantity)
+        final AlertDialog builder = new AlertDialog.Builder(getActivity(), R.style.Dialog_Quantity)
                 .setPositiveButton("OK", null)
                 .setNegativeButton("Cancelar", null)
                 .setTitle("PagPeg")
@@ -87,7 +87,7 @@ public class CartFragment  extends Fragment{
             @Override
             public void onClick(View v) {
 
-                fragment = new StepViewFragment();
+                fragment = new StepToPickUpFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
             }
@@ -98,7 +98,7 @@ public class CartFragment  extends Fragment{
             @Override
             public void onClick(View v) {
 
-                fragment = new CCManageFragment();
+                fragment = new CreditCardFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
             }
