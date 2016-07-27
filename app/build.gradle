@@ -43,4 +43,5 @@ dependencies {
     compile 'com.wang.avi:library:1.0.5'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile project(":creditcardguide")
 }

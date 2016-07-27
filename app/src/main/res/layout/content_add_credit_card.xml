@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar"/>
+
+    <fragment
+        android:id="@+id/frgCreditCard"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="movile.com.creditcardguide.CreditCardFragment"
+        app:labelCardOwner="Nome"
+        app:labelCardDateExp="Expira"
+        app:labelButtonPay="Adicionar cartão"
+        app:buttonPayBackground="@color/colorPrimary"
+        app:buttonPayTextColor="@color/white"
+        app:labelExpireDate="Número do cartão"
+        app:labelCVV="Código de segurança"
+        app:labelOwnerName="Nome no cartão"
+        app:installments="false"
+        app:saveCard="false"
+        />
+
+</LinearLayout>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
+
+    <ImageView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:src="@mipmap/ic_launcher"
+         android:layout_gravity="top|left"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Aplicativo do Shopper"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:id="@+id/textView2"
+            android:padding="20dp"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Digite seu código de acesso"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:gravity="center_horizontal"/>
+
+        <Button
+            android:id="@+id/btnConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirmar"
+            android:background="@drawable/round_button"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="10dp"/>
+
+     </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+
+    <Button
+        android:id="@+id/addCart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Classificar shopper"
+        android:textSize="12sp"
+        android:padding="8dp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@android:color/white"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:background="@color/colorPrimary"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+
+                <fragment
+                    xmlns:map="http://schemas.android.com/apk/res-auto"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:id="@+id/map"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    map:cameraZoom="10"
+                    map:mapType="normal"
+                    map:liteMode="true"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="8dp"
+                    android:padding="8dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/name"
+                                android:layout_width="0dp"
+                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
+                                android:textSize="18sp"
+                                android:text="Carrefour"
+                                android:gravity="start"
+                                android:textAlignment="viewStart"
+                                android:textColor="@android:color/black"/>
+
+                            <TextView
+                                android:id="@+id/km"
+                                android:layout_width="0dp"
+                                android:layout_weight="0.5"
+                                android:layout_height="wrap_content"
+                                android:textSize="14sp"
+                                android:text="3.2 km"
+                                android:gravity="end"
+                                fontPath="fonts/Nexa-Bold.ttf"
+                                tools:ignore="MissingPrefix"/>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Av. Fernão Dias Paes Leme, 391 - Centro - Várzea Pta"
+                            android:textSize="12sp"
+                            android:gravity="start"/>
+
+                        <TextView
+                            android:id="@+id/time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Aberta até as 23:00"
+                            android:textSize="12sp"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="normal|bold"
+                            android:layout_gravity="left"/>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Resumo do seu pedido"-->
+                <!--android:textSize="15dp"-->
+                <!--android:padding="5dp"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:background="@color/white"-->
+                <!--android:textColor="@color/colorPrimary"-->
+                <!--fontPath="fonts/Nexa-Bold.ttf"-->
+                <!--android:gravity="center"-->
+                <!--tools:ignore="MissingPrefix"/>-->
+
+
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/recyclerView"
+                android:cacheColorHint="@android:color/transparent"
+                android:clipToPadding="false"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:listSelector="@android:color/transparent"
+                android:scrollbarStyle="outsideOverlay"
+                android:scrollbars="vertical"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="16dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

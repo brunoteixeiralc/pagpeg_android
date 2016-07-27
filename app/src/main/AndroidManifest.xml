@@ -22,8 +22,7 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="@string/API_KEY_MAPS"/>
-
-        <activity android:name=".activity.IntroActivity">
+        <activity android:name=".activity.ChooseActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,7 +30,23 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.MainActivity" android:screenOrientation="portrait"
+        <activity android:name=".activity.user.MainUserActivity" android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+
+        <activity android:name=".activity.user.IntroActivity" android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+
+        <activity android:name=".activity.user.AddCreditCardActivity" android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+
+        <activity android:name=".activity.shopper.ShopperLoginActivity" android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+
+        <activity android:name=".activity.shopper.MainShopperActivity" android:screenOrientation="portrait"
             android:configChanges="keyboardHidden"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
 
