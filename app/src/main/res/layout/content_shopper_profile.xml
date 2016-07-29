@@ -24,19 +24,7 @@
             android:src="@drawable/shopper_profile"
             app:civ_border_width="2dp"
             app:civ_border_color="@color/white"
-            android:layout_gravity="center|top"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Aguarde o shopper fazer sua compra."
-            android:gravity="center_horizontal"
-            android:textColor="@color/white"
-            android:layout_gravity="bottom"
-            android:padding="16dp"
-            android:textSize="14sp"
-            fontPath="fonts/Nexa-Bold.ttf"
-            tools:ignore="MissingPrefix"/>
+            android:layout_gravity="center"/>
 
     </FrameLayout>
 
@@ -128,7 +116,7 @@
                 android:id="@+id/edit_profile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Editar"
+                android:text="@string/edit"
                 android:textSize="12sp"
                 android:padding="8dp"
                 android:background="@color/colorPrimary"

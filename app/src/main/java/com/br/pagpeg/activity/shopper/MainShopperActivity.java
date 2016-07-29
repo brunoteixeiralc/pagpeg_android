@@ -12,8 +12,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
+import com.br.pagpeg.fragment.shopper.GraphFragment;
+import com.br.pagpeg.fragment.shopper.OrderFragment;
+import com.br.pagpeg.fragment.shopper.OrderHistoryFragment;
 import com.br.pagpeg.fragment.shopper.ShopperProfileFragment;
-import com.br.pagpeg.fragment.shopper.StarsFragment;
+import com.br.pagpeg.fragment.shopper.RatingFragment;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.OnMenuTabClickListener;
@@ -65,17 +68,20 @@ public class MainShopperActivity extends AppCompatActivity {
                         fragment = new ShopperProfileFragment();
                         break;
                     case R.id.bottomBarItemTwo:
-                        //fragment = new MapFragment();
+                        mLogOut.setVisibility(View.GONE);
+                        fragment = new OrderFragment();
                         break;
                     case R.id.bottomBarItemThree:
-                        //fragment = new CartFragment();
+                        mLogOut.setVisibility(View.GONE);
+                        fragment = new OrderHistoryFragment();
                         break;
                     case R.id.bottomBarItemFour:
-                        //fragment = new CartFragment();
+                        mLogOut.setVisibility(View.GONE);
+                        fragment = new GraphFragment();
                         break;
                     case R.id.bottomBarItemFive:
                         mLogOut.setVisibility(View.GONE);
-                        fragment = new StarsFragment();
+                        fragment = new RatingFragment();
                         break;
 
                 }
@@ -92,17 +98,20 @@ public class MainShopperActivity extends AppCompatActivity {
                         fragment = new ShopperProfileFragment();
                         break;
                     case R.id.bottomBarItemTwo:
-                        //fragment = new MapFragment();
+                        mLogOut.setVisibility(View.GONE);
+                        fragment = new OrderFragment();
                         break;
                     case R.id.bottomBarItemThree:
-                        //fragment = new CartFragment();
+                        mLogOut.setVisibility(View.GONE);
+                        fragment = new OrderHistoryFragment();
                         break;
                     case R.id.bottomBarItemFour:
-                        //fragment = new CartFragment();
+                        mLogOut.setVisibility(View.GONE);
+                        fragment = new GraphFragment();
                         break;
                     case R.id.bottomBarItemFive:
                         mLogOut.setVisibility(View.GONE);
-                        fragment = new StarsFragment();
+                        fragment = new RatingFragment();
                         break;
                 }
 

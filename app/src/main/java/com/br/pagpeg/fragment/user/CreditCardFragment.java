@@ -36,7 +36,7 @@ public class CreditCardFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.content_credit_card, container, false);
+        view = inflater.inflate(R.layout.list_credit_card, container, false);
 
         //Toolbar MainActivity
         Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);

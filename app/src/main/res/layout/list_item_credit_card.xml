@@ -27,5 +27,4 @@
         android:src="@drawable/check"
         android:visibility="invisible"/>
 
-
 </LinearLayout>

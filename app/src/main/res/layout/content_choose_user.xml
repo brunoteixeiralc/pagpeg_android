@@ -27,7 +27,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Por favor escolha qual é o seu perfil do pagpeg"
+            android:text="@string/choose_profile"
             android:textColor="@color/white"
             android:padding="16dp"
             android:gravity="center"/>
@@ -36,14 +36,14 @@
             android:id="@+id/btnShopper"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Shopper"
+            android:text="@string/shopper"
             android:background="@drawable/round_button"
             android:textColor="@color/colorPrimary"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OU"
+            android:text="@string/or"
             android:textColor="@color/white"
             android:padding="16dp"/>
 
@@ -51,7 +51,7 @@
             android:id="@+id/btnUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Usuário"
+            android:text="@string/user"
             android:background="@drawable/round_button"
             android:textColor="@color/colorPrimary"/>
 

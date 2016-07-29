@@ -71,7 +71,7 @@
              android:layout_width="0dp"
              android:layout_weight="0.3"
              android:layout_height="wrap_content"
-             android:text="R$ 2.00"
+             android:text="@string/price"
              android:textSize="12sp"
              fontPath="fonts/Nexa-Bold.ttf"
              tools:ignore="MissingPrefix"

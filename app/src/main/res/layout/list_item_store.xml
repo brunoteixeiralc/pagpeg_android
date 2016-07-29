@@ -48,7 +48,7 @@
                 android:layout_weight="0.5"
                 android:layout_height="wrap_content"
                 android:textSize="14sp"
-                android:text="3.2 km"
+                android:text="@string/distance"
                 android:gravity="end"
                 fontPath="fonts/Nexa-Bold.ttf"
                 tools:ignore="MissingPrefix"/>
@@ -63,15 +63,15 @@
             android:textSize="12sp"
             android:gravity="start"/>
 
-            <TextView
-                android:id="@+id/shoppers"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="10 shoppers"
-                android:textSize="12sp"
-                android:gravity="start"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="normal|bold"/>
+            <!--<TextView-->
+                <!--android:id="@+id/shoppers"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="10 shoppers"-->
+                <!--android:textSize="12sp"-->
+                <!--android:gravity="start"-->
+                <!--android:textColor="@color/colorPrimary"-->
+                <!--android:textStyle="normal|bold"/>-->
 
       </LinearLayout>
 

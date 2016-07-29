@@ -1,16 +1,71 @@
 <resources>
 
-    <string name="API_KEY_MAPS">AIzaSyBA0_YHih-j6VuOuaL6Kfx0MPT4zaptIt8</string>
     <string name="app_name">pagpeg</string>
+
+    <!-- Wizard User -->
     <string name="intro1">O usuário seleciona a loja e já pode ir adicionando os produtos no carrinho e ao final paga pelo próprio aplicativo</string>
     <string name="intro2">No horário agendado, o usuário se dirige até a loja desejada para pegar a sua compra que estará pronto para ser entregue</string>
     <string name="intro3">Já na loja selecionada, no lugar designado para a coleta, um funcionário lhe trará a sua compra</string>
     <string name="intro1_title">Crie sua lista de compra</string>
     <string name="intro2_title">Ir até a loja</string>
     <string name="intro3_title">Pegar a compra</string>
-    <string name="desc_product_test">bla bla bla blabla bla bla blabla bla bla blabla bla bla blabla bla bla blabla bla bla bla
-    bla bla bla blavbla bla bla blabla bla bla bla
-    bla bla bla blabla bla bla blabla bla bla blabla bla bla blabla bla bla blabla bla bla bla</string>
+
+    <!--User -->
+    <string name="photo_edit">Editar foto</string>
+    <string name="name">Nome Completo</string>
+    <string name="email">Email</string>
+    <string name="phone">Telefone</string>
+    <string name="wait_shopper_buy">Aguarde o shopper fazer sua compra.</string>
+    <string name="instructions">Instruções</string>
+    <string name="route">Rota</string>
+    <string name="date_time_get_product">Pegue seus produtos antes de 23:00 do dia 4 de Outuble de 2016</string>
+    <string name="locker">Locker 05 - Código 239892</string>
+    <string name="open_until">Aberta até as 23:00</string>
+    <string name="rating_shopper">Classificar shopper</string>
+    <string name="description">Descrição</string>
+    <string name="price">R$ 2.00</string>
+    <string name="discount_price">R$ 4.00</string>
+    <string name="manage_credit_card">Gerenciar cartões</string>
+    <string name="account">Conta</string>
+
+    <!--Shopper -->
+    <string name="hint_access_code">Digite seu código de acesso</string>
+    <string name="app_shopper">Aplicativo do Shopper</string>
+    <string name="user">Usuário</string>
+    <string name="shopper">Shopper</string>
+    <string name="or">OU</string>
+    <string name="choose_profile">Por favor escolha qual é o seu perfil do pagpeg</string>
+    <string name="store">Loja</string>
+    <string name="distance">3.2 km</string>
+    <string name="qty_order">1 pedido</string>
+    <string name="qty_items_order">13 itens (19 unidades)</string>
+    <string name="your_actual_rating">Sua avaliação atual</string>
+    <string name="total_order">242 \n Total de \npedidos</string>
+    <string name="order_rating">200 \n Pedidos \navaliados</string>
+    <string name="five_rating">190 \n 5 estrelas</string>
+    <string name="see_all">Ver todos...</string>
+    <string name="last_comment">Último comentário:</string>
+    <string name="size_product">Tamanho ou peso</string>
+    <string name="department">Departamento</string>
+    <string name="unit_qty">5x</string>
+
+    <!-- Buttons -->
+    <string name="save">Salvar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="see_orders">Ver os pedidos</string>
+    <string name="get_my_products">Peguei meus produtos</string>
+    <string name="call">Ligar</string>
+    <string name="add_cart">Adicionar no carrinho</string>
+    <string name="has_the_product">Contêm produto</string>
+    <string name="edit">Editar</string>
+    <string name="apply_discount">Aplicar desconto</string>
+    <string name="buy">Comprar: R$ 100,00</string>
+    <string name="found">Pronto,achei!</string>
+
+     <!-- Static -->
+     <string name="desc_product_test">teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste</string>
+
+
 
 </resources>
 

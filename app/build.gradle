@@ -2,6 +2,15 @@ apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
 
 android {
+
+    signingConfigs {
+        release {
+            keyAlias 'pagpeg'
+            keyPassword 'pagpeg'
+            storeFile file('/Users/brunolemgruber/Dropbox/pagpeg/pagpeg_keystore.jks')
+            storePassword 'pagpeg'
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
     defaultConfig {
@@ -11,11 +20,36 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
+
+        debug {
+            debuggable true
+            applicationIdSuffix ".debug"
+            versionNameSuffix '-DEBUG'
+            buildConfigField "String", "ENDPOINT", "\"http://server.ws/app/dev\"";
+            buildConfigField "boolean", "REPORT_CRASH", "false"
+            resValue "string", "google_maps_api_key", "AIzaSyBA0_YHih-j6VuOuaL6Kfx0MPT4zaptIt8"
+        }
+        homolog {
+            signingConfig signingConfigs.release
+            debuggable true
+            applicationIdSuffix ".homolog"
+            versionNameSuffix '-HOMOLOG'
+            buildConfigField "String", "ENDPOINT", "\"http://server.ws/app/homolog\"";
+            buildConfigField "boolean", "REPORT_CRASH", "true"
+            resValue "string", "google_maps_api_key", "AIzaSyBA0_YHih-j6VuOuaL6Kfx0MPT4zaptIt8"
+        }
         release {
-            minifyEnabled false
+            signingConfig signingConfigs.release
+            debuggable false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "ENDPOINT", "\"http://server.ws/app/prod\"";
+            buildConfigField "boolean", "REPORT_CRASH", "true"
+            resValue "string", "google_maps_api_key", "AIzaSyBA0_YHih-j6VuOuaL6Kfx0MPT4zaptIt8"
         }
     }
 }
@@ -39,9 +73,10 @@ dependencies {
     compile 'com.google.maps.android:android-maps-utils:0.4'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.github.baoyachi:StepView:1.6'
-    compile "com.daimajia.swipelayout:library:1.2.0@aar"
+    compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     compile 'com.wang.avi:library:1.0.5'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'de.hdodenhof:circleimageview:2.1.0'
-    compile project(":creditcardguide")
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
+    compile project(':creditcardguide')
 }

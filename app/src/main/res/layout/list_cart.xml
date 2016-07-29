@@ -52,7 +52,7 @@
                         android:layout_width="0dp"
                         android:layout_weight="0.8"
                         android:layout_height="20dp"
-                        android:text="Aplicar desconto"
+                        android:text="@string/apply_discount"
                         android:textSize="10sp"
                         android:background="@color/colorPrimary"
                         android:textColor="@android:color/white"/>
@@ -111,7 +111,7 @@
                     android:layout_width="0dp"
                     android:layout_weight="0.8"
                     android:layout_height="20dp"
-                    android:text="Gerenciar cartões"
+                    android:text="@string/manage_credit_card"
                     android:textSize="10sp"
                     android:background="@color/colorPrimary"
                     android:textColor="@android:color/white"/>
@@ -133,7 +133,7 @@
                         android:id="@+id/buy"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Comprar: R$ 100,00"
+                        android:text="@string/buy"
                         android:textSize="12sp"
                         android:padding="8dp"
                         android:background="@color/colorPrimary"
