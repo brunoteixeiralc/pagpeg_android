@@ -40,8 +40,8 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Detalhe do produto");
-        mIconBarCode = (ImageView) toolbar.findViewById(R.id.ic_bar_code);
-        mIconBarCode.setVisibility(View.VISIBLE);
+        //mIconBarCode = (ImageView) toolbar.findViewById(R.id.ic_bar_code);
+        //mIconBarCode.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
 
         cardView = (CardView)findViewById(R.id.cardViewAddCart);

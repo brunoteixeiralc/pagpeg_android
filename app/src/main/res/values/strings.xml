@@ -16,6 +16,7 @@
     <string name="email">Email</string>
     <string name="phone">Telefone</string>
     <string name="wait_shopper_buy">Aguarde o shopper fazer sua compra.</string>
+    <string name="wait_user_to_get">Toshiro está lhe aguardando para entregar a sua compra.</string>
     <string name="instructions">Instruções</string>
     <string name="route">Rota</string>
     <string name="date_time_get_product">Pegue seus produtos antes de 23:00 do dia 4 de Outuble de 2016</string>

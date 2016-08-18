@@ -82,7 +82,7 @@
                android:layout_width="0dp"
                android:layout_weight="1"
                android:layout_height="wrap_content"
-               android:text="no Carrefour"
+               android:text="no Roldão"
                android:textSize="12sp" />
 
          </LinearLayout>

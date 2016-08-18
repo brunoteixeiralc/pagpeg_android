@@ -57,7 +57,7 @@ public class StepToPickUpFragment extends Fragment{
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
                         transaction.replace(R.id.fragment_container_step, fragment).commit();
                         stepView.setStepsViewIndicatorComplectingPosition(2);
-                        toolbarMainActivity.setTitle("Sua entrega está pronta!");
+                        toolbarMainActivity.setTitle("Sua compra está pronta!");
                         myhandler.postDelayed(new Runnable()
                         {
                             @Override
@@ -67,14 +67,14 @@ public class StepToPickUpFragment extends Fragment{
                                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                                 transaction.replace(R.id.fragment_container_step, fragment).commit();
                                 stepView.setStepsViewIndicatorComplectingPosition(3);
-                                toolbarMainActivity.setTitle("Produto entregue.");
+                                toolbarMainActivity.setTitle("Compra entregue.");
                             }
-                        },20000);
+                        },5000);
                     }
-                },20000);
+                },5000);
           }
 
-        }, 20000);
+        }, 5000);
 
         //Toolbar MainActivity
         toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);

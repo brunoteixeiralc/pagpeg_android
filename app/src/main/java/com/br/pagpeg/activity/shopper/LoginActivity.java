@@ -15,7 +15,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
  * Created by brunolemgruber on 26/07/16.
  */
 
-public class ShopperLoginActivity extends Activity {
+public class LoginActivity extends Activity {
 
     private Button btnConfirm;
 

@@ -4,12 +4,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.InflateException;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -30,11 +35,12 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * Created by brunolemgruber on 15/07/16.
  */
 
-public class DetailStoreFragment extends Fragment implements OnMapReadyCallback{
+public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,SearchView.OnQueryTextListener{
 
     private View view;
     protected RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
+    private ImageView mIconMapImageView;
     private Store store;
     private ImageView imgMap;
     private GoogleMap gMap;
@@ -42,6 +48,12 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback{
     LatLng latLng = new LatLng(35.0116363, 135.7680294);
     private SupportMapFragment mapFragment;
     private Fragment fragment;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
 
     @Nullable
     @Override
@@ -59,7 +71,10 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback{
 
         //Toolbar MainActivity
         Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
-        toolbarMainActivity.setVisibility(View.GONE);
+        toolbarMainActivity.setVisibility(View.VISIBLE);
+        toolbarMainActivity.setTitle("Roldão");
+        mIconMapImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_mapStore);
+        mIconMapImageView.setVisibility(View.GONE);
 
         recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
         mLayoutManager = new LinearLayoutManager(DetailStoreFragment.this.getActivity());
@@ -75,6 +90,30 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback{
         mapFragment.getMapAsync(DetailStoreFragment.this);
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_search, menu);
+
+        final MenuItem item = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+        searchView.setOnQueryTextListener(this);
+
+        MenuItemCompat.setOnActionExpandListener(item,
+                new MenuItemCompat.OnActionExpandListener() {
+                    @Override
+                    public boolean onMenuItemActionCollapse(MenuItem item) {
+
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onMenuItemActionExpand(MenuItem item) {
+
+                        return true;
+                    }
+                });
     }
 
     private CategoryAdapter.CategoryOnClickListener onClickListener() {
@@ -97,5 +136,15 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback{
         googleMap.addMarker(new MarkerOptions().position(new LatLng(-15.7797200,-47.929720)));
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(-15.7797200,-47.9297200), 5f);
         googleMap.moveCamera(cameraUpdate);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }

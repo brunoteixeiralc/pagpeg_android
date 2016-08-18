@@ -5,17 +5,39 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/locker"
-        android:gravity="center"
-        android:padding="16dp"
-        android:textSize="15dp"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/white"
-        fontPath="fonts/Nexa-Bold.ttf"
-        tools:ignore="MissingPrefix"/>
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="match_parent"
+            android:background="@color/colorPrimary"
+            android:layout_height="150dp"/>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/profile_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/shopper_profile"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/white"
+            android:layout_gravity="center|top"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/wait_user_to_get"
+            android:gravity="center_horizontal"
+            android:textColor="@color/white"
+            android:layout_gravity="bottom"
+            android:padding="16dp"
+            android:textSize="14sp"
+            fontPath="fonts/Nexa-Bold.ttf"
+            tools:ignore="MissingPrefix"/>
+
+    </FrameLayout>
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -129,7 +151,7 @@
                                 android:layout_weight="1"
                                 android:layout_height="wrap_content"
                                 android:textSize="18sp"
-                                android:text="Carrefour"
+                                android:text="Roldão"
                                 android:gravity="start"
                                 android:textAlignment="viewStart"
                                 android:textColor="@android:color/black"/>

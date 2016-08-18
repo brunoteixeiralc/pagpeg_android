@@ -11,16 +11,24 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import com.br.pagpeg.R;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Created by brunolemgruber on 28/07/16.
  */
 
-public class OrderFragment extends Fragment {
+public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
     private View view;
     private Button btnSeeOrder;
     private Fragment fragment;
+    private SupportMapFragment mapFragment;
     private ImageView mIconOrderCompleted;
 
     @Nullable
@@ -28,6 +36,9 @@ public class OrderFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.content_order, container, false);
+
+        mapFragment = (com.google.android.gms.maps.SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(OrderFragment.this);
 
         btnSeeOrder = (Button) view.findViewById(R.id.see_order);
         btnSeeOrder.setOnClickListener(new View.OnClickListener() {
@@ -40,5 +51,14 @@ public class OrderFragment extends Fragment {
         });
 
         return view;
+    }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+
+        googleMap.getUiSettings().setMapToolbarEnabled(false);
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(-15.7797200,-47.929720)));
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(-15.7797200,-47.9297200), 5f);
+        googleMap.moveCamera(cameraUpdate);
     }
 }

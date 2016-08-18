@@ -7,14 +7,18 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.br.pagpeg.R;
+import com.br.pagpeg.activity.BarCodeActivity;
 import com.br.pagpeg.activity.shopper.ProductDetailActivity;
 import com.br.pagpeg.adapter.shopper.OrderListAdapter;
 import com.br.pagpeg.utils.DividerItemDecoration;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 /**
  * Created by brunolemgruber on 28/07/16.
@@ -50,12 +54,23 @@ public class OrderListItemFragment extends Fragment {
         return new OrderListAdapter.OrderListOnClickListener() {
             @Override
             public void onClickSticker(View view, int idx) {
-
-                startActivity(new Intent(OrderListItemFragment.this.getActivity(),ProductDetailActivity.class));
-//                fragment = new ProductDetailFragment();
-//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                IntentIntegrator.forSupportFragment(OrderListItemFragment.this).setCaptureActivity(BarCodeActivity.class).initiateScan();
             }
         };
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() != null) {
+                Log.d("MainActivity", "Cancelled scan");
+                startActivity(new Intent(OrderListItemFragment.this.getActivity(),ProductDetailActivity.class));
+            } else {
+                Log.d("MainActivity", "Scanned");
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }

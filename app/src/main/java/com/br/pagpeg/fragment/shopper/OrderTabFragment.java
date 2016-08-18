@@ -80,9 +80,9 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
             if (position == 0) {
                 fragment = new OrderListItemFragment();
             } else if (position == 1) {
-                fragment = new OrderListItemFragment();
+                fragment = new Fragment();
             }else if (position == 2) {
-                fragment = new OrderListItemFragment();
+                fragment = new Fragment();
             }
             return fragment;
         }

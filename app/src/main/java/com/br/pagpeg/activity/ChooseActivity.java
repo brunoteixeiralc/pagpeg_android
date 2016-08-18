@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.br.pagpeg.R;
-import com.br.pagpeg.activity.shopper.ShopperLoginActivity;
+import com.br.pagpeg.activity.shopper.LoginActivity;
 import com.br.pagpeg.activity.user.IntroActivity;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
@@ -30,7 +30,7 @@ public class ChooseActivity extends Activity{
         btnShopper.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(),ShopperLoginActivity.class));
+                startActivity(new Intent(v.getContext(),LoginActivity.class));
             }
         });
 

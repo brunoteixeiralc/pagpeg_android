@@ -10,7 +10,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:id="@+id/logoStore"
-        android:src="@drawable/carrefour_img"
+        android:src="@drawable/roldao_img"
         tools:ignore="ContentDescription"
         android:scaleType="fitXY"
         android:layout_gravity="center"/>
@@ -37,7 +37,7 @@
                 android:layout_weight="0.7"
                 android:layout_height="wrap_content"
                 android:textSize="18sp"
-                android:text="Carrefour"
+                android:text="Roldão"
                 android:gravity="start"
                 android:textAlignment="viewStart"
                 android:textColor="@android:color/black"/>
