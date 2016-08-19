@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.adapter.user.CartAdapter;
@@ -32,6 +33,10 @@ public class CartFragment  extends Fragment{
     private RecyclerView.Adapter mAdapter;
     private Fragment fragment;
     private Button btnDiscount,btnBuy,btnCCManage;
+    private ImageView mIconListImageView;
+    private ImageView mIconMapImageView;
+    private ImageView mIconBarCode;
+    private ImageView mAddCreditCard;
 
     @Nullable
     @Override
@@ -43,6 +48,14 @@ public class CartFragment  extends Fragment{
         Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbarMainActivity.setVisibility(View.VISIBLE);
         toolbarMainActivity.setTitle("Resumo do pedido (13 itens)");
+        mIconMapImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_mapStore);
+        mIconListImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_listStore);
+        mIconBarCode = (ImageView) toolbarMainActivity.findViewById(R.id.ic_bar_code);
+        mAddCreditCard = (ImageView) toolbarMainActivity.findViewById(R.id.ic_add_credit_card);
+        mIconListImageView.setVisibility(View.GONE);
+        mIconMapImageView.setVisibility(View.GONE);
+        mIconBarCode.setVisibility(View.GONE);
+        mAddCreditCard.setVisibility(View.GONE);
 
         final AlertDialog builder = new AlertDialog.Builder(getActivity(), R.style.Dialog_Quantity)
                 .setPositiveButton("OK", null)

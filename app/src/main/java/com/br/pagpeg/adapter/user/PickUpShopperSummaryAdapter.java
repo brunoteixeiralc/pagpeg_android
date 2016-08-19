@@ -15,14 +15,14 @@ import java.util.List;
  * Created by brunolemgruber on 16/07/16.
  */
 
-public class PickUpSummaryAdapter extends RecyclerView.Adapter<PickUpSummaryAdapter.PickUpSummaryViewHolder> {
+public class PickUpShopperSummaryAdapter extends RecyclerView.Adapter<PickUpShopperSummaryAdapter.PickUpSummaryViewHolder> {
 
     protected static final String TAG = "pagpeg";
     private final List<Product> products;
-    private PickUpSummaryAdapter.PickUpSummaryOnClickListener pickUpSummaryOnClickListener;
+    private PickUpShopperSummaryAdapter.PickUpSummaryOnClickListener pickUpSummaryOnClickListener;
     private final Context context;
 
-    public PickUpSummaryAdapter(PickUpSummaryAdapter.PickUpSummaryOnClickListener pickUpSummaryOnClickListener, Context context, List<Product> products) {
+    public PickUpShopperSummaryAdapter(PickUpShopperSummaryAdapter.PickUpSummaryOnClickListener pickUpSummaryOnClickListener, Context context, List<Product> products) {
         this.context = context;
         this.products = products;
         this.pickUpSummaryOnClickListener = pickUpSummaryOnClickListener;
@@ -34,17 +34,17 @@ public class PickUpSummaryAdapter extends RecyclerView.Adapter<PickUpSummaryAdap
     }
 
     @Override
-    public PickUpSummaryAdapter.PickUpSummaryViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+    public PickUpShopperSummaryAdapter.PickUpSummaryViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Infla a view do layout
-        View view = LayoutInflater.from(context).inflate(R.layout.list_item_cart, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_summary_shopper, viewGroup, false);
 
         // Cria o ViewHolder
-        PickUpSummaryAdapter.PickUpSummaryViewHolder holder = new PickUpSummaryAdapter.PickUpSummaryViewHolder(view);
+        PickUpShopperSummaryAdapter.PickUpSummaryViewHolder holder = new PickUpShopperSummaryAdapter.PickUpSummaryViewHolder(view);
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(final PickUpSummaryAdapter.PickUpSummaryViewHolder holder, final int position) {
+    public void onBindViewHolder(final PickUpShopperSummaryAdapter.PickUpSummaryViewHolder holder, final int position) {
 
         // Click
         if (pickUpSummaryOnClickListener != null) {

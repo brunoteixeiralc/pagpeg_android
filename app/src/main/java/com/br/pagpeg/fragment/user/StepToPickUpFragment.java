@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.baoyachi.stepview.HorizontalStepView;
 import com.br.pagpeg.R;
@@ -28,6 +29,9 @@ public class StepToPickUpFragment extends Fragment{
     private Fragment fragment;
     private Handler myhandler;
     private Toolbar toolbarMainActivity;
+    private ImageView mIconListImageView;
+    private ImageView mIconMapImageView;
+    private ImageView mIconBarCode;
 
     @Nullable
     @Override
@@ -51,25 +55,37 @@ public class StepToPickUpFragment extends Fragment{
                 myhandler.postDelayed(new Runnable()
                 {
                     @Override
-                    public void run()
-                    {
-                        fragment = new PickUpReadyFragment();
+                    public void run() {
+
+                        fragment = new PickUpShopperSummaryFragment();
                         FragmentTransaction transaction = getFragmentManager().beginTransaction();
                         transaction.replace(R.id.fragment_container_step, fragment).commit();
                         stepView.setStepsViewIndicatorComplectingPosition(2);
-                        toolbarMainActivity.setTitle("Sua compra está pronta!");
+                        toolbarMainActivity.setTitle("Resumo da compra do shopper");
                         myhandler.postDelayed(new Runnable()
                         {
-                            @Override
-                            public void run()
-                            {
-                                fragment = new PickUpSummaryFragment();
-                                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                                transaction.replace(R.id.fragment_container_step, fragment).commit();
-                                stepView.setStepsViewIndicatorComplectingPosition(3);
-                                toolbarMainActivity.setTitle("Compra entregue.");
-                            }
-                        },5000);
+                           @Override
+                           public void run() {
+
+                               fragment = new PickUpReadyFragment();
+                               FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                               transaction.replace(R.id.fragment_container_step, fragment).commit();
+                               stepView.setStepsViewIndicatorComplectingPosition(3);
+                               toolbarMainActivity.setTitle("Sua compra está pronta!");
+                               myhandler.postDelayed(new Runnable()
+                               {
+                                   @Override
+                                   public void run() {
+
+                                       fragment = new PickUpSummaryFragment();
+                                       FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                                       transaction.replace(R.id.fragment_container_step, fragment).commit();
+                                       stepView.setStepsViewIndicatorComplectingPosition(4);
+                                       toolbarMainActivity.setTitle("Compra entregue.");
+                                   }
+                               },5000);
+                           }
+                        },20000);
                     }
                 },5000);
           }
@@ -79,13 +95,19 @@ public class StepToPickUpFragment extends Fragment{
         //Toolbar MainActivity
         toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbarMainActivity.setTitle("Localizando shopper");
+        mIconMapImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_mapStore);
+        mIconListImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_listStore);
+        mIconBarCode = (ImageView) toolbarMainActivity.findViewById(R.id.ic_bar_code);
+        mIconListImageView.setVisibility(View.GONE);
+        mIconMapImageView.setVisibility(View.GONE);
+        mIconBarCode.setVisibility(View.GONE);
 
         stepView = (HorizontalStepView) view.findViewById(R.id.step_view);
         List<String> list = new ArrayList<>();
         list.add("");
         list.add("");
         list.add("");
-        //list.add("");
+        list.add("");
         stepView.setStepsViewIndicatorComplectingPosition(0)
                 .setStepViewTexts(list)
                 .setStepsViewIndicatorCompletedLineColor(ContextCompat.getColor(getActivity(), android.R.color.white))
