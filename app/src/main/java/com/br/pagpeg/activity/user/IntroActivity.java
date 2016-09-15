@@ -29,7 +29,7 @@ public class IntroActivity extends AppIntro2 {
 
     private void loadMainActivity(){
 
-        Intent intent = new Intent(IntroActivity.this,MainUserActivity.class);
+        Intent intent = new Intent(IntroActivity.this,LoginActivity.class);
         startActivity(intent);
     }
 

@@ -11,6 +11,7 @@
     <string name="intro3_title">Pegar a compra</string>
 
     <!--User -->
+    <string name="app_user">Aplicativo do Usuário</string>
     <string name="photo_edit">Editar foto</string>
     <string name="name">Nome Completo</string>
     <string name="email">Email</string>
@@ -27,7 +28,15 @@
     <string name="price">R$ 2.00</string>
     <string name="discount_price">R$ 4.00</string>
     <string name="manage_credit_card">Gerenciar cartões</string>
+    <string name="add_credit_card">Adicionar cartões</string>
     <string name="account">Conta</string>
+    <string name="register_account">Precisamos de alguns dados</string>
+    <string name="login_create_user">Não tem uma conta? Se cadastre</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_number">Número de telefone</string>
+    <string name="hint_name">Nome</string>
+    <string name="hint_password">Senha</string>
+    <string name="select_image">Selecione uma imagem</string>
 
     <!--Shopper -->
     <string name="hint_access_code">Digite seu código de acesso</string>
@@ -63,11 +72,14 @@
     <string name="apply_discount">Aplicar desconto</string>
     <string name="buy">Comprar: R$ 100,00</string>
     <string name="found">Pronto,achei!</string>
+    <string name="login">Login</string>
+    <string name="register">Cadastrar</string>
+
+    <!-- Errors -->
+    <string name="create_user_error">Erro ao se cadastrar o usuário , tente novamente mais tarde.</string>
 
      <!-- Static -->
      <string name="desc_product_test">teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste</string>
-
-
 
 </resources>
 

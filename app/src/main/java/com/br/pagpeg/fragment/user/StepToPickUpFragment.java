@@ -83,14 +83,14 @@ public class StepToPickUpFragment extends Fragment{
                                        stepView.setStepsViewIndicatorComplectingPosition(4);
                                        toolbarMainActivity.setTitle("Compra entregue.");
                                    }
-                               },5000);
+                               },20000);
                            }
                         },20000);
                     }
-                },5000);
+                },20000);
           }
 
-        }, 5000);
+        }, 20000);
 
         //Toolbar MainActivity
         toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);

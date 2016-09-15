@@ -133,7 +133,7 @@ public class ProductListFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
-            if(result.getContents() == null) {
+            if(result.getContents() != null) {
                 Log.d("MainActivity", "Cancelled scan");
             } else {
                 Log.d("MainActivity", "Scanned");

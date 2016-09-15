@@ -6,6 +6,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".PagPegApplication"
@@ -43,6 +45,14 @@
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
 
         <activity android:name=".activity.shopper.LoginActivity" android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+
+        <activity android:name=".activity.user.LoginActivity" android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+
+        <activity android:name=".activity.user.RegisterActivity" android:screenOrientation="portrait"
             android:configChanges="keyboardHidden"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
 
