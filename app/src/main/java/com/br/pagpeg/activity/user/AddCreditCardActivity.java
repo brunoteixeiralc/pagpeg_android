@@ -9,6 +9,10 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.br.pagpeg.R;
+import com.br.pagpeg.model.CreditCard;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,13 +33,15 @@ public class AddCreditCardActivity extends AppCompatActivity implements ActionOn
 
     private View view;
     private CreditCardFragment creditCardFragment;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_add_credit_card);
 
-        //Toolbar MainActivity
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         Toolbar toolbarMainActivity =(Toolbar)this.findViewById(R.id.toolbar);
         toolbarMainActivity.setVisibility(View.VISIBLE);
         toolbarMainActivity.setTitle("Novo cartão");
@@ -72,6 +78,7 @@ public class AddCreditCardActivity extends AppCompatActivity implements ActionOn
 
     @Override
     public void onComplete(CreditCardPaymentMethod purchaseOption, boolean saveCard) {
+        saveCreditCard(FirebaseAuth.getInstance().getCurrentUser().getUid(),purchaseOption);
         finish();
     }
 
@@ -89,5 +96,14 @@ public class AddCreditCardActivity extends AppCompatActivity implements ActionOn
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    private void saveCreditCard(String uid,CreditCardPaymentMethod cc){
+
+        CreditCard creditCard = new CreditCard(cc.getCreditCardName(),String.valueOf(cc.getExpireMonth()) + "/"
+                + String.valueOf(cc.getExpireYear()),cc.getCreditCardNumber(),
+                cc.getSecurityCode(),cc.getIssuerCode().name(),"",cc.getIssuerCode().getIconId());
+        mDatabase.child("credit_card").child(uid).push().setValue(creditCard);
+
     }
 }

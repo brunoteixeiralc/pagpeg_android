@@ -21,16 +21,16 @@
             android:id="@+id/profile_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/user_profile"
+            android:src="@drawable/image_user"
             app:civ_border_width="2dp"
             app:civ_border_color="@color/white"
             android:layout_gravity="center|top"
             android:layout_marginTop="10dp"/>
 
         <TextView
+            android:id="@+id/label_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Aline Ornelas"
             android:gravity="center_horizontal"
             android:textColor="@color/white"
             android:layout_gravity="bottom"
@@ -86,8 +86,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/shopper_name"
-                android:text="Aline Ornelas"
+                android:id="@+id/user_name"
                 android:gravity="center_horizontal"/>
 
         </LinearLayout>
@@ -107,8 +106,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/shopper_email"
-                android:text="aline@gmail.com"
+                android:id="@+id/user_email"
                 android:gravity="center_horizontal"/>
 
         </LinearLayout>
@@ -128,8 +126,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/shopper_phone"
-                android:text="(61) 991189994"
+                android:id="@+id/user_phone"
                 android:gravity="center_horizontal"/>
 
         </LinearLayout>

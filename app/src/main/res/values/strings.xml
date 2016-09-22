@@ -29,7 +29,7 @@
     <string name="discount_price">R$ 4.00</string>
     <string name="manage_credit_card">Gerenciar cartões</string>
     <string name="add_credit_card">Adicionar cartões</string>
-    <string name="account">Conta</string>
+    <string name="account">Sua conta</string>
     <string name="register_account">Precisamos de alguns dados</string>
     <string name="login_create_user">Não tem uma conta? Se cadastre</string>
     <string name="hint_email">Email</string>
@@ -37,6 +37,7 @@
     <string name="hint_name">Nome</string>
     <string name="hint_password">Senha</string>
     <string name="select_image">Selecione uma imagem</string>
+    <string name="change_image">Mudar foto</string>
 
     <!--Shopper -->
     <string name="hint_access_code">Digite seu código de acesso</string>

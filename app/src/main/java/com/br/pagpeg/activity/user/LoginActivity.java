@@ -12,12 +12,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
+import com.br.pagpeg.model.User;
 import com.br.pagpeg.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -32,6 +38,7 @@ public class LoginActivity extends Activity {
     private EditText email,password;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference mDatabase;
 
     @Override
     public void onStart() {
@@ -59,11 +66,16 @@ public class LoginActivity extends Activity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    startActivity(new Intent(LoginActivity.this,MainUserActivity.class));
+
+                    Utils.openDialog(LoginActivity.this,"Entrando...");
+
+                    FirebaseUser userLogged = firebaseAuth.getCurrentUser();
+                    getUser(userLogged.getUid());
                     Log.d("Firebase", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     Log.d("Firebase", "onAuthStateChanged:signed_out");
                 }
+
             }
         };
 
@@ -94,8 +106,32 @@ public class LoginActivity extends Activity {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 
+    private void getUser(String uid){
+
+     mDatabase = FirebaseDatabase.getInstance().getReference();
+     mDatabase.child("users/" + uid).addListenerForSingleValueEvent(new ValueEventListener() {
+         @Override
+         public void onDataChange(DataSnapshot dataSnapshot) {
+
+             User user = dataSnapshot.getValue(User.class);
+             Intent intent = new Intent(LoginActivity.this,MainUserActivity.class);
+             intent.putExtra("user",user);
+             startActivity(intent);
+
+             Utils.closeDialog(LoginActivity.this);
+         }
+
+         @Override
+         public void onCancelled(DatabaseError databaseError) {
+
+         }
+     });
+
+    }
 
     private void loginUser(){
+
+        Utils.openDialog(this,"Entrando...");
 
         mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -105,6 +141,8 @@ public class LoginActivity extends Activity {
                         if (!task.isSuccessful()) {
                             Log.w("Firebase", "signInWithEmail:failed", task.getException());
                         }
+
+                        Utils.closeDialog(LoginActivity.this);
                     }
                 });
     }

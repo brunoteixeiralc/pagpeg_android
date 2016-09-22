@@ -6,9 +6,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.br.pagpeg.R;
-import com.br.pagpeg.model.Store;
+import com.br.pagpeg.model.CreditCard;
 
 import java.util.List;
 
@@ -18,76 +19,73 @@ import java.util.List;
 
 public class CreditCardAdapter extends RecyclerView.Adapter<CreditCardAdapter.CCViewHolder>{
 
-    protected static final String TAG = "pagpeg";
-    private final List<Store> stores;
+    private final List<CreditCard> creditCards;
     private CreditCardAdapter.CCOnClickListener ccOnClickListener;
     private final Context context;
 
-    public CreditCardAdapter(CreditCardAdapter.CCOnClickListener ccOnClickListener, Context context, List<Store> stores) {
+    public CreditCardAdapter(CreditCardAdapter.CCOnClickListener ccOnClickListener, Context context, List<CreditCard> creditCards) {
         this.context = context;
-        this.stores = stores;
+        this.creditCards = creditCards;
         this.ccOnClickListener = ccOnClickListener;
     }
 
     @Override
     public int getItemCount() {
-        //return this.stores.size();
-        return 3;
+        return creditCards.size();
     }
 
     @Override
     public CreditCardAdapter.CCViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Infla a view do layout
-        View view = LayoutInflater.from(context).inflate(R.layout.list_item_credit_card, viewGroup, false);
 
-        // Cria o ViewHolder
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_credit_card, viewGroup, false);
         CreditCardAdapter.CCViewHolder holder = new CreditCardAdapter.CCViewHolder(view);
+
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final CreditCardAdapter.CCViewHolder holder, final int position) {
-        // Atualiza a view
-//        Friend a = friends.get(position);
-//
-//        holder.nome.setText(a.getNome());
-//        holder.nome.setTypeface(FontUtils.getRegular(context));
-//        holder.img.setImageResource(a.getImg());
 
-        // Click
+        final CreditCard cc = creditCards.get(position);
+
+        holder.cc_number.setText(cc.getCc_number());
+        holder.cc_flag_img.setImageResource(cc.getCc_flag_img());
+        if(cc.isDefault())
+            holder.check.setVisibility(View.VISIBLE);
+        else
+            holder.check.setVisibility(View.INVISIBLE);
+
         if (ccOnClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //ccOnClickListener.onClickSticker(holder.itemView, position); // A variável position é final
-                    holder.check.setVisibility(View.VISIBLE);
+
+                    for (CreditCard ccAll:creditCards) {
+                        ccAll.setDefault(false);
+                    }
+                    cc.setDefault(true);
+                    notifyDataSetChanged();
                 }
             });
-
         }
-
-
-
     }
 
     public interface CCOnClickListener  {
         public void onClickSticker(View view, int idx);
     }
 
-
-    // ViewHolder com as views
     public static class CCViewHolder extends RecyclerView.ViewHolder {
 
-        //public TextView nome;
-        public ImageView check;
-//
-//
+        public TextView cc_number;
+        public ImageView check,cc_flag_img;
+
         public CCViewHolder(View view) {
             super(view);
-//            // Cria as views para salvar no ViewHolder
-//            nome = (TextView) view.findViewById(R.id.nome);
+            cc_number = (TextView) view.findViewById(R.id.cc_number);
             check = (ImageView) view.findViewById(R.id.check);
-//
+            cc_flag_img = (ImageView) view.findViewById(R.id.cc_flag_img);
+
         }
     }
+
 }

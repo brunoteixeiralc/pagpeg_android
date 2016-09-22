@@ -199,29 +199,29 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="16dp"
-                android:gravity="center">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:padding="16dp"-->
+                <!--android:gravity="center">-->
 
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:src="@drawable/credit_card"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="25dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:src="@drawable/credit_card"/>-->
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/manage_cc"
-                    android:text="@string/add_credit_card"
-                    android:gravity="left"
-                    android:textSize="14dp"
-                    android:textColor="@color/colorPrimary"
-                    android:paddingLeft="10dp"/>
+                <!--<TextView-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/manage_cc"-->
+                    <!--android:text="@string/add_credit_card"-->
+                    <!--android:gravity="left"-->
+                    <!--android:textSize="14dp"-->
+                    <!--android:textColor="@color/colorPrimary"-->
+                    <!--android:paddingLeft="10dp"/>-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cardViewAddCart"

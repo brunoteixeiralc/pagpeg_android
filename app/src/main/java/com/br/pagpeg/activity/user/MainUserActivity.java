@@ -17,6 +17,7 @@ import com.br.pagpeg.fragment.user.CartFragment;
 import com.br.pagpeg.fragment.user.MapFragment;
 import com.br.pagpeg.fragment.user.StoreListFragment;
 import com.br.pagpeg.fragment.user.UserProfileFragment;
+import com.br.pagpeg.model.User;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.OnMenuTabClickListener;
@@ -36,6 +37,7 @@ public class MainUserActivity extends AppCompatActivity {
     private ImageView mIconMapImageView;
     private TextView mLogOut;
     private ImageView mAddCreditCard;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,7 +100,13 @@ public class MainUserActivity extends AppCompatActivity {
                         mIconListImageView.setVisibility(View.GONE);
                         mLogOut.setVisibility(View.VISIBLE);
                         mAddCreditCard.setVisibility(View.GONE);
+
+                        User user = (User) getIntent().getSerializableExtra("user");
+                        bundle = new Bundle();
+                        bundle.putSerializable("user",user);
                         fragment = new UserProfileFragment();
+                        fragment.setArguments(bundle);
+
                         break;
                     case R.id.bottomBarItemTwo:
                         mIconMapImageView.setVisibility(View.GONE);

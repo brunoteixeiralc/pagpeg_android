@@ -25,8 +25,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -148,8 +151,9 @@ public class RegisterActivity extends Activity {
                         }else{
                             if(bitmapUserImage != null)
                                 saveImageStorage();
-                            startActivity(new Intent(RegisterActivity.this.getApplicationContext(),MainUserActivity.class));
-                            Utils.closeDialog(RegisterActivity.this.getApplicationContext());
+                            else{
+                                saveUser();
+                            }
                         }
                     }
                 });
@@ -159,6 +163,8 @@ public class RegisterActivity extends Activity {
 
         User user = new User(name.getText().toString(),number.getText().toString(),email.getText().toString(),user_img_url);
         mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
+
+        getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
     }
 
@@ -197,6 +203,29 @@ public class RegisterActivity extends Activity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, getString(R.string.select_image)),PICK_IMAGE_REQUEST);
+
+    }
+
+    private void getUser(String uid){
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("users/" + uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                User user = dataSnapshot.getValue(User.class);
+                Intent intent = new Intent(RegisterActivity.this,MainUserActivity.class);
+                intent.putExtra("user",user);
+                startActivity(intent);
+
+                Utils.closeDialog(RegisterActivity.this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 }

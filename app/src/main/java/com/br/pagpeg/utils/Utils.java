@@ -41,6 +41,7 @@ public final class Utils {
     }
 
     public static void closeDialog(Context context){
-        simpleArcDialog.dismiss();
+        if(simpleArcDialog != null)
+            simpleArcDialog.dismiss();
     }
 }
