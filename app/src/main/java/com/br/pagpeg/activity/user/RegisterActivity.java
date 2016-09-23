@@ -1,6 +1,5 @@
 package com.br.pagpeg.activity.user;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,7 +7,9 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.telephony.TelephonyManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.User;
 import com.br.pagpeg.utils.Utils;
@@ -57,6 +59,7 @@ public class RegisterActivity extends Activity {
     private CircleImageView circleImageView;
     private int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmapUserImage =  null;
+    private String deviceId = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +104,11 @@ public class RegisterActivity extends Activity {
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pickGallery();
+                RegisterActivityPermissionsDispatcher.pickGalleryWithCheck(RegisterActivity.this);
             }
         });
+
+        RegisterActivityPermissionsDispatcher.getDeviceIdWithCheck(RegisterActivity.this);
     }
 
     @Override
@@ -161,11 +166,22 @@ public class RegisterActivity extends Activity {
 
     private void saveUser(){
 
-        User user = new User(name.getText().toString(),number.getText().toString(),email.getText().toString(),user_img_url);
+        User user = new User(name.getText().toString(),number.getText().toString(),email.getText().toString(),user_img_url,deviceId);
         mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
 
         getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
+    }
+
+    @NeedsPermission(android.Manifest.permission.READ_PHONE_STATE)
+    public void getDeviceId(){
+
+        TelephonyManager mTelephony = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        if (mTelephony.getDeviceId() != null){
+            deviceId = mTelephony.getDeviceId();
+        }else{
+            deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        }
     }
 
     private void saveImageStorage(){
@@ -196,7 +212,7 @@ public class RegisterActivity extends Activity {
 
     }
 
-    @NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE,Manifest.permission.READ_EXTERNAL_STORAGE})
+    @NeedsPermission({android.Manifest.permission.WRITE_EXTERNAL_STORAGE,android.Manifest.permission.READ_EXTERNAL_STORAGE})
     public void pickGallery(){
 
         Intent intent = new Intent();

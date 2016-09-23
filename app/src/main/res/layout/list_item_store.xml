@@ -6,14 +6,31 @@
     android:orientation="horizontal"
     android:padding="16dp">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/logoStore"
-        android:src="@drawable/roldao_img"
-        tools:ignore="ContentDescription"
-        android:scaleType="fitXY"
-        android:layout_gravity="center"/>
+    <RelativeLayout
+        android:id="@+id/relative_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/img"
+            android:src="@drawable/roldao_img"
+            tools:ignore="ContentDescription"
+            android:scaleType="fitXY"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"/>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            android:indeterminateTint="@color/colorPrimary"/>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -43,7 +60,7 @@
                 android:textColor="@android:color/black"/>
 
             <TextView
-                android:id="@+id/km"
+                android:id="@+id/distance"
                 android:layout_width="0dp"
                 android:layout_weight="0.5"
                 android:layout_height="wrap_content"
@@ -63,15 +80,14 @@
             android:textSize="12sp"
             android:gravity="start"/>
 
-            <!--<TextView-->
-                <!--android:id="@+id/shoppers"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="10 shoppers"-->
-                <!--android:textSize="12sp"-->
-                <!--android:gravity="start"-->
-                <!--android:textColor="@color/colorPrimary"-->
-                <!--android:textStyle="normal|bold"/>-->
+        <TextView
+           android:id="@+id/openClose"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:text="07:00 - 22:00"
+           android:textSize="12sp"
+           android:gravity="start"/>
+
 
       </LinearLayout>
 

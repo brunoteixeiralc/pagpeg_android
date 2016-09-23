@@ -16,15 +16,18 @@ public class User implements Serializable {
 
     private String user_img;
 
+    private String device_id;
+
     public User(){
 
     }
 
-    public User(String name,String number,String email,String user_img){
+    public User(String name,String number,String email,String user_img,String device_id){
         this.name = name;
         this.number = number;
         this.email = email;
         this.user_img = user_img;
+        this.device_id = device_id;
     }
 
     public String getName() {
@@ -57,5 +60,13 @@ public class User implements Serializable {
 
     public void setUser_img(String user_img) {
         this.user_img = user_img;
+    }
+
+    public String getDevice_id() {
+        return device_id;
+    }
+
+    public void setDevice_id(String device_id) {
+        this.device_id = device_id;
     }
 }

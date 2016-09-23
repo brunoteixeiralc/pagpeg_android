@@ -10,9 +10,13 @@ import com.google.maps.android.clustering.ClusterItem;
 public class ClusterMarkerLocation implements ClusterItem{
 
     private LatLng position;
+    private String title;
+    private String snippet;
 
-    public ClusterMarkerLocation( LatLng latLng ) {
-        position = latLng;
+    public ClusterMarkerLocation( LatLng latLng, String title, String snippet ) {
+        this.position = latLng;
+        this.title = title;
+        this.snippet = snippet;
     }
 
     @Override
@@ -22,5 +26,21 @@ public class ClusterMarkerLocation implements ClusterItem{
 
     public void setPosition(LatLng position) {
         this.position = position;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getSnippet() {
+        return snippet;
+    }
+
+    public void setSnippet(String snippet) {
+        this.snippet = snippet;
     }
 }

@@ -15,7 +15,10 @@ import android.widget.ImageView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.adapter.user.StoreAdapter;
+import com.br.pagpeg.model.Store;
 import com.br.pagpeg.utils.DividerItemDecoration;
+
+import java.util.List;
 
 /**
  * Created by brunolemgruber on 14/07/16.
@@ -29,6 +32,7 @@ public class StoreListFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private Fragment fragment;
     private ImageView mIconMapImageView;
+    private List<Store> storeList;
 
 
     @Nullable
@@ -37,15 +41,22 @@ public class StoreListFragment extends Fragment {
 
         view = inflater.inflate(R.layout.list_store, container, false);
 
-        //Toolbar MainActivity
+        storeList = (List<Store>) getArguments().getSerializable("stores");
+
         Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbarMainActivity.setVisibility(View.VISIBLE);
         toolbarMainActivity.setTitle("Lojas nas proximidades");
         mIconMapImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_mapStore);
         mIconMapImageView.setVisibility(View.VISIBLE);
+        mIconMapImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         mLayoutManager = new LinearLayoutManager(StoreListFragment.this.getActivity());
-        mAdapter = new StoreAdapter(onClickListener(),StoreListFragment.this.getContext(),null);
+        mAdapter = new StoreAdapter(onClickListener(),StoreListFragment.this.getContext(),storeList);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());

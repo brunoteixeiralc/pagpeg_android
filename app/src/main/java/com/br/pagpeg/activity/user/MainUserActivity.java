@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.br.pagpeg.R;
 import com.br.pagpeg.fragment.user.CartFragment;
 import com.br.pagpeg.fragment.user.MapFragment;
-import com.br.pagpeg.fragment.user.StoreListFragment;
 import com.br.pagpeg.fragment.user.UserProfileFragment;
 import com.br.pagpeg.model.User;
 import com.roughike.bottombar.BottomBar;
@@ -50,6 +49,7 @@ public class MainUserActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mAddCreditCard = (ImageView) toolbar.findViewById(R.id.ic_add_credit_card);
+        mIconListImageView = (ImageView) toolbar.findViewById(R.id.ic_listStore);
 
         mIconMapImageView = (ImageView) toolbar.findViewById(R.id.ic_mapStore);
         mIconMapImageView.setOnClickListener(new View.OnClickListener() {
@@ -63,19 +63,7 @@ public class MainUserActivity extends AppCompatActivity {
                 }
             }
         });
-        mIconListImageView = (ImageView) toolbar.findViewById(R.id.ic_listStore);
-        mIconListImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fragment = new StoreListFragment();
-                if(fragment != null) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                    mIconMapImageView.setVisibility(View.VISIBLE);
-                    mIconListImageView.setVisibility(View.GONE);
-                }
 
-            }
-        });
         mLogOut = (TextView) toolbar.findViewById(R.id.logout);
         mLogOut.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +84,7 @@ public class MainUserActivity extends AppCompatActivity {
                 switch (menuItemId){
 
                     case R.id.bottomBarItemOne:
+
                         mIconMapImageView.setVisibility(View.GONE);
                         mIconListImageView.setVisibility(View.GONE);
                         mLogOut.setVisibility(View.VISIBLE);
@@ -108,6 +97,7 @@ public class MainUserActivity extends AppCompatActivity {
                         fragment.setArguments(bundle);
 
                         break;
+
                     case R.id.bottomBarItemTwo:
                         mIconMapImageView.setVisibility(View.GONE);
                         mIconListImageView.setVisibility(View.VISIBLE);

@@ -1,9 +1,11 @@
 package com.br.pagpeg.fragment.user;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.InflateException;
@@ -11,11 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.br.pagpeg.R;
-import com.br.pagpeg.fragment.user.MapFragmentPermissionsDispatcher;
 import com.br.pagpeg.model.ClusterMarkerLocation;
+import com.br.pagpeg.model.Store;
 import com.br.pagpeg.utils.ClusterRenderer;
+import com.br.pagpeg.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
@@ -23,12 +27,24 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
-import java.util.Random;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
+
+import static android.R.attr.fragment;
+import static com.br.pagpeg.R.id.map;
 
 
 /**
@@ -43,6 +59,11 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
     private GoogleApiClient googleApiClient;
     protected LatLng mCenterLocation;
     private ImageView mIconListImageView;
+    private DatabaseReference mDatabase;
+    private List<Store> storeList = new ArrayList<>();
+    private ClusterMarkerLocation clickedClusterItem;
+    private Fragment fragment;
+    private Bundle bundle;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -58,15 +79,32 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
         }
 
         setRetainInstance(true);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        //Toolbar MainActivity
         Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbarMainActivity.setVisibility(View.VISIBLE);
         toolbarMainActivity.setTitle("Lojas nas proximidades");
+
         mIconListImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_listStore);
         mIconListImageView.setVisibility(View.VISIBLE);
+        mIconListImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        mapFragment = (com.google.android.gms.maps.SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+                fragment = new StoreListFragment();
+                bundle = new Bundle();
+                bundle.putSerializable("stores", (Serializable) storeList);
+                fragment.setArguments(bundle);
+
+                if(fragment != null) {
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                    mIconListImageView.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        mapFragment = (com.google.android.gms.maps.SupportMapFragment) getChildFragmentManager().findFragmentById(map);
         mapFragment.getMapAsync(MapFragment.this);
         googleApiClient = new GoogleApiClient.Builder(MapFragment.this.getActivity())
                 .addConnectionCallbacks(this)
@@ -81,27 +119,11 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
 
         if (gMap != null && l != null) {
 
+            Utils.openDialog(MapFragment.this.getContext(),"Carregando lojas");
+
             mCenterLocation = new LatLng(l.getLatitude(),l.getLongitude());
-
-            initMarkers();
-
-//            LatLng latLng = new LatLng(l.getLatitude(), l.getLongitude());
-//            final CameraPosition position = new CameraPosition.Builder().target(latLng)
-//                    .bearing(0).tilt(0).zoom(10).build();
-//            CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
-//            gMap.animateCamera(update, 1000, new GoogleMap.CancelableCallback() {
-//                @Override
-//                public void onCancel() {
-//                    Toast.makeText(MapFragment.this.getActivity(), "Ação cancelada!", Toast.LENGTH_LONG).show();
-//                }
-//
-//                @Override
-//                public void onFinish() {
-//                    //Toast.makeText(MapFragment.this.getActivity(), "PagPeg te achou!", Toast.LENGTH_LONG).show();
-//                }
-//            });
+            initMarkers(l);
         }
-
     }
 
     @Override
@@ -111,21 +133,17 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
 
     @Override
     public void onConnected(Bundle bundle) {
-
         Log.i("Pagpeg", "Conectado ao google play service");
-
         startLocationUpdates();
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
         Log.i("Pagpeg", "Conexão interrompida");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
-
         Log.i("Pagpeg", "Erro ao conectar: " + connectionResult);
     }
 
@@ -150,7 +168,6 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
     public void onStart() {
 
         super.onStart();
-
         googleApiClient.connect();
     }
 
@@ -158,7 +175,6 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
     public void onStop() {
 
         stopLocationUpdates();
-
         googleApiClient.disconnect();
 
         super.onStop();
@@ -186,10 +202,9 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
     public void setlocation(GoogleMap gMap){
 
         gMap.setMyLocationEnabled(true);
-        gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        gMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
         Location l = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-
         setUpMap(l);
     }
 
@@ -204,26 +219,99 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
     }
 
-    private void initMarkers() {
+    private void initMarkers(Location l) {
+
         ClusterManager<ClusterMarkerLocation> clusterManager = new ClusterManager<ClusterMarkerLocation>( MapFragment.this.getContext(), gMap );
+
+        clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<ClusterMarkerLocation>() {
+            @Override
+            public boolean onClusterItemClick(ClusterMarkerLocation clusterMarkerLocation) {
+                clickedClusterItem = clusterMarkerLocation;
+                return false;
+            }
+        });
+
+        gMap.setOnMarkerClickListener(clusterManager);
         gMap.setOnCameraChangeListener(clusterManager);
+        gMap.setOnInfoWindowClickListener(new MyMarkerInfoWindowClickListener());
+        gMap.setInfoWindowAdapter(clusterManager.getMarkerManager());
 
+        clusterManager.getMarkerCollection().setOnInfoWindowAdapter(new ClusterMarkerLocationAdapter());
         clusterManager.setRenderer(new ClusterRenderer(MapFragment.this.getContext(),gMap,clusterManager));
+        getStores(clusterManager,l);
+    }
 
-        double lat;
-        double lng;
-        Random generator = new Random();
-        for( int i = 0; i < 30; i++ ) {
-            lat = generator.nextDouble();
-            lng = generator.nextDouble();
-            if( generator.nextBoolean() ) {
-                lat = -lat;
-            }
-            if( generator.nextBoolean() ) {
-                lng = -lng;
-            }
-            clusterManager.addItem(new ClusterMarkerLocation(new LatLng(mCenterLocation.latitude + lat, mCenterLocation.longitude + lng )));
+    public class ClusterMarkerLocationAdapter implements GoogleMap.InfoWindowAdapter{
+
+        private final View view;
+
+        ClusterMarkerLocationAdapter() {
+            view = getActivity().getLayoutInflater().inflate(R.layout.info_windows_map, null);
         }
+
+        @Override
+        public View getInfoWindow(Marker marker) {
+
+            TextView title = (TextView) view.findViewById(R.id.txtTitle);
+            title.setText(clickedClusterItem.getTitle());
+
+            TextView snippet = (TextView) view.findViewById(R.id.txtSnippet);
+            snippet.setText(clickedClusterItem.getSnippet());
+
+            return view;
+        }
+
+        @Override
+        public View getInfoContents(Marker marker) {
+            return null;
+        }
+    }
+
+    private class MyMarkerInfoWindowClickListener implements GoogleMap.OnInfoWindowClickListener {
+        @Override
+        public void onInfoWindowClick(Marker marker) {
+
+        }
+    }
+
+    private void getStores(final ClusterManager<ClusterMarkerLocation> clManager, final Location l){
+
+        mDatabase.child("network").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                storeList.clear();
+
+                if(dataSnapshot.hasChildren()){
+
+                    if(dataSnapshot.hasChildren()){
+                        for (DataSnapshot nt: dataSnapshot.getChildren()) {
+                            for (DataSnapshot st: nt.getChildren()) {
+
+                                Store store = st.getValue(Store.class);
+
+                                Location storeLocation=new Location("storeLocation");
+                                storeLocation.setLatitude(store.getLat());
+                                storeLocation.setLongitude(store.getLng());
+
+                                Float distanceTo = l.distanceTo(storeLocation) / 1000;
+                                store.setDistance(distanceTo);
+
+                                storeList.add(store);
+                                clManager.addItem(new ClusterMarkerLocation(new LatLng(store.getLat(), store.getLng()),store.getName(),store.getAddress()));
+                            }
+                        }
+
+                        Utils.closeDialog(MapFragment.this.getContext());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

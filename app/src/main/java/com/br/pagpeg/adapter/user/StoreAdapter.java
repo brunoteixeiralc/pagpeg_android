@@ -5,9 +5,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.Store;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
@@ -30,62 +38,71 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
 
     @Override
     public int getItemCount() {
-        //return this.stores.size();
-        return 10;
+        return this.stores.size();
     }
 
     @Override
     public StoreViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Infla a view do layout
+
         View view = LayoutInflater.from(context).inflate(R.layout.list_item_store, viewGroup, false);
 
-        // Cria o ViewHolder
         StoreViewHolder holder = new StoreViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final StoreViewHolder holder, final int position) {
-        // Atualiza a view
-//        Friend a = friends.get(position);
-//
-//        holder.nome.setText(a.getNome());
-//        holder.nome.setTypeface(FontUtils.getRegular(context));
-//        holder.img.setImageResource(a.getImg());
 
-        // Click
+        Store s = stores.get(position);
+
+        holder.progressBar.setVisibility(View.VISIBLE);
+        holder.distance.setText(String.valueOf(s.getDistance()) + " km");
+        holder.name.setText(s.getName());
+        holder.address.setText(s.getAddress());
+        holder.openClose.setText(s.getOpen() + "-" + s.getClose());
+        Glide.with(context).load(s.getImg()).listener(new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                holder.progressBar.setVisibility(View.GONE);
+                return false;
+            }
+        }).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.img);
+
         if (storeOnClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    storeOnClickListener.onClickSticker(holder.itemView, position); // A variável position é final
+                    storeOnClickListener.onClickSticker(holder.itemView, position);
                 }
             });
-
         }
-
-
-
     }
 
     public interface StoreOnClickListener  {
         public void onClickSticker(View view, int idx);
     }
 
-
-    // ViewHolder com as views
     public static class StoreViewHolder extends RecyclerView.ViewHolder {
 
-        //        public TextView nome;
-//        public ImageView img;
-//
-//
+        public TextView name,address,openClose,distance;
+        public ImageView img;
+        public ProgressBar progressBar;
+
         public StoreViewHolder(View view) {
             super(view);
-//            // Cria as views para salvar no ViewHolder
-//            nome = (TextView) view.findViewById(R.id.nome);
-//            img = (ImageView) view.findViewById(R.id.img);
-//
+
+          name = (TextView) view.findViewById(R.id.name);
+          distance = (TextView) view.findViewById(R.id.distance);
+          address = (TextView) view.findViewById(R.id.address);
+          openClose = (TextView) view.findViewById(R.id.openClose);
+          img = (ImageView) view.findViewById(R.id.img);
+          progressBar = (ProgressBar) view.findViewById(R.id.progress);
+
         }
     }
 
