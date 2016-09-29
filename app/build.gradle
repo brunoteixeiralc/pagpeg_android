@@ -50,12 +50,12 @@ android {
         }
         homolog {
             signingConfig signingConfigs.release
-            debuggable true
+            debuggable false
             applicationIdSuffix ".homolog"
             versionNameSuffix '-HOMOLOG'
-            buildConfigField "String", "ENDPOINTSTORAGE", "\"gs://pagpeg-debug-818a1.appspot.com\"";
+            buildConfigField "String", "ENDPOINTSTORAGE", "\"gs://pagpeg-homol-df3da.appspot.com\"";
             buildConfigField "boolean", "REPORT_CRASH", "true"
-            resValue "string", "google_maps_api_key", "AIzaSyBA0_YHih-j6VuOuaL6Kfx0MPT4zaptIt8"
+            resValue "string", "google_maps_api_key", "AIzaSyDhgkhyV7t-R03KjrRivf2POqGvRMb9zLc"
         }
         release {
             signingConfig signingConfigs.release
@@ -63,9 +63,9 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            buildConfigField "String", "ENDPOINTSTORAGE", "\"gs://pagpeg-debug-818a1.appspot.com\"";
+            buildConfigField "String", "ENDPOINTSTORAGE", "\"gs://pagpeg-fc42f.appspot.com\"";
             buildConfigField "boolean", "REPORT_CRASH", "true"
-            resValue "string", "google_maps_api_key", "AIzaSyBA0_YHih-j6VuOuaL6Kfx0MPT4zaptIt8"
+            resValue "string", "google_maps_api_key", "AIzaSyDhgkhyV7t-R03KjrRivf2POqGvRMb9zLc"
         }
     }
 }

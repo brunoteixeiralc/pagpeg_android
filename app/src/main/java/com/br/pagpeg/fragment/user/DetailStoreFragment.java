@@ -18,11 +18,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.adapter.user.CategoryAdapter;
 import com.br.pagpeg.model.Store;
+import com.br.pagpeg.model.StoreCategory;
 import com.br.pagpeg.utils.DividerItemDecoration;
+import com.br.pagpeg.utils.Utils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,6 +39,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by brunolemgruber on 15/07/16.
@@ -42,17 +59,22 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
     private LinearLayoutManager mLayoutManager;
     private ImageView mIconMapImageView;
     private Store store;
-    private ImageView imgMap;
-    private GoogleMap gMap;
-    //Store location
-    LatLng latLng = new LatLng(35.0116363, 135.7680294);
     private SupportMapFragment mapFragment;
     private Fragment fragment;
+    private TextView name,address,openClose,distance;
+    private ProgressBar progressBar;
+    public ImageView img;
+    private DatabaseReference mDatabase;
+    private List<StoreCategory> storeCategories  = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        Utils.openDialog(DetailStoreFragment.this.getContext(),"Carregando categorias");
+        getCategories();
     }
 
     @Nullable
@@ -69,10 +91,35 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
         } catch (InflateException e) {
         }
 
-        //Toolbar MainActivity
+        store = (Store) getArguments().getSerializable("store");
+
+        name = (TextView) view.findViewById(R.id.name);
+        openClose = (TextView) view.findViewById(R.id.openClose);
+        address = (TextView) view.findViewById(R.id.address);
+        distance = (TextView) view.findViewById(R.id.km);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress);
+        img = (ImageView) view.findViewById(R.id.img);
+        Glide.with(DetailStoreFragment.this.getContext()).load(store.getImg()).listener(new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                progressBar.setVisibility(View.GONE);
+                return false;
+            }
+        }).diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
+
+        name.setText(store.getName());
+        address.setText(store.getAddress());
+        distance.setText(String.valueOf(store.getDistance()) + " km");
+        openClose.setText(store.getOpen() + "-" + store.getClose());
+
         Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbarMainActivity.setVisibility(View.VISIBLE);
-        toolbarMainActivity.setTitle("Roldão");
+        toolbarMainActivity.setTitle(store.getNetwork());
         mIconMapImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_mapStore);
         mIconMapImageView.setVisibility(View.GONE);
 
@@ -81,8 +128,6 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
-
-        recyclerView.setAdapter(new CategoryAdapter(onClickListener(),DetailStoreFragment.this.getActivity(),null));
 
         recyclerView.addItemDecoration(new DividerItemDecoration(DetailStoreFragment.this.getContext(),LinearLayoutManager.VERTICAL));
 
@@ -121,7 +166,13 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
             @Override
             public void onClickSticker(View view, int idx) {
 
+                StoreCategory category = storeCategories.get(idx);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("category",category);
+
                 fragment = new ProductListFragment();
+                fragment.setArguments(bundle);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
@@ -133,8 +184,8 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
 
         googleMap.getUiSettings().setMapToolbarEnabled(false);
-        googleMap.addMarker(new MarkerOptions().position(new LatLng(-15.7797200,-47.929720)));
-        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(-15.7797200,-47.9297200), 5f);
+        googleMap.addMarker(new MarkerOptions().position(new LatLng(store.getLat(),store.getLng())));
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(store.getLat(),store.getLng()), 5f);
         googleMap.moveCamera(cameraUpdate);
     }
 
@@ -146,5 +197,34 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+    }
+
+    private void getCategories(){
+
+        mDatabase.child("categories").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                storeCategories.clear();
+
+                if (dataSnapshot.hasChildren()) {
+
+                    for (DataSnapshot st : dataSnapshot.getChildren()) {
+
+                        StoreCategory category = new StoreCategory();
+                        category.setName(st.getKey());
+                        storeCategories.add(category);
+                    }
+                }
+
+                recyclerView.setAdapter(new CategoryAdapter(onClickListener(),DetailStoreFragment.this.getActivity(),storeCategories));
+                Utils.closeDialog(DetailStoreFragment.this.getContext());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

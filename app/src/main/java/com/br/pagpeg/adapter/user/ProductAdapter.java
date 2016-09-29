@@ -6,9 +6,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.br.pagpeg.R;
-import com.br.pagpeg.model.Store;
+import com.br.pagpeg.model.Product;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
@@ -19,40 +26,49 @@ import java.util.List;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
     protected static final String TAG = "pagpeg";
-    private final List<Store> stores;
+    private final List<Product> products;
     private ProductAdapter.ProductOnClickListener productOnClickListener;
     private Boolean isInCart = false;
+    private final Context context;
 
-    public ProductAdapter(ProductAdapter.ProductOnClickListener storeOnClickListener, Context context, List<Store> stores) {
+    public ProductAdapter(ProductAdapter.ProductOnClickListener storeOnClickListener, Context context, List<Product> products) {
         this.context = context;
-        this.stores = stores;
+        this.products = products;
         this.productOnClickListener = storeOnClickListener;
     }
 
     @Override
     public int getItemCount() {
-        //return this.stores.size();
-        return 20;
+        return this.products.size();
     }
 
     @Override
     public ProductAdapter.ProductViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Infla a view do layout
-        View view = LayoutInflater.from(context).inflate(R.layout.list_item_product, viewGroup, false);
 
-        // Cria o ViewHolder
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_product, viewGroup, false);
         ProductAdapter.ProductViewHolder holder = new ProductAdapter.ProductViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final ProductAdapter.ProductViewHolder holder, final int position) {
-        // Atualiza a view
-//        Friend a = friends.get(position);
-//
-//        holder.nome.setText(a.getNome());
-//        holder.nome.setTypeface(FontUtils.getRegular(context));
-//        holder.img.setImageResource(a.getImg());
+
+       Product p = products.get(position);
+
+       holder.name.setText(p.getName() + " " + p.getUnit_quantity());
+       holder.price.setText("R$ " + p.getPrice());
+       Glide.with(context).load(p.getImg()).listener(new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                holder.progressBar.setVisibility(View.GONE);
+                return false;
+            }
+        }).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.img);
 
         holder.cart.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +85,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             }
         });
 
-        // Click
         if (productOnClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -88,20 +103,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         public void onClickSticker(View view, int idx);
     }
 
-
-    // ViewHolder com as views
     public static class ProductViewHolder extends RecyclerView.ViewHolder {
 
-        //        public TextView nome;
-        public ImageView cart;
-//
-//
+        public TextView name,price;
+        public ImageView img,cart;
+        public ProgressBar progressBar;
+
         public ProductViewHolder(View view) {
             super(view);
-//            // Cria as views para salvar no ViewHolder
-//            nome = (TextView) view.findViewById(R.id.nome);
+            name = (TextView) view.findViewById(R.id.name);
+            price = (TextView) view.findViewById(R.id.price);
             cart = (ImageView) view.findViewById(R.id.product_cart);
-//
+            img = (ImageView) view.findViewById(R.id.img);
+            progressBar = (ProgressBar) view.findViewById(R.id.progress);
         }
-    }    private final Context context;
+    }
 }

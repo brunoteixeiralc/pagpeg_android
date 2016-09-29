@@ -25,9 +25,20 @@ import com.br.pagpeg.R;
 import com.br.pagpeg.activity.BarCodeActivity;
 import com.br.pagpeg.activity.user.MainUserActivity;
 import com.br.pagpeg.adapter.user.ProductAdapter;
+import com.br.pagpeg.model.Product;
+import com.br.pagpeg.model.StoreCategory;
 import com.br.pagpeg.utils.DividerItemDecoration;
+import com.br.pagpeg.utils.Utils;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by brunolemgruber on 16/07/16.
@@ -46,6 +57,20 @@ public class ProductListFragment extends Fragment {
     private Snackbar snackbar;
     private CoordinatorLayout coordinatorLayout;
     private AlertDialog builder = null;
+    private StoreCategory category;
+    private DatabaseReference mDatabase;
+    private List<Product> products = new ArrayList<>();
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        category = (StoreCategory) getArguments().getSerializable("category");
+
+        Utils.openDialog(ProductListFragment.this.getContext(),"Carregando produtos");
+        getProducts();
+    }
 
     @Nullable
     @Override
@@ -54,10 +79,9 @@ public class ProductListFragment extends Fragment {
         view = inflater.inflate(R.layout.list_product, container, false);
         coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorLayout);
 
-        //Toolbar MainActivity
         Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbarMainActivity.setVisibility(View.VISIBLE);
-        toolbarMainActivity.setTitle("Bebidas");
+        toolbarMainActivity.setTitle(category.getName());
 
         mIconMapImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_mapStore);
         mIconListImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_listStore);
@@ -78,9 +102,6 @@ public class ProductListFragment extends Fragment {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
-
-        mAdapter = new ProductAdapter(onClickListener(),ProductListFragment.this.getContext(),null);
-        recyclerView.setAdapter(mAdapter);
 
         recyclerView.addItemDecoration(new DividerItemDecoration(ProductListFragment.this.getContext(),LinearLayoutManager.VERTICAL));
 
@@ -155,5 +176,36 @@ public class ProductListFragment extends Fragment {
 
             }
         };
+    }
+
+    private void getProducts(){
+
+        mDatabase.child("product").orderByChild("category").equalTo(category.getName()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                products.clear();
+
+                if (dataSnapshot.hasChildren()) {
+
+                    for (DataSnapshot st : dataSnapshot.getChildren()) {
+
+                        Product product = st.getValue(Product.class);
+                        product.setName(st.getKey());
+                        products.add(product);
+                    }
+                }
+
+                if(products.size() != 0)
+                    recyclerView.setAdapter(new ProductAdapter(onClickListener(),ProductListFragment.this.getContext(),products));
+                Utils.closeDialog(ProductListFragment.this.getContext());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

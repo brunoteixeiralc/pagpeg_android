@@ -28,6 +28,7 @@ public class Store implements Serializable {
 
     private Float distance;
 
+    private String network;
 
     public String getAddress() {
         return address;
@@ -107,5 +108,13 @@ public class Store implements Serializable {
 
     public void setDistance(Float distance) {
         this.distance = distance;
+    }
+
+    public String getNetwork() {
+        return network;
+    }
+
+    public void setNetwork(String network) {
+        this.network = network;
     }
 }

@@ -52,6 +52,14 @@ public class StoreListFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                fragment = new MapFragment();
+
+                if(fragment != null) {
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+                    mIconMapImageView.setVisibility(View.GONE);
+                }
+
             }
         });
 
@@ -71,7 +79,14 @@ public class StoreListFragment extends Fragment {
         return new StoreAdapter.StoreOnClickListener() {
             @Override
             public void onClickSticker(View view, int idx) {
+
+                Store storeSelected = storeList.get(idx);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("store",storeSelected);
+
                 fragment = new DetailStoreFragment();
+                fragment.setArguments(bundle);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
             }

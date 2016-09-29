@@ -297,6 +297,8 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
                                 Float distanceTo = l.distanceTo(storeLocation) / 1000;
                                 store.setDistance(distanceTo);
 
+                                store.setNetwork(nt.getKey());
+
                                 storeList.add(store);
                                 clManager.addItem(new ClusterMarkerLocation(new LatLng(store.getLat(), store.getLng()),store.getName(),store.getAddress()));
                             }
