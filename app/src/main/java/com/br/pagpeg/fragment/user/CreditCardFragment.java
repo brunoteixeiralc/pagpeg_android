@@ -18,6 +18,8 @@ import com.br.pagpeg.activity.user.AddCreditCardActivity;
 import com.br.pagpeg.adapter.user.CreditCardAdapter;
 import com.br.pagpeg.model.CreditCard;
 import com.br.pagpeg.utils.DividerItemDecoration;
+import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,6 +44,7 @@ public class CreditCardFragment extends Fragment {
     private ImageView mAddCreditCard;
     private List<CreditCard> creditCards = new ArrayList<>();
     private DatabaseReference mDatabase;
+    private Toolbar toolbar;
 
     @Nullable
     @Override
@@ -51,12 +54,13 @@ public class CreditCardFragment extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
-        toolbarMainActivity.setVisibility(View.VISIBLE);
-        toolbarMainActivity.setTitle("Gerenciar seus cartões");
+        toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbar.setTitle("Gerenciar seus cartões");
 
-        mAddCreditCard = (ImageView) toolbarMainActivity.findViewById(R.id.ic_add_credit_card);
-        mAddCreditCard.setVisibility(View.VISIBLE);
+        Utils.setIconBar(EnumIconBar.ADDCREDITCARD,toolbar);
+
+        mAddCreditCard = (ImageView) toolbar.findViewById(R.id.ic_add_credit_card);
         mAddCreditCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

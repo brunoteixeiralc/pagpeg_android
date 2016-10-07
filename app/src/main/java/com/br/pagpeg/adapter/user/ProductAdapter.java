@@ -28,13 +28,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     protected static final String TAG = "pagpeg";
     private final List<Product> products;
     private ProductAdapter.ProductOnClickListener productOnClickListener;
-    private Boolean isInCart = false;
+    private ProductAdapter.CartOnClickListener cartOnClickListener;
     private final Context context;
 
-    public ProductAdapter(ProductAdapter.ProductOnClickListener storeOnClickListener, Context context, List<Product> products) {
+    public ProductAdapter(ProductAdapter.CartOnClickListener cartOnClickListener,ProductAdapter.ProductOnClickListener storeOnClickListener, Context context, List<Product> products) {
         this.context = context;
         this.products = products;
         this.productOnClickListener = storeOnClickListener;
+        this.cartOnClickListener = cartOnClickListener;
     }
 
     @Override
@@ -53,7 +54,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(final ProductAdapter.ProductViewHolder holder, final int position) {
 
-       Product p = products.get(position);
+       final Product p = products.get(position);
 
        holder.name.setText(p.getName() + " " + p.getUnit_quantity());
        holder.price.setText("R$ " + p.getPrice());
@@ -70,37 +71,39 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             }
         }).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.img);
 
-        holder.cart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if(isInCart){
-                    holder.cart.setImageResource(R.drawable.cart_add);
-                    isInCart = false;
-                }else{
-                    holder.cart.setImageResource(R.drawable.cart_sucess);
-                    isInCart = true;
-                }
-
-            }
-        });
-
         if (productOnClickListener != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            holder.img.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    productOnClickListener.onClickSticker(holder.itemView, position); // A variável position é final
+                    productOnClickListener.onClick(holder.img, position);
                 }
             });
 
         }
 
-
-
+        if (cartOnClickListener != null) {
+            holder.cart.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(p.isInCart()){
+                        holder.cart.setImageResource(R.drawable.cart_add);
+                        p.setInCart(false);
+                    }else{
+                        holder.cart.setImageResource(R.drawable.cart_sucess);
+                        p.setInCart(true);
+                    }
+                    cartOnClickListener.onClick(holder.cart, position);
+                }
+            });
+        }
     }
 
     public interface ProductOnClickListener  {
-        public void onClickSticker(View view, int idx);
+        public void onClick(View view, int idx);
+    }
+
+    public interface CartOnClickListener  {
+        public void onClick(View view, int idx);
     }
 
     public static class ProductViewHolder extends RecyclerView.ViewHolder {

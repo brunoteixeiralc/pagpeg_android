@@ -26,6 +26,7 @@ import com.br.pagpeg.adapter.user.CategoryAdapter;
 import com.br.pagpeg.model.Store;
 import com.br.pagpeg.model.StoreCategory;
 import com.br.pagpeg.utils.DividerItemDecoration;
+import com.br.pagpeg.utils.EnumIconBar;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -66,6 +67,7 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
     public ImageView img;
     private DatabaseReference mDatabase;
     private List<StoreCategory> storeCategories  = new ArrayList<>();
+    private Toolbar toolbar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -93,6 +95,12 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
 
         store = (Store) getArguments().getSerializable("store");
 
+        toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbar.setTitle(store.getNetwork());
+
+        Utils.setIconBar(EnumIconBar.STOREDETAIL,toolbar);
+
         name = (TextView) view.findViewById(R.id.name);
         openClose = (TextView) view.findViewById(R.id.openClose);
         address = (TextView) view.findViewById(R.id.address);
@@ -117,19 +125,16 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
         distance.setText(String.valueOf(store.getDistance()) + " km");
         openClose.setText(store.getOpen() + "-" + store.getClose());
 
-        Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
-        toolbarMainActivity.setVisibility(View.VISIBLE);
-        toolbarMainActivity.setTitle(store.getNetwork());
-        mIconMapImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_mapStore);
-        mIconMapImageView.setVisibility(View.GONE);
+        if(recyclerView == null){
 
-        recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
-        mLayoutManager = new LinearLayoutManager(DetailStoreFragment.this.getActivity());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setHasFixedSize(true);
+            recyclerView = (RecyclerView)view.findViewById(R.id.recyclerView);
+            mLayoutManager = new LinearLayoutManager(DetailStoreFragment.this.getActivity());
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setHasFixedSize(true);
+            recyclerView.addItemDecoration(new DividerItemDecoration(DetailStoreFragment.this.getContext(),LinearLayoutManager.VERTICAL));
 
-        recyclerView.addItemDecoration(new DividerItemDecoration(DetailStoreFragment.this.getContext(),LinearLayoutManager.VERTICAL));
+        }
 
         mapFragment = (com.google.android.gms.maps.SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(DetailStoreFragment.this);

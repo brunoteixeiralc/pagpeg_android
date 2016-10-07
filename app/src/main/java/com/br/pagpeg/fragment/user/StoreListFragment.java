@@ -17,6 +17,8 @@ import com.br.pagpeg.R;
 import com.br.pagpeg.adapter.user.StoreAdapter;
 import com.br.pagpeg.model.Store;
 import com.br.pagpeg.utils.DividerItemDecoration;
+import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.Utils;
 
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class StoreListFragment extends Fragment {
     private Fragment fragment;
     private ImageView mIconMapImageView;
     private List<Store> storeList;
+    private Toolbar toolbar;
 
 
     @Nullable
@@ -43,10 +46,13 @@ public class StoreListFragment extends Fragment {
 
         storeList = (List<Store>) getArguments().getSerializable("stores");
 
-        Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
-        toolbarMainActivity.setVisibility(View.VISIBLE);
-        toolbarMainActivity.setTitle("Lojas nas proximidades");
-        mIconMapImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_mapStore);
+        toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbar.setTitle("Lojas nas proximidades");
+
+        Utils.setIconBar(EnumIconBar.STORELIST,toolbar);
+
+        mIconMapImageView = (ImageView) toolbar.findViewById(R.id.ic_mapStore);
         mIconMapImageView.setVisibility(View.VISIBLE);
         mIconMapImageView.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.User;
+import com.br.pagpeg.utils.EnumIconBar;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -59,12 +60,19 @@ public class EditUserProfileFragment extends Fragment {
     private Bitmap bitmapUserImage =  null;
     private CircleImageView circleImageView;
     private String user_img_url;
+    private Toolbar toolbar;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.content_edit_user_profile, container, false);
+
+        toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbar.setTitle("Editar Perfil");
+
+        Utils.setIconBar(EnumIconBar.EDITPROFILE,toolbar);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -106,11 +114,6 @@ public class EditUserProfileFragment extends Fragment {
             }
 
         }
-
-        //Toolbar MainActivity
-        Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
-        toolbarMainActivity.setVisibility(View.VISIBLE);
-        toolbarMainActivity.setTitle("Editar Perfil");
 
         return view;
     }

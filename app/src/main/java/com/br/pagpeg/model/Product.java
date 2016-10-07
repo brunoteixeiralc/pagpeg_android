@@ -28,6 +28,10 @@ public class Product implements Serializable {
 
     private String wholesale_price;
 
+    private int quatity;
+
+    private boolean inCart;
+
     public Long getBar_code() {
         return bar_code;
     }
@@ -106,5 +110,21 @@ public class Product implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getQuatity() {
+        return quatity;
+    }
+
+    public void setQuatity(int quatity) {
+        this.quatity = quatity;
+    }
+
+    public boolean isInCart() {
+        return inCart;
+    }
+
+    public void setInCart(boolean inCart) {
+        this.inCart = inCart;
     }
 }

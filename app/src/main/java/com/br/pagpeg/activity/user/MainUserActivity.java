@@ -48,29 +48,29 @@ public class MainUserActivity extends AppCompatActivity {
         toolbar.setTitle("Lojas nas proximidades");
         setSupportActionBar(toolbar);
 
-        mAddCreditCard = (ImageView) toolbar.findViewById(R.id.ic_add_credit_card);
-        mIconListImageView = (ImageView) toolbar.findViewById(R.id.ic_listStore);
+//        mAddCreditCard = (ImageView) toolbar.findViewById(R.id.ic_add_credit_card);
+//        mIconListImageView = (ImageView) toolbar.findViewById(R.id.ic_listStore);
+//
+//        mIconMapImageView = (ImageView) toolbar.findViewById(R.id.ic_mapStore);
+//        mIconMapImageView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                fragment = new MapFragment();
+//                if(fragment != null) {
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+//                    mIconMapImageView.setVisibility(View.GONE);
+//                    mIconListImageView.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
 
-        mIconMapImageView = (ImageView) toolbar.findViewById(R.id.ic_mapStore);
-        mIconMapImageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fragment = new MapFragment();
-                if(fragment != null) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-                    mIconMapImageView.setVisibility(View.GONE);
-                    mIconListImageView.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        mLogOut = (TextView) toolbar.findViewById(R.id.logout);
-        mLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+//        mLogOut = (TextView) toolbar.findViewById(R.id.logout);
+//        mLogOut.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
 
         mBottomBar = BottomBar.attach(this, savedInstanceState);
         mBottomBar.noNavBarGoodness();
@@ -85,10 +85,10 @@ public class MainUserActivity extends AppCompatActivity {
 
                     case R.id.bottomBarItemOne:
 
-                        mIconMapImageView.setVisibility(View.GONE);
-                        mIconListImageView.setVisibility(View.GONE);
-                        mLogOut.setVisibility(View.VISIBLE);
-                        mAddCreditCard.setVisibility(View.GONE);
+//                        mIconMapImageView.setVisibility(View.GONE);
+//                        mIconListImageView.setVisibility(View.GONE);
+//                        mLogOut.setVisibility(View.VISIBLE);
+//                        mAddCreditCard.setVisibility(View.GONE);
 
                         User user = (User) getIntent().getSerializableExtra("user");
                         bundle = new Bundle();
@@ -99,18 +99,22 @@ public class MainUserActivity extends AppCompatActivity {
                         break;
 
                     case R.id.bottomBarItemTwo:
-                        mIconMapImageView.setVisibility(View.GONE);
-                        mIconListImageView.setVisibility(View.VISIBLE);
-                        mLogOut.setVisibility(View.GONE);
-                        mAddCreditCard.setVisibility(View.GONE);
+
+//                        mIconMapImageView.setVisibility(View.GONE);
+//                        mIconListImageView.setVisibility(View.VISIBLE);
+//                        mLogOut.setVisibility(View.GONE);
+//                        mAddCreditCard.setVisibility(View.GONE);
                         fragment = new MapFragment();
+
                         break;
                     case R.id.bottomBarItemThree:
-                        mIconMapImageView.setVisibility(View.GONE);
-                        mIconListImageView.setVisibility(View.GONE);
-                        mLogOut.setVisibility(View.GONE);
-                        mAddCreditCard.setVisibility(View.GONE);
+
+//                        mIconMapImageView.setVisibility(View.GONE);
+//                        mIconListImageView.setVisibility(View.GONE);
+//                        mLogOut.setVisibility(View.GONE);
+//                        mAddCreditCard.setVisibility(View.GONE);
                         fragment = new CartFragment();
+
                         break;
                 }
 
@@ -122,25 +126,31 @@ public class MainUserActivity extends AppCompatActivity {
             public void onMenuTabReSelected(@IdRes int menuItemId) {
                 switch (menuItemId){
                     case R.id.bottomBarItemOne:
+
                         mIconMapImageView.setVisibility(View.GONE);
                         mIconListImageView.setVisibility(View.GONE);
                         mLogOut.setVisibility(View.VISIBLE);
                         mAddCreditCard.setVisibility(View.GONE);
                         fragment = new UserProfileFragment();
+
                         break;
                     case R.id.bottomBarItemTwo:
-                        mIconMapImageView.setVisibility(View.GONE);
-                        mIconListImageView.setVisibility(View.VISIBLE);
-                        mLogOut.setVisibility(View.GONE);
-                        mAddCreditCard.setVisibility(View.GONE);
+
+//                        mIconMapImageView.setVisibility(View.GONE);
+//                        mIconListImageView.setVisibility(View.VISIBLE);
+//                        mLogOut.setVisibility(View.GONE);
+//                        mAddCreditCard.setVisibility(View.GONE);
                         fragment = new MapFragment();
+
                         break;
                     case R.id.bottomBarItemThree:
+
                         mIconMapImageView.setVisibility(View.GONE);
                         mIconListImageView.setVisibility(View.GONE);
                         mLogOut.setVisibility(View.GONE);
                         mAddCreditCard.setVisibility(View.GONE);
                         fragment = new CartFragment();
+
                         break;
                     default:break;
                 }
@@ -150,7 +160,7 @@ public class MainUserActivity extends AppCompatActivity {
             }
         });
 
-        BottomBarBadge unreadMessages = mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), 13);
+        BottomBarBadge unreadMessages = mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), 0);
         unreadMessages.setAutoShowAfterUnSelection(true);
     }
 

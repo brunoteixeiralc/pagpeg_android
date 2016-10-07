@@ -19,6 +19,7 @@ import com.br.pagpeg.R;
 import com.br.pagpeg.model.ClusterMarkerLocation;
 import com.br.pagpeg.model.Store;
 import com.br.pagpeg.utils.ClusterRenderer;
+import com.br.pagpeg.utils.EnumIconBar;
 import com.br.pagpeg.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -45,6 +46,7 @@ import permissions.dispatcher.RuntimePermissions;
 
 import static android.R.attr.fragment;
 import static com.br.pagpeg.R.id.map;
+import static com.br.pagpeg.R.id.toolbar;
 
 
 /**
@@ -64,6 +66,7 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
     private ClusterMarkerLocation clickedClusterItem;
     private Fragment fragment;
     private Bundle bundle;
+    private Toolbar toolbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,15 +81,15 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
         } catch (InflateException e) {
         }
 
-        setRetainInstance(true);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
-        toolbarMainActivity.setVisibility(View.VISIBLE);
-        toolbarMainActivity.setTitle("Lojas nas proximidades");
+        toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbar.setTitle("Lojas nas proximidades");
 
-        mIconListImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_listStore);
-        mIconListImageView.setVisibility(View.VISIBLE);
+        Utils.setIconBar(EnumIconBar.STOREMAP,toolbar);
+
+        mIconListImageView = (ImageView) toolbar.findViewById(R.id.ic_listStore);
         mIconListImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

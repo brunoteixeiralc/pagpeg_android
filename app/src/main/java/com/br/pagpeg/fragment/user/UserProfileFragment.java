@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.br.pagpeg.R;
 import com.br.pagpeg.activity.user.LoginActivity;
 import com.br.pagpeg.model.User;
+import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,12 +34,19 @@ public class UserProfileFragment extends Fragment {
     private TextView manageCC,logout,email,number,name,labelName;
     private ImageView profile_user;
     private Bundle bundle;
+    private Toolbar toolbar;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.content_user_profile, container, false);
+
+        toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbar.setTitle("Minha conta");
+
+        Utils.setIconBar(EnumIconBar.EDITPROFILE,toolbar);
 
         profile_user = (ImageView) view.findViewById(R.id.profile_image);
         labelName = (TextView) view.findViewById(R.id.label_name);
@@ -46,6 +55,7 @@ public class UserProfileFragment extends Fragment {
         number = (TextView) view.findViewById(R.id.user_phone);
 
         final User user = (User) getArguments().getSerializable("user");
+
         if(user != null){
             labelName.setText(user.getName());
             email.setText(user.getEmail());
@@ -57,10 +67,7 @@ public class UserProfileFragment extends Fragment {
 
         }
 
-        Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
-        toolbarMainActivity.setVisibility(View.VISIBLE);
-        toolbarMainActivity.setTitle("Minha conta");
-        logout = (TextView) toolbarMainActivity.findViewById(R.id.logout);
+        logout = (TextView) toolbar.findViewById(R.id.logout);
         logout.setVisibility(View.VISIBLE);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override

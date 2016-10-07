@@ -14,9 +14,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.activity.user.MainUserActivity;
+import com.br.pagpeg.model.Cart;
+import com.br.pagpeg.model.Product;
+import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.Utils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 /**
  * Created by brunolemgruber on 16/07/16.
@@ -29,6 +41,13 @@ public class ProductDetailFragment extends Fragment {
     private Button btnAddCart;
     private Snackbar snackbar;
     private CoordinatorLayout coordinatorLayout;
+    private TextView name,price,description;
+    private EditText quantity;
+    private ImageView img;
+    private Cart cart;
+    private Product product;
+    private ProgressBar progressBar;
+    private Toolbar toolbar;
 
     @Nullable
     @Override
@@ -37,14 +56,46 @@ public class ProductDetailFragment extends Fragment {
         view = inflater.inflate(R.layout.content_product_detail, container, false);
 
         coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorLayout);
+        name = (TextView) view.findViewById(R.id.name);
+        price = (TextView) view.findViewById(R.id.price);
+        description = (TextView) view.findViewById(R.id.description);
+        img = (ImageView) view.findViewById(R.id.img);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress);
 
+        product = (Product) getArguments().getSerializable("product");
+        cart = (Cart) getArguments().getSerializable("cart");
+
+        toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbar.setTitle(product.getName() + " - Detalhes");
+
+        Utils.setIconBar(EnumIconBar.PRODUCTSDETAIL,toolbar);
+
+        name.setText(product.getName() + " " + product.getUnit_quantity());
+        price.setText("R$ " + product.getPrice());
+        description.setText(product.getDescription());
+        Glide.with(ProductDetailFragment.this.getContext()).load(product.getImg()).listener(new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                progressBar.setVisibility(View.GONE);
+                return false;
+            }
+        }).diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
+
+        View dialoglayout = ProductDetailFragment.this.getActivity().getLayoutInflater().inflate(R.layout.content_alert_dialog, null);
+        quantity = (EditText) dialoglayout.findViewById(R.id.quantity);
         final AlertDialog builder = new AlertDialog.Builder(getActivity(), R.style.Dialog_Quantity)
                 .setPositiveButton("OK", null)
                 .setNegativeButton("Cancelar", null)
                 .setTitle("PagPeg")
                 .setMessage("Quantidade do produto")
                 .setIcon(R.mipmap.ic_launcher)
-                .setView(new EditText(ProductDetailFragment.this.getContext()))
+                .setView(dialoglayout)
                 .create();
 
         builder.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -54,15 +105,21 @@ public class ProductDetailFragment extends Fragment {
                 btnAccept.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                      addProduct();
+
                       snackbar.show();
-                      ((MainUserActivity)getActivity()).mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), 200);
                       builder.dismiss();
+                      getFragmentManager().popBackStack();
+
                     }
                 });
+
                 final Button btnDecline = builder.getButton(DialogInterface.BUTTON_NEGATIVE);
                 btnDecline.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                         builder.dismiss();
                     }
                 });
@@ -75,15 +132,13 @@ public class ProductDetailFragment extends Fragment {
                 .setAction("UNDO", new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+
+                        removeProduct();
+
                         Snackbar snackbarUndo = Snackbar.make(coordinatorLayout, "Produto removido.", Snackbar.LENGTH_SHORT);
                         snackbarUndo.show();
                     }
                 });
-
-        //Toolbar MainActivity
-        Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
-        toolbarMainActivity.setVisibility(View.VISIBLE);
-        toolbarMainActivity.setTitle("Detalhe do produto");
 
         cardView = (CardView) view.findViewById(R.id.cardViewAddCart);
         btnAddCart = (Button) cardView.findViewById(R.id.addCart);
@@ -92,10 +147,29 @@ public class ProductDetailFragment extends Fragment {
             public void onClick(View v) {
 
                builder.show();
+               Utils.openKeyboard(ProductDetailFragment.this.getActivity());
 
             }
         });
 
         return view;
     }
+
+    private void removeProduct(){
+
+        cart.getProducts().remove(product);
+        cart.setCount(cart.getCount() - 1);
+        ((MainUserActivity)getActivity()).mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), cart.getCount());
+
+    }
+
+    private void addProduct(){
+
+        product.setQuatity(Integer.parseInt(quantity.getText().toString()));
+        cart.getProducts().add(product);
+        cart.setCount(cart.getCount() + 1);
+        ((MainUserActivity)getActivity()).mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), cart.getCount());
+
+    }
 }
+
