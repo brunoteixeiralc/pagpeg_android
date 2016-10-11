@@ -27,14 +27,6 @@ public class Cart implements Serializable {
         this.count = count;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
     public String getTotal_price() {
         return total_price;
     }
@@ -57,5 +49,13 @@ public class Cart implements Serializable {
 
     public void setTax(String tax) {
         this.tax = tax;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

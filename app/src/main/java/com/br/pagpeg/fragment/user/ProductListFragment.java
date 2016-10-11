@@ -27,10 +27,12 @@ import com.br.pagpeg.activity.user.MainUserActivity;
 import com.br.pagpeg.adapter.user.ProductAdapter;
 import com.br.pagpeg.model.Cart;
 import com.br.pagpeg.model.Product;
+import com.br.pagpeg.model.ProductCart;
 import com.br.pagpeg.model.StoreCategory;
 import com.br.pagpeg.utils.DividerItemDecoration;
 import com.br.pagpeg.utils.EnumIconBar;
 import com.br.pagpeg.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -271,6 +273,8 @@ public class ProductListFragment extends Fragment {
         cart.setCount(cart.getCount() + 1);
         ((MainUserActivity)getActivity()).mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), cart.getCount());
 
+        saveProductCart();
+
     }
 
     private void removeProduct(){
@@ -278,6 +282,28 @@ public class ProductListFragment extends Fragment {
         cart.getProducts().remove(selectedProduct);
         cart.setCount(cart.getCount() - 1);
         ((MainUserActivity)getActivity()).mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), cart.getCount());
+
+    }
+
+    private void saveProductCart(){
+
+        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                ProductCart productCart = new ProductCart();
+                productCart.setQuantity(selectedProduct.getQuatity());
+                productCart.setPrice_total(String.valueOf(selectedProduct.getQuatity() * Float.parseFloat(selectedProduct.getPrice().replace(",","."))));
+
+                mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getName()).setValue(productCart);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 }

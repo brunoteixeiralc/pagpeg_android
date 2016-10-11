@@ -85,7 +85,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             holder.cart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if(p.isInCart()){
+                   if(p.isInCart()){
                         holder.cart.setImageResource(R.drawable.cart_add);
                         p.setInCart(false);
                     }else{

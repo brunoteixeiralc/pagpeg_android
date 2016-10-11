@@ -93,7 +93,7 @@
               android:layout_height="wrap_content"
               android:text="@string/price"
               android:gravity="left|center"
-              android:textSize="12sp"
+              android:textSize="14sp"
               fontPath="fonts/Nexa-Bold.ttf"
               tools:ignore="MissingPrefix"
               android:textColor="@color/colorPrimary"/>

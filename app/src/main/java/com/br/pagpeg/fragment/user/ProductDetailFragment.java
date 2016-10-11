@@ -22,6 +22,7 @@ import com.br.pagpeg.R;
 import com.br.pagpeg.activity.user.MainUserActivity;
 import com.br.pagpeg.model.Cart;
 import com.br.pagpeg.model.Product;
+import com.br.pagpeg.model.ProductCart;
 import com.br.pagpeg.utils.EnumIconBar;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
@@ -159,6 +160,7 @@ public class ProductDetailFragment extends Fragment {
 
         cart.getProducts().remove(product);
         cart.setCount(cart.getCount() - 1);
+
         ((MainUserActivity)getActivity()).mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), cart.getCount());
 
     }
@@ -166,8 +168,13 @@ public class ProductDetailFragment extends Fragment {
     private void addProduct(){
 
         product.setQuatity(Integer.parseInt(quantity.getText().toString()));
-        cart.getProducts().add(product);
+        ProductCart productCart = new ProductCart();
+        productCart.setPrice_total(String.valueOf(product.getQuatity() * Float.parseFloat(product.getPrice().replace(",","."))));
+        productCart.setQuantity(product.getQuatity());
+
+        //cart.getProducts().add(productCart);
         cart.setCount(cart.getCount() + 1);
+
         ((MainUserActivity)getActivity()).mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), cart.getCount());
 
     }
