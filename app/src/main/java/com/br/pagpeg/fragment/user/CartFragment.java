@@ -15,11 +15,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.adapter.user.CartAdapter;
+import com.br.pagpeg.model.Product;
+import com.br.pagpeg.model.ProductCart;
 import com.br.pagpeg.utils.DividerItemDecoration;
+import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by brunolemgruber on 18/07/16.
@@ -33,37 +46,55 @@ public class CartFragment  extends Fragment{
     private RecyclerView.Adapter mAdapter;
     private Fragment fragment;
     private Button btnDiscount,btnBuy,btnCCManage;
-    private ImageView mIconListImageView;
-    private ImageView mIconMapImageView;
-    private ImageView mIconBarCode;
-    private ImageView mAddCreditCard;
+    private EditText discount;
+    private DatabaseReference mDatabase;
+    private List<ProductCart> productCarts;
+    private Toolbar toolbar;
+    private ProductCart productCart;
+    private TextView txtDiscount;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.list_cart, container, false);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        //Toolbar MainActivity
-        Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
-        toolbarMainActivity.setVisibility(View.VISIBLE);
-        toolbarMainActivity.setTitle("Resumo do pedido (13 itens)");
-        mIconMapImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_mapStore);
-        mIconListImageView = (ImageView) toolbarMainActivity.findViewById(R.id.ic_listStore);
-        mIconBarCode = (ImageView) toolbarMainActivity.findViewById(R.id.ic_bar_code);
-        mAddCreditCard = (ImageView) toolbarMainActivity.findViewById(R.id.ic_add_credit_card);
-        mIconListImageView.setVisibility(View.GONE);
-        mIconMapImageView.setVisibility(View.GONE);
-        mIconBarCode.setVisibility(View.GONE);
-        mAddCreditCard.setVisibility(View.GONE);
+        Utils.openDialog(CartFragment.this.getContext(),"Carregando produtos");
 
+        if(productCarts == null){
+            productCarts = new ArrayList<>();
+        }
+
+        txtDiscount = (TextView) view.findViewById(R.id.discount);
+
+        if(recyclerView == null){
+
+            recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+            mLayoutManager = new LinearLayoutManager(CartFragment.this.getActivity());
+            recyclerView.setLayoutManager(mLayoutManager);
+            recyclerView.setItemAnimator(new DefaultItemAnimator());
+            recyclerView.setHasFixedSize(true);
+
+            recyclerView.addItemDecoration(new DividerItemDecoration(CartFragment.this.getContext(),LinearLayoutManager.VERTICAL));
+
+        }
+
+        getProductsCart();
+
+        toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        Utils.setIconBar(EnumIconBar.CART,toolbar);
+
+        View dialoglayout = CartFragment.this.getActivity().getLayoutInflater().inflate(R.layout.content_alert_discount, null);
+        discount = (EditText) dialoglayout.findViewById(R.id.discount);
         final AlertDialog builder = new AlertDialog.Builder(getActivity(), R.style.Dialog_Quantity)
                 .setPositiveButton("OK", null)
                 .setNegativeButton("Cancelar", null)
                 .setTitle("PagPeg")
                 .setMessage("Código do desconto")
                 .setIcon(R.mipmap.ic_launcher)
-                .setView(new EditText(CartFragment.this.getContext()))
+                .setView(dialoglayout)
                 .create();
 
         builder.setOnShowListener(new DialogInterface.OnShowListener() {
@@ -73,6 +104,8 @@ public class CartFragment  extends Fragment{
                 btnAccept.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
+                        validadeDiscount(discount.getText().toString());
                         builder.dismiss();
                     }
                 });
@@ -117,30 +150,107 @@ public class CartFragment  extends Fragment{
             }
         });
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mLayoutManager = new LinearLayoutManager(CartFragment.this.getActivity());
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setHasFixedSize(true);
-
-        mAdapter = new CartAdapter(onClickListener(),CartFragment.this.getContext(),null);
-        recyclerView.setAdapter(mAdapter);
-
-        recyclerView.addItemDecoration(new DividerItemDecoration(CartFragment.this.getContext(),LinearLayoutManager.VERTICAL));
-
         return  view;
     }
 
     private CartAdapter.CartOnClickListener onClickListener() {
         return new CartAdapter.CartOnClickListener() {
             @Override
-            public void onClickSticker(View view, int idx) {
+            public void onClick(View view, Product product) {
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("product",product);
 
                 fragment = new ProductDetailFragment();
+                fragment.setArguments(bundle);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
 
             }
         };
+    }
+
+    private CartAdapter.RemoveCartOnClickListener cartOnClickListener() {
+        return new CartAdapter.RemoveCartOnClickListener() {
+            @Override
+            public void onClick(View view, Product product) {
+                deleteProductCart(product.getName());
+            }
+        };
+    }
+
+    private void getProductsCart(){
+
+        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                productCarts.clear();
+
+                if (dataSnapshot.hasChildren()) {
+
+                    for (DataSnapshot st : dataSnapshot.getChildren()) {
+
+                        productCart = st.getValue(ProductCart.class);
+                        productCart.setProduct(new Product());
+                        productCart.setName(st.getKey());
+                        productCarts.add(productCart);
+                    }
+
+                    if(productCarts.size() != 0){
+
+                        toolbar.setTitle("Resumo do pedido ( " + String.format("%02d", productCarts.size()) + " itens )");
+
+                        mAdapter = new CartAdapter(onClickListener(),cartOnClickListener(),CartFragment.this.getContext(),productCarts,mDatabase);
+                        recyclerView.setAdapter(mAdapter);
+                    }
+
+                    Utils.closeDialog(CartFragment.this.getContext());
+
+                }else{
+
+                    Utils.closeDialog(CartFragment.this.getContext());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void validadeDiscount(String code){
+
+        mDatabase.child("discount").child(code).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.getValue() != null){
+                    txtDiscount.setText("Desconto : R$ " + dataSnapshot.getValue().toString());
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void deleteProductCart(final String name){
+
+        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(name).removeValue();
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }

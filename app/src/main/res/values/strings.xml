@@ -25,7 +25,7 @@
     <string name="open_until">Aberta até as 23:00</string>
     <string name="rating_shopper">Classificar shopper</string>
     <string name="description">Descrição</string>
-    <string name="price">R$ 2.00</string>
+    <string name="price">R$ 0.00</string>
     <string name="discount_price">R$ 4.00</string>
     <string name="manage_credit_card">Gerenciar cartões</string>
     <string name="add_credit_card">Adicionar cartões</string>
@@ -68,6 +68,7 @@
     <string name="get_my_products">Peguei meus produtos</string>
     <string name="call">Ligar</string>
     <string name="add_cart">Adicionar no carrinho</string>
+    <string name="remove_cart">Remover do carrinho</string>
     <string name="has_the_product">Contêm produto</string>
     <string name="edit">Editar</string>
     <string name="apply_discount">Aplicar desconto</string>

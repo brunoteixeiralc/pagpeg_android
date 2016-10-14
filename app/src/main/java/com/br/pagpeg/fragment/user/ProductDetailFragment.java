@@ -39,7 +39,7 @@ public class ProductDetailFragment extends Fragment {
 
     private View view;
     private CardView cardView;
-    private Button btnAddCart;
+    private Button btnAddCart,btnRemoveCart;
     private Snackbar snackbar;
     private CoordinatorLayout coordinatorLayout;
     private TextView name,price,description;
@@ -64,7 +64,6 @@ public class ProductDetailFragment extends Fragment {
         progressBar = (ProgressBar) view.findViewById(R.id.progress);
 
         product = (Product) getArguments().getSerializable("product");
-        cart = (Cart) getArguments().getSerializable("cart");
 
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
@@ -108,8 +107,8 @@ public class ProductDetailFragment extends Fragment {
                     public void onClick(View v) {
 
                       addProduct();
-
                       snackbar.show();
+
                       builder.dismiss();
                       getFragmentManager().popBackStack();
 
@@ -153,6 +152,26 @@ public class ProductDetailFragment extends Fragment {
             }
         });
 
+        btnRemoveCart = (Button) cardView.findViewById(R.id.removeCart);
+        btnRemoveCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                builder.show();
+                Utils.openKeyboard(ProductDetailFragment.this.getActivity());
+
+            }
+        });
+
+        cart = (Cart) getArguments().getSerializable("cart");
+        if(cart != null){
+           btnAddCart.setVisibility(View.VISIBLE);
+           btnRemoveCart.setVisibility(View.GONE);
+        }else{
+           btnAddCart.setVisibility(View.GONE);
+           btnRemoveCart.setVisibility(View.VISIBLE);
+        }
+
         return view;
     }
 
@@ -171,8 +190,7 @@ public class ProductDetailFragment extends Fragment {
         ProductCart productCart = new ProductCart();
         productCart.setPrice_total(String.valueOf(product.getQuatity() * Float.parseFloat(product.getPrice().replace(",","."))));
         productCart.setQuantity(product.getQuatity());
-
-        //cart.getProducts().add(productCart);
+        ;
         cart.setCount(cart.getCount() + 1);
 
         ((MainUserActivity)getActivity()).mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), cart.getCount());

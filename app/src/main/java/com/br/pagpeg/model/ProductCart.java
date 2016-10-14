@@ -12,8 +12,12 @@ public class ProductCart implements Serializable {
 
    private String price_total;
 
-    public ProductCart(){
-    }
+   private Product product;
+
+   private String name;
+
+   public ProductCart(){
+   }
 
     public ProductCart(String name,int quantity,String price_total){
         this.quantity = quantity;
@@ -34,5 +38,21 @@ public class ProductCart implements Serializable {
 
     public void setPrice_total(String price_total) {
         this.price_total = price_total;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

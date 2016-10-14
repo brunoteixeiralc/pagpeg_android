@@ -78,6 +78,9 @@ public final class Utils {
                 mIconMap.setVisibility(View.VISIBLE);
                 break;
             }
+            case CART:{
+                break;
+            }
             case STOREMAP:{
                 mIconList.setVisibility(View.VISIBLE);
                 break;

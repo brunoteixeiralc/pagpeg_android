@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-
 import com.br.pagpeg.R;
 import com.br.pagpeg.activity.BarCodeActivity;
 import com.br.pagpeg.activity.user.MainUserActivity;
@@ -183,7 +182,6 @@ public class ProductListFragment extends Fragment {
             } else {
                 Log.d("MainActivity", "Scanned");
 
-                //addProduct();
                 builder.show();
             }
         } else {
@@ -283,6 +281,22 @@ public class ProductListFragment extends Fragment {
         cart.setCount(cart.getCount() - 1);
         ((MainUserActivity)getActivity()).mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), cart.getCount());
 
+        deleteProductCart();
+    }
+
+    private void deleteProductCart(){
+
+        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getName()).removeValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void saveProductCart(){
