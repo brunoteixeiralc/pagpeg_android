@@ -22,13 +22,15 @@ public class CreditCard implements Serializable {
 
     private int cc_flag_img;
 
-    private boolean isDefault;
+    private Boolean is_default;
+
+    private String key;
 
     public CreditCard(){
 
     }
 
-    public CreditCard(String cc_name,String cc_expire_date,String cc_number,String cc_security_number,String cc_flag,String token, int cc_flag_img){
+    public CreditCard(String cc_name,String cc_expire_date,String cc_number,String cc_security_number,String cc_flag,String token, int cc_flag_img, Boolean is_default){
         this.cc_name = cc_name;
         this.cc_expire_date = cc_expire_date;
         this.cc_number = cc_number;
@@ -36,6 +38,7 @@ public class CreditCard implements Serializable {
         this.cc_flag = cc_flag;
         this.token = token;
         this.cc_flag_img = cc_flag_img;
+        this.is_default = is_default;
     }
 
     public String getCc_name() {
@@ -94,11 +97,19 @@ public class CreditCard implements Serializable {
         this.cc_flag_img = cc_flag_img;
     }
 
-    public boolean isDefault() {
-        return isDefault;
+    public Boolean getIs_default() {
+        return is_default;
     }
 
-    public void setDefault(boolean aDefault) {
-        isDefault = aDefault;
+    public void setIs_default(Boolean is_default) {
+        this.is_default = is_default;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

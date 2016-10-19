@@ -8,8 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.fragment.user.CartFragment;
@@ -31,11 +29,8 @@ public class MainUserActivity extends AppCompatActivity {
     public BottomBar mBottomBar;
     private Toolbar toolbar;
     private Fragment fragment;
-    private ImageView mIconListImageView;
-    private ImageView mIconMapImageView;
-    private TextView mLogOut;
-    private ImageView mAddCreditCard;
     private Bundle bundle;
+    public BottomBarBadge bottomBarBadge;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -111,8 +106,9 @@ public class MainUserActivity extends AppCompatActivity {
             }
         });
 
-        BottomBarBadge unreadMessages = mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), 0);
-        unreadMessages.setAutoShowAfterUnSelection(true);
+        bottomBarBadge = mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), 0);
+        bottomBarBadge.setAutoShowAfterUnSelection(true);
+        bottomBarBadge.show();
     }
 
     @Override

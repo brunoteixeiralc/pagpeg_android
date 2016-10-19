@@ -188,9 +188,9 @@ public class ProductDetailFragment extends Fragment {
 
         product.setQuatity(Integer.parseInt(quantity.getText().toString()));
         ProductCart productCart = new ProductCart();
-        productCart.setPrice_total(String.valueOf(product.getQuatity() * Float.parseFloat(product.getPrice().replace(",","."))));
+        productCart.setPrice_total(product.getQuatity() * product.getPrice());
         productCart.setQuantity(product.getQuatity());
-        ;
+
         cart.setCount(cart.getCount() + 1);
 
         ((MainUserActivity)getActivity()).mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), cart.getCount());

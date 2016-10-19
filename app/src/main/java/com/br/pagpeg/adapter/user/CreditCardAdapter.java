@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.CreditCard;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
 
@@ -22,11 +24,13 @@ public class CreditCardAdapter extends RecyclerView.Adapter<CreditCardAdapter.CC
     private final List<CreditCard> creditCards;
     private CreditCardAdapter.CCOnClickListener ccOnClickListener;
     private final Context context;
+    private DatabaseReference databaseReference;
 
-    public CreditCardAdapter(CreditCardAdapter.CCOnClickListener ccOnClickListener, Context context, List<CreditCard> creditCards) {
+    public CreditCardAdapter(CreditCardAdapter.CCOnClickListener ccOnClickListener, Context context, List<CreditCard> creditCards,DatabaseReference databaseReference) {
         this.context = context;
         this.creditCards = creditCards;
         this.ccOnClickListener = ccOnClickListener;
+        this.databaseReference = databaseReference;
     }
 
     @Override
@@ -50,7 +54,7 @@ public class CreditCardAdapter extends RecyclerView.Adapter<CreditCardAdapter.CC
 
         holder.cc_number.setText(cc.getCc_number());
         holder.cc_flag_img.setImageResource(cc.getCc_flag_img());
-        if(cc.isDefault())
+        if(cc.getIs_default())
             holder.check.setVisibility(View.VISIBLE);
         else
             holder.check.setVisibility(View.INVISIBLE);
@@ -61,10 +65,13 @@ public class CreditCardAdapter extends RecyclerView.Adapter<CreditCardAdapter.CC
                 public void onClick(View v) {
 
                     for (CreditCard ccAll:creditCards) {
-                        ccAll.setDefault(false);
+                        ccAll.setIs_default(false);
+                        setDefault(ccAll);
                     }
-                    cc.setDefault(true);
+
+                    cc.setIs_default(true);
                     notifyDataSetChanged();
+                    setDefault(cc);
                 }
             });
         }
@@ -86,6 +93,13 @@ public class CreditCardAdapter extends RecyclerView.Adapter<CreditCardAdapter.CC
             cc_flag_img = (ImageView) view.findViewById(R.id.cc_flag_img);
 
         }
+    }
+
+    private void setDefault(CreditCard creditCard){
+
+        String key = creditCard.getKey();
+        databaseReference.child("credit_card").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(key).setValue(creditCard);
+
     }
 
 }

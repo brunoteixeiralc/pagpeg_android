@@ -18,7 +18,7 @@ public class Product implements Serializable {
 
     private String img;
 
-    private String price;
+    private Double price;
 
     private String short_unit_measurement;
 
@@ -26,7 +26,7 @@ public class Product implements Serializable {
 
     private String unit_quantity;
 
-    private String wholesale_price;
+    private Double wholesale_price;
 
     private int quatity;
 
@@ -64,14 +64,6 @@ public class Product implements Serializable {
         this.img = img;
     }
 
-    public String getPrice() {
-        return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
-    }
-
     public String getShort_unit_measurement() {
         return short_unit_measurement;
     }
@@ -96,14 +88,6 @@ public class Product implements Serializable {
         this.unit_quantity = unit_quantity;
     }
 
-    public String getWholesale_price() {
-        return wholesale_price;
-    }
-
-    public void setWholesale_price(String wholesale_price) {
-        this.wholesale_price = wholesale_price;
-    }
-
     public String getName() {
         return name;
     }
@@ -126,5 +110,21 @@ public class Product implements Serializable {
 
     public void setInCart(boolean inCart) {
         this.inCart = inCart;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public Double getWholesale_price() {
+        return wholesale_price;
+    }
+
+    public void setWholesale_price(Double wholesale_price) {
+        this.wholesale_price = wholesale_price;
     }
 }

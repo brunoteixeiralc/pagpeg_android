@@ -85,9 +85,10 @@ public class CreditCardFragment extends Fragment {
 
                     for (DataSnapshot ss: dataSnapshot.getChildren()) {
                         CreditCard creditCard = ss.getValue(CreditCard.class);
+                        creditCard.setKey(ss.getKey());
                         creditCards.add(creditCard);
                     }
-                    mAdapter = new CreditCardAdapter(onClickListener(),CreditCardFragment.this.getContext(),creditCards);
+                    mAdapter = new CreditCardAdapter(onClickListener(),CreditCardFragment.this.getContext(),creditCards,mDatabase);
                     recyclerView.setAdapter(mAdapter);
                 }
             }

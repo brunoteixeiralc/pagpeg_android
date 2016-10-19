@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.adapter.user.CartAdapter;
+import com.br.pagpeg.model.CreditCard;
 import com.br.pagpeg.model.Product;
 import com.br.pagpeg.model.ProductCart;
 import com.br.pagpeg.utils.DividerItemDecoration;
@@ -51,7 +52,9 @@ public class CartFragment  extends Fragment{
     private List<ProductCart> productCarts;
     private Toolbar toolbar;
     private ProductCart productCart;
-    private TextView txtDiscount;
+    private TextView txtDiscount,ccSelect,txtTotal,txtTax;
+    private Double totalDouble = 0.0;
+    private Double taxDouble = 0.0;
 
     @Nullable
     @Override
@@ -67,6 +70,9 @@ public class CartFragment  extends Fragment{
         }
 
         txtDiscount = (TextView) view.findViewById(R.id.discount);
+        ccSelect = (TextView) view.findViewById(R.id.cc_select);
+        txtTotal = (TextView) view.findViewById(R.id.total);
+        txtTax = (TextView) view.findViewById(R.id.tax);
 
         if(recyclerView == null){
 
@@ -81,6 +87,8 @@ public class CartFragment  extends Fragment{
         }
 
         getProductsCart();
+        getDefaultCard();
+        getTax();
 
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
@@ -173,8 +181,8 @@ public class CartFragment  extends Fragment{
     private CartAdapter.RemoveCartOnClickListener cartOnClickListener() {
         return new CartAdapter.RemoveCartOnClickListener() {
             @Override
-            public void onClick(View view, Product product) {
-                deleteProductCart(product.getName());
+            public void onClick(View view, ProductCart productCart) {
+                deleteProductCart(productCart.getName(),productCart.getPrice_total());
             }
         };
     }
@@ -186,6 +194,7 @@ public class CartFragment  extends Fragment{
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 productCarts.clear();
+                totalDouble = 0.0;
 
                 if (dataSnapshot.hasChildren()) {
 
@@ -194,10 +203,14 @@ public class CartFragment  extends Fragment{
                         productCart = st.getValue(ProductCart.class);
                         productCart.setProduct(new Product());
                         productCart.setName(st.getKey());
+                        totalDouble += productCart.getPrice_total();
                         productCarts.add(productCart);
                     }
 
                     if(productCarts.size() != 0){
+
+                        btnBuy.setText(String.valueOf(totalDouble));
+                        txtTotal.setText(String.valueOf(totalDouble));
 
                         toolbar.setTitle("Resumo do pedido ( " + String.format("%02d", productCarts.size()) + " itens )");
 
@@ -226,7 +239,9 @@ public class CartFragment  extends Fragment{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue() != null){
-                    txtDiscount.setText("Desconto : R$ " + dataSnapshot.getValue().toString());
+                    txtDiscount.setText(String.valueOf(dataSnapshot.getValue()));
+                    totalDouble -= Double.parseDouble(dataSnapshot.getValue().toString());
+                    btnBuy.setText(String.valueOf(totalDouble));
                 }
             }
 
@@ -238,13 +253,58 @@ public class CartFragment  extends Fragment{
 
     }
 
-    private void deleteProductCart(final String name){
+    private void getDefaultCard() {
+
+        mDatabase.child("credit_card/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("is_default").equalTo(true).limitToFirst(1).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                ccSelect.setText("");
+
+                if (dataSnapshot.hasChildren()) {
+                    for (DataSnapshot ss: dataSnapshot.getChildren()) {
+                        CreditCard creditCard = ss.getValue(CreditCard.class);
+                        ccSelect.setText(creditCard.getCc_number());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getTax(){
+
+        mDatabase.child("tax").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                taxDouble = Double.parseDouble(dataSnapshot.getValue().toString());
+                txtTax.setText(String.valueOf(taxDouble));
+                totalDouble += taxDouble;
+                btnBuy.setText(String.valueOf(totalDouble));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+    }
+
+    private void deleteProductCart(final String name, final Double price){
 
         mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(name).removeValue();
-                mAdapter.notifyDataSetChanged();
+                getProductsCart();
+                //txtTotal.setText(String.valueOf(totalDouble));
+                //totalDouble += taxDouble;
+                //btnBuy.setText(String.valueOf(totalDouble));
             }
 
             @Override

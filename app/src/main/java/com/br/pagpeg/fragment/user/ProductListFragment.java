@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+
 import com.br.pagpeg.R;
 import com.br.pagpeg.activity.BarCodeActivity;
 import com.br.pagpeg.activity.user.MainUserActivity;
@@ -269,7 +270,8 @@ public class ProductListFragment extends Fragment {
         selectedProduct.setQuatity(Integer.parseInt(quantity.getText().toString()));
         cart.getProducts().add(selectedProduct);
         cart.setCount(cart.getCount() + 1);
-        ((MainUserActivity)getActivity()).mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), cart.getCount());
+        ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
+        ((MainUserActivity)getActivity()).bottomBarBadge.show();
 
         saveProductCart();
 
@@ -279,7 +281,8 @@ public class ProductListFragment extends Fragment {
 
         cart.getProducts().remove(selectedProduct);
         cart.setCount(cart.getCount() - 1);
-        ((MainUserActivity)getActivity()).mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), cart.getCount());
+        ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
+        ((MainUserActivity)getActivity()).bottomBarBadge.show();
 
         deleteProductCart();
     }
@@ -307,7 +310,7 @@ public class ProductListFragment extends Fragment {
 
                 ProductCart productCart = new ProductCart();
                 productCart.setQuantity(selectedProduct.getQuatity());
-                productCart.setPrice_total(String.valueOf(selectedProduct.getQuatity() * Float.parseFloat(selectedProduct.getPrice().replace(",","."))));
+                productCart.setPrice_total(selectedProduct.getQuatity() * selectedProduct.getPrice());
 
                 mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getName()).setValue(productCart);
 

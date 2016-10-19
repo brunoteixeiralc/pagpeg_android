@@ -100,10 +100,13 @@ public class AddCreditCardActivity extends AppCompatActivity implements ActionOn
 
     private void saveCreditCard(String uid,CreditCardPaymentMethod cc){
 
+        String key = mDatabase.child("credit_card").push().getKey();
+
         CreditCard creditCard = new CreditCard(cc.getCreditCardName(),String.valueOf(cc.getExpireMonth()) + "/"
                 + String.valueOf(cc.getExpireYear()),cc.getCreditCardNumber(),
-                cc.getSecurityCode(),cc.getIssuerCode().name(),"",cc.getIssuerCode().getIconId());
-        mDatabase.child("credit_card").child(uid).push().setValue(creditCard);
+                cc.getSecurityCode(),cc.getIssuerCode().name(),"",cc.getIssuerCode().getIconId(),false);
+
+        mDatabase.child("credit_card").child(uid).child(key).setValue(creditCard);
 
     }
 }

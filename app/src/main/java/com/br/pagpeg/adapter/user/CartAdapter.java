@@ -80,7 +80,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
             holder.cartImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    removeCartOnClickListener.onClick(holder.cartImg, pc.getProduct());
+                    removeCartOnClickListener.onClick(holder.cartImg, pc);
                 }
             });
 
@@ -92,7 +92,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
     }
 
     public interface RemoveCartOnClickListener  {
-        public void onClick(View view, Product product);
+        public void onClick(View view, ProductCart productCart);
     }
 
 
