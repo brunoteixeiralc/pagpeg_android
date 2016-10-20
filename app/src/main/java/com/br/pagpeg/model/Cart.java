@@ -19,6 +19,10 @@ public class Cart implements Serializable {
 
     private String tax;
 
+    private String network;
+
+    private String store;
+
     public int getCount() {
         return count;
     }
@@ -57,5 +61,21 @@ public class Cart implements Serializable {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public String getNetwork() {
+        return network;
+    }
+
+    public void setNetwork(String network) {
+        this.network = network;
+    }
+
+    public String getStore() {
+        return store;
+    }
+
+    public void setStore(String store) {
+        this.store = store;
     }
 }

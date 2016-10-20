@@ -54,7 +54,9 @@ public class CartFragment  extends Fragment{
     private ProductCart productCart;
     private TextView txtDiscount,ccSelect,txtTotal,txtTax;
     private Double totalDouble = 0.0;
+    private Double totalPriceDouble = 0.0;
     private Double taxDouble = 0.0;
+    private Double discountDouble = 0.0;
 
     @Nullable
     @Override
@@ -141,6 +143,8 @@ public class CartFragment  extends Fragment{
             @Override
             public void onClick(View v) {
 
+                saveCart();
+
                 fragment = new StepToPickUpFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
@@ -195,6 +199,7 @@ public class CartFragment  extends Fragment{
 
                 productCarts.clear();
                 totalDouble = 0.0;
+                totalPriceDouble = 0.0;
 
                 if (dataSnapshot.hasChildren()) {
 
@@ -203,12 +208,13 @@ public class CartFragment  extends Fragment{
                         productCart = st.getValue(ProductCart.class);
                         productCart.setProduct(new Product());
                         productCart.setName(st.getKey());
-                        totalDouble += productCart.getPrice_total();
+                        totalPriceDouble += productCart.getPrice_total();
                         productCarts.add(productCart);
                     }
 
                     if(productCarts.size() != 0){
 
+                        totalDouble += totalPriceDouble;
                         btnBuy.setText(String.valueOf(totalDouble));
                         txtTotal.setText(String.valueOf(totalDouble));
 
@@ -239,8 +245,9 @@ public class CartFragment  extends Fragment{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.getValue() != null){
-                    txtDiscount.setText(String.valueOf(dataSnapshot.getValue()));
-                    totalDouble -= Double.parseDouble(dataSnapshot.getValue().toString());
+                    discountDouble = Double.parseDouble(dataSnapshot.getValue().toString());
+                    txtDiscount.setText(String.valueOf(discountDouble));
+                    totalDouble -= discountDouble;
                     btnBuy.setText(String.valueOf(totalDouble));
                 }
             }
@@ -302,9 +309,6 @@ public class CartFragment  extends Fragment{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(name).removeValue();
                 getProductsCart();
-                //txtTotal.setText(String.valueOf(totalDouble));
-                //totalDouble += taxDouble;
-                //btnBuy.setText(String.valueOf(totalDouble));
             }
 
             @Override
@@ -312,5 +316,14 @@ public class CartFragment  extends Fragment{
 
             }
         });
+    }
+
+    private void saveCart(){
+
+        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("tax").setValue(taxDouble);
+        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("total").setValue(totalDouble);
+        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("total_price").setValue(totalPriceDouble);
+        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("discount").setValue(discountDouble);
+
     }
 }

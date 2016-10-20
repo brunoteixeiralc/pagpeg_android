@@ -61,6 +61,10 @@
             android:configChanges="keyboardHidden"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
 
+        <activity android:name=".activity.shopper.RegisterActivity" android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+
         <activity android:name=".activity.shopper.ProductDetailActivity" android:screenOrientation="portrait"
             android:configChanges="keyboardHidden"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>

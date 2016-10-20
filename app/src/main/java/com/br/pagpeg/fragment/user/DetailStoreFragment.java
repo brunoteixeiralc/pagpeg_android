@@ -174,6 +174,7 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
                 StoreCategory category = storeCategories.get(idx);
 
                 Bundle bundle = new Bundle();
+                bundle.putSerializable("store",store);
                 bundle.putSerializable("category",category);
 
                 fragment = new ProductListFragment();

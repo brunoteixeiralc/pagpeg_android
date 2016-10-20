@@ -40,6 +40,8 @@
     <string name="change_image">Mudar foto</string>
 
     <!--Shopper -->
+    <string name="register_account_shopper">Precisamos de alguns dados</string>
+    <string name="login_create_shopper">Não tem uma conta de shopper? Se cadastre</string>
     <string name="hint_access_code">Digite seu código de acesso</string>
     <string name="app_shopper">Aplicativo do Shopper</string>
     <string name="user">Usuário</string>

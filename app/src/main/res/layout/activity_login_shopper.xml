@@ -44,6 +44,16 @@
             android:textColor="@color/colorPrimary"
             android:layout_marginTop="10dp"/>
 
-     </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/login_create_shopper"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="16dp"
+            android:id="@+id/createShopper"
+            android:padding="20dp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

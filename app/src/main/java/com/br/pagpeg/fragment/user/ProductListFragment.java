@@ -13,13 +13,13 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.activity.BarCodeActivity;
@@ -28,6 +28,8 @@ import com.br.pagpeg.adapter.user.ProductAdapter;
 import com.br.pagpeg.model.Cart;
 import com.br.pagpeg.model.Product;
 import com.br.pagpeg.model.ProductCart;
+import com.br.pagpeg.model.Promotion;
+import com.br.pagpeg.model.Store;
 import com.br.pagpeg.model.StoreCategory;
 import com.br.pagpeg.utils.DividerItemDecoration;
 import com.br.pagpeg.utils.EnumIconBar;
@@ -66,6 +68,9 @@ public class ProductListFragment extends Fragment {
     private Product selectedProduct;
     private EditText quantity;
     private Toolbar toolbar;
+    private Store store;
+    private Promotion promotion;
+    private List<Promotion> promotions;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -73,6 +78,7 @@ public class ProductListFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         category = (StoreCategory) getArguments().getSerializable("category");
+        store = (Store) getArguments().getSerializable("store");
 
         Utils.openDialog(ProductListFragment.this.getContext(),"Carregando produtos");
 
@@ -178,12 +184,10 @@ public class ProductListFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(result != null) {
-            if(result.getContents() != null) {
-                Log.d("MainActivity", "Cancelled scan");
+            if(result.getContents() != null){
+                getBarCode(result.getContents());
             } else {
-                Log.d("MainActivity", "Scanned");
-
-                builder.show();
+                Toast.makeText(getActivity(), "Produto não encontrado", Toast.LENGTH_LONG).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -294,10 +298,8 @@ public class ProductListFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getName()).removeValue();
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
@@ -313,7 +315,8 @@ public class ProductListFragment extends Fragment {
                 productCart.setPrice_total(selectedProduct.getQuatity() * selectedProduct.getPrice());
 
                 mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getName()).setValue(productCart);
-
+                mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("store").setValue(store.getName());
+                mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("network").setValue(store.getNetwork());
             }
 
             @Override
@@ -322,5 +325,64 @@ public class ProductListFragment extends Fragment {
             }
         });
 
+    }
+
+    private void getBarCode(String code){
+
+        mDatabase.child("product").orderByChild("bar_code").equalTo(Long.parseLong(code)).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.hasChildren()) {
+
+                    for (DataSnapshot st : dataSnapshot.getChildren()) {
+
+                        selectedProduct = st.getValue(Product.class);
+                        selectedProduct.setName(st.getKey());
+                        builder.show();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void validatePromotionNetwork(){
+
+        mDatabase.child("promotions").child(store.getNetwork()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                promotions = new ArrayList<Promotion>();
+
+                if (dataSnapshot.hasChildren()) {
+
+                    for (DataSnapshot st : dataSnapshot.getChildren()) {
+
+                        promotion = st.getValue(Promotion.class);
+                        promotions.add(promotion);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void validatePromotionProduct(){
+
+        cart.getProducts().add(selectedProduct);
+        cart.setCount(cart.getCount() + 1);
+        ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
+        ((MainUserActivity)getActivity()).bottomBarBadge.show();
+
+        saveProductCart();
     }
 }
