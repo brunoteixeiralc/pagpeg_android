@@ -9,6 +9,8 @@ import java.util.List;
 
 public class Promotion implements Serializable {
 
+    private String key;
+
     private String name;
 
     private Long start;
@@ -47,5 +49,13 @@ public class Promotion implements Serializable {
 
     public void setEnd(Long end) {
         this.end = end;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
     }
 }

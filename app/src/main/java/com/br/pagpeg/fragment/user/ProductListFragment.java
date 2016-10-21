@@ -29,6 +29,7 @@ import com.br.pagpeg.model.Cart;
 import com.br.pagpeg.model.Product;
 import com.br.pagpeg.model.ProductCart;
 import com.br.pagpeg.model.Promotion;
+import com.br.pagpeg.model.PromotionProduct;
 import com.br.pagpeg.model.Store;
 import com.br.pagpeg.model.StoreCategory;
 import com.br.pagpeg.utils.DividerItemDecoration;
@@ -44,6 +45,8 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -272,12 +275,14 @@ public class ProductListFragment extends Fragment {
     private void addProduct(){
 
         selectedProduct.setQuatity(Integer.parseInt(quantity.getText().toString()));
-        cart.getProducts().add(selectedProduct);
-        cart.setCount(cart.getCount() + 1);
-        ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
-        ((MainUserActivity)getActivity()).bottomBarBadge.show();
+        validatePromotionNetwork();
 
-        saveProductCart();
+//        cart.getProducts().add(selectedProduct);
+//        cart.setCount(cart.getCount() + 1);
+//        ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
+//        ((MainUserActivity)getActivity()).bottomBarBadge.show();
+//
+//        saveProductCart();
 
     }
 
@@ -304,7 +309,7 @@ public class ProductListFragment extends Fragment {
         });
     }
 
-    private void saveProductCart(){
+    private void saveProductCart(final Double wholesale_price){
 
         mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -312,7 +317,7 @@ public class ProductListFragment extends Fragment {
 
                 ProductCart productCart = new ProductCart();
                 productCart.setQuantity(selectedProduct.getQuatity());
-                productCart.setPrice_total(selectedProduct.getQuatity() * selectedProduct.getPrice());
+                productCart.setPrice_total(selectedProduct.getQuatity() * (wholesale_price == 0.0 ? selectedProduct.getPrice() : wholesale_price));
 
                 mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getName()).setValue(productCart);
                 mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("store").setValue(store.getName());
@@ -358,13 +363,23 @@ public class ProductListFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 promotions = new ArrayList<Promotion>();
+                java.util.Date date = new java.util.Date();
 
                 if (dataSnapshot.hasChildren()) {
 
                     for (DataSnapshot st : dataSnapshot.getChildren()) {
 
                         promotion = st.getValue(Promotion.class);
-                        promotions.add(promotion);
+                        promotion.setKey(st.getKey());
+                        boolean isValidate = validateDates((date.getTime()/1000),promotion.getStart(),promotion.getEnd());
+                        if(isValidate)
+                            promotions.add(promotion);
+                    }
+
+                    if(promotions.size() != 0) {
+                       for (Promotion p : promotions) {
+                           validatePromotionProduct(p.getKey());
+                       }
                     }
                 }
             }
@@ -376,13 +391,64 @@ public class ProductListFragment extends Fragment {
         });
     }
 
-    private void validatePromotionProduct(){
+    private void validatePromotionProduct(String keyName){
 
-        cart.getProducts().add(selectedProduct);
-        cart.setCount(cart.getCount() + 1);
-        ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
-        ((MainUserActivity)getActivity()).bottomBarBadge.show();
+        mDatabase.child("promotion_product").child(store.getNetwork()).child(keyName).child(selectedProduct.getName()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
 
-        saveProductCart();
+                java.util.Date date = new java.util.Date();
+
+                if (dataSnapshot.exists()) {
+
+                        PromotionProduct promotionProduct = dataSnapshot.getValue(PromotionProduct.class);
+                        boolean isValidate = validateDates((date.getTime()/1000),promotionProduct.getStart(),promotionProduct.getEnd());
+                        if(isValidate){
+
+                            if(selectedProduct.getQuatity() >= promotionProduct.getQuantity()){
+
+                                cart.getProducts().add(selectedProduct);
+                                cart.setCount(cart.getCount() + 1);
+                                ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
+                                ((MainUserActivity)getActivity()).bottomBarBadge.show();
+
+                                saveProductCart(selectedProduct.getWholesale_price());
+
+                            }else{
+                                saveProductCart(0.0);
+                            }
+                        }
+
+                }else{
+                    saveProductCart(0.0);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
+    }
+
+    private boolean validateDates(Long dateNow, Long date1, Long date2){
+
+        Date dNow = new Date(dateNow * 1000);
+        Date d1 = new Date(date1 * 1000);
+        Date d2 = new Date(date2 * 1000);
+
+        Calendar calNow = Calendar.getInstance();
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        calNow.setTime(dNow);
+        cal1.setTime(d1);
+        cal2.setTime(d2);
+
+        if(calNow.after(cal1) || calNow.equals(cal1)){
+            if(calNow.before(cal2) || calNow.equals(cal2)){
+                return true;
+            }
+        }
+        return false;
     }
 }
