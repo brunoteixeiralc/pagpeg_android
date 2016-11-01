@@ -320,6 +320,7 @@ public class CartFragment  extends Fragment{
 
     private void saveCart(){
 
+        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("status").setValue("Finding shopper");
         mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("tax").setValue(taxDouble);
         mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("total").setValue(totalDouble);
         mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("total_price").setValue(totalPriceDouble);

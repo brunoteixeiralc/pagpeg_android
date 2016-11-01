@@ -28,6 +28,16 @@
             android:padding="20dp"/>
 
         <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_access_email"
+            android:textColorHint="@color/white"
+            android:textColor="@color/white"
+            android:gravity="center_horizontal"/>
+
+        <EditText
+            android:id="@+id/code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/hint_access_code"

@@ -4,12 +4,20 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.utils.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -21,17 +29,27 @@ public class LoginActivity extends Activity {
 
     private Button btnConfirm;
     private TextView register;
+    private DatabaseReference mDatabase;
+    private EditText accessCode,email;
+    private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_shopper);
 
+        FirebaseAuth.getInstance().signOut();
+        mAuth = FirebaseAuth.getInstance();
+
+        accessCode = (EditText) findViewById(R.id.code);
+        email = (EditText) findViewById(R.id.email);
+
         btnConfirm = (Button) findViewById(R.id.btnConfirm);
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(v.getContext(),MainShopperActivity.class));
+                loginShopper();
             }
         });
 
@@ -48,5 +66,25 @@ public class LoginActivity extends Activity {
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    private void loginShopper(){
+
+        Utils.openDialog(LoginActivity.this,"Entrando...");
+
+        mAuth.signInWithEmailAndPassword("shopper_" + email.getText().toString(), accessCode.getText().toString())
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        Log.d("Firebase", "signInWithEmail:onComplete:" + task.isSuccessful());
+                        if (!task.isSuccessful()) {
+                            Log.w("Firebase", "signInWithEmail:failed", task.getException());
+                        }else{
+                            startActivity(new Intent(LoginActivity.this,MainShopperActivity.class));
+                        }
+
+                        Utils.closeDialog(LoginActivity.this);
+                    }
+                });
     }
 }

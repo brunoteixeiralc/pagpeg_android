@@ -106,6 +106,9 @@ public final class Utils {
             case STOREDETAIL:{
                 break;
             }
+            case FINDINGSHOPPER:{
+                break;
+            }
 
             default:break;
         }

@@ -186,10 +186,10 @@ public class ProductDetailFragment extends Fragment {
 
     private void addProduct(){
 
-        product.setQuatity(Integer.parseInt(quantity.getText().toString()));
+        product.setQuantity(Integer.parseInt(quantity.getText().toString()));
         ProductCart productCart = new ProductCart();
-        productCart.setPrice_total(product.getQuatity() * product.getPrice());
-        productCart.setQuantity(product.getQuatity());
+        productCart.setPrice_total(product.getQuantity() * product.getPrice());
+        productCart.setQuantity(product.getQuantity());
 
         cart.setCount(cart.getCount() + 1);
 

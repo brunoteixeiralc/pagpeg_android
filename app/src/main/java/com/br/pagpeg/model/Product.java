@@ -28,7 +28,7 @@ public class Product implements Serializable {
 
     private Double wholesale_price;
 
-    private int quatity;
+    private int quantity;
 
     private boolean inCart;
 
@@ -96,14 +96,6 @@ public class Product implements Serializable {
         this.name = name;
     }
 
-    public int getQuatity() {
-        return quatity;
-    }
-
-    public void setQuatity(int quatity) {
-        this.quatity = quatity;
-    }
-
     public boolean isInCart() {
         return inCart;
     }
@@ -126,5 +118,13 @@ public class Product implements Serializable {
 
     public void setWholesale_price(Double wholesale_price) {
         this.wholesale_price = wholesale_price;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }

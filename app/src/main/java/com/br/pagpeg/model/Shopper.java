@@ -20,17 +20,22 @@ public class Shopper implements Serializable {
 
     private Boolean is_free;
 
+    private Integer rating;
+
+    private String key;
+
     public Shopper(){
 
     }
 
-    public Shopper(String name,String number,String email,String user_img,String device_id, Boolean is_free){
+    public Shopper(String name,String number,String email,String user_img,String device_id, Boolean is_free,Integer rating){
         this.name = name;
         this.number = number;
         this.email = email;
         this.user_img = user_img;
         this.device_id = device_id;
         this.is_free = is_free;
+        this.rating = rating;
     }
 
     public String getName() {
@@ -79,5 +84,21 @@ public class Shopper implements Serializable {
 
     public void setIs_free(Boolean is_free) {
         this.is_free = is_free;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public Integer getRating() {
+        return rating;
+    }
+
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 }

@@ -23,6 +23,10 @@ public class Cart implements Serializable {
 
     private String store;
 
+    private String shopper;
+
+    private String status;
+
     public int getCount() {
         return count;
     }
@@ -55,14 +59,6 @@ public class Cart implements Serializable {
         this.tax = tax;
     }
 
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
     public String getNetwork() {
         return network;
     }
@@ -77,5 +73,29 @@ public class Cart implements Serializable {
 
     public void setStore(String store) {
         this.store = store;
+    }
+
+    public String getShopper() {
+        return shopper;
+    }
+
+    public void setShopper(String shopper) {
+        this.shopper = shopper;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 }

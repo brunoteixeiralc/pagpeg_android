@@ -274,7 +274,7 @@ public class ProductListFragment extends Fragment {
 
     private void addProduct(){
 
-        selectedProduct.setQuatity(Integer.parseInt(quantity.getText().toString()));
+        selectedProduct.setQuantity(Integer.parseInt(quantity.getText().toString()));
         validatePromotionNetwork();
 
 //        cart.getProducts().add(selectedProduct);
@@ -316,8 +316,8 @@ public class ProductListFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 ProductCart productCart = new ProductCart();
-                productCart.setQuantity(selectedProduct.getQuatity());
-                productCart.setPrice_total(selectedProduct.getQuatity() * (wholesale_price == 0.0 ? selectedProduct.getPrice() : wholesale_price));
+                productCart.setQuantity(selectedProduct.getQuantity());
+                productCart.setPrice_total(selectedProduct.getQuantity() * (wholesale_price == 0.0 ? selectedProduct.getPrice() : wholesale_price));
 
                 mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getName()).setValue(productCart);
                 mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("store").setValue(store.getName());
@@ -405,7 +405,7 @@ public class ProductListFragment extends Fragment {
                         boolean isValidate = validateDates((date.getTime()/1000),promotionProduct.getStart(),promotionProduct.getEnd());
                         if(isValidate){
 
-                            if(selectedProduct.getQuatity() >= promotionProduct.getQuantity()){
+                            if(selectedProduct.getQuantity() >= promotionProduct.getQuantity()){
 
                                 cart.getProducts().add(selectedProduct);
                                 cart.setCount(cart.getCount() + 1);

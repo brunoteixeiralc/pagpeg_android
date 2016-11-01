@@ -16,16 +16,6 @@
             android:background="@color/colorPrimary"
             android:layout_height="150dp"/>
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/profile_image"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/shopper_profile"
-            app:civ_border_width="2dp"
-            app:civ_border_color="@color/white"
-            android:layout_gravity="center|top"/>
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,15 +28,41 @@
             fontPath="fonts/Nexa-Bold.ttf"
             tools:ignore="MissingPrefix"/>
 
+        <RelativeLayout
+            android:id="@+id/relative_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/shopper_image"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/image_user"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/white"
+            android:layout_gravity="center|top"/>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="visible"
+            android:indeterminateTint="@color/white"/>
+
+        </RelativeLayout>
+
     </FrameLayout>
 
     <RatingBar
-        android:id="@+id/ratingBar"
+        android:id="@+id/shopper_ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:numStars="5"
         android:stepSize="1.0"
-        android:rating="4.0"
+        android:rating="0.0"
         android:theme="@style/Rating_Bar"
         android:isIndicator="true"/>
 

@@ -144,7 +144,7 @@ public class RegisterActivity extends Activity {
 
     private void createShopper(){
 
-        mAuth.createUserWithEmailAndPassword(email.getText().toString(), code.getText().toString())
+        mAuth.createUserWithEmailAndPassword("shopper_" + email.getText().toString(), code.getText().toString())
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -165,7 +165,7 @@ public class RegisterActivity extends Activity {
 
     private void saveShopper(){
 
-        Shopper shopper = new Shopper(name.getText().toString(),number.getText().toString(),email.getText().toString(),shopper_img_url,deviceId,true);
+        Shopper shopper = new Shopper(name.getText().toString(),number.getText().toString(),email.getText().toString(),shopper_img_url,deviceId,true,0);
         mDatabase.child("shoppers").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(shopper);
 
         getShopper(FirebaseAuth.getInstance().getCurrentUser().getUid());
