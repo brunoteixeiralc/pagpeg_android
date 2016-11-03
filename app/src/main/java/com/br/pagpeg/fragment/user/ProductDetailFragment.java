@@ -177,7 +177,7 @@ public class ProductDetailFragment extends Fragment {
 
     private void removeProduct(){
 
-        cart.getProducts().remove(product);
+        cart.getProductCartList().remove(product);
         cart.setCount(cart.getCount() - 1);
 
         ((MainUserActivity)getActivity()).mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), cart.getCount());

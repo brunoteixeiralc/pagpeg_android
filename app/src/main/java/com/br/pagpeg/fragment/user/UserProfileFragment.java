@@ -43,7 +43,6 @@ public class UserProfileFragment extends Fragment {
         view = inflater.inflate(R.layout.content_user_profile, container, false);
 
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
-        toolbar.setVisibility(View.VISIBLE);
         toolbar.setTitle("Minha conta");
 
         Utils.setIconBar(EnumIconBar.EDITPROFILE,toolbar);
@@ -83,7 +82,6 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                logout.setVisibility(View.GONE);
                 fragment = new EditUserProfileFragment();
                 bundle = new Bundle();
                 bundle.putSerializable("user",user);

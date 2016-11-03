@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 public class ProductCart implements Serializable {
 
-   private int quantity;
+   private Integer quantity;
 
    private Double price_total;
 
@@ -19,17 +19,9 @@ public class ProductCart implements Serializable {
    public ProductCart(){
    }
 
-    public ProductCart(String name,int quantity,Double price_total){
+    public ProductCart(String name,Integer quantity,Double price_total){
         this.quantity = quantity;
         this.price_total = price_total;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public Product getProduct() {
@@ -54,5 +46,13 @@ public class ProductCart implements Serializable {
 
     public void setPrice_total(Double price_total) {
         this.price_total = price_total;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
     }
 }

@@ -68,7 +68,7 @@ public class ProductListFragment extends Fragment {
     private DatabaseReference mDatabase;
     private List<Product> products = new ArrayList<>();
     private Cart cart;
-    private Product selectedProduct;
+    private ProductCart selectedProduct;
     private EditText quantity;
     private Toolbar toolbar;
     private Store store;
@@ -87,7 +87,7 @@ public class ProductListFragment extends Fragment {
 
         if(cart == null){
             cart = new Cart();
-            cart.setProducts(new ArrayList<Product>());
+            cart.setProductCartList(new ArrayList<ProductCart>());
         }
 
         getProducts();
@@ -220,9 +220,11 @@ public class ProductListFragment extends Fragment {
             @Override
             public void onClick(View view, int idx) {
 
-                selectedProduct = products.get(idx);
+                selectedProduct = new ProductCart();
+                selectedProduct.setProduct(products.get(idx));
+                selectedProduct.setName(products.get(idx).getName());
 
-                if(selectedProduct.isInCart()){
+                if(selectedProduct.getProduct().isInCart()){
 
                     builder.show();
                     Utils.openKeyboard(ProductListFragment.this.getActivity());
@@ -275,20 +277,19 @@ public class ProductListFragment extends Fragment {
     private void addProduct(){
 
         selectedProduct.setQuantity(Integer.parseInt(quantity.getText().toString()));
-        validatePromotionNetwork();
 
-//        cart.getProducts().add(selectedProduct);
-//        cart.setCount(cart.getCount() + 1);
-//        ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
-//        ((MainUserActivity)getActivity()).bottomBarBadge.show();
-//
-//        saveProductCart();
+        cart.setCount(cart.getCount() + 1);
+        ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
+        ((MainUserActivity)getActivity()).bottomBarBadge.show();
+
+        validatePromotionNetwork();
 
     }
 
     private void removeProduct(){
 
-        cart.getProducts().remove(selectedProduct);
+        cart.getProductCartList().remove(selectedProduct);
+
         cart.setCount(cart.getCount() - 1);
         ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
         ((MainUserActivity)getActivity()).bottomBarBadge.show();
@@ -317,10 +318,10 @@ public class ProductListFragment extends Fragment {
 
                 ProductCart productCart = new ProductCart();
                 productCart.setQuantity(selectedProduct.getQuantity());
-                productCart.setPrice_total(selectedProduct.getQuantity() * (wholesale_price == 0.0 ? selectedProduct.getPrice() : wholesale_price));
+                productCart.setPrice_total(selectedProduct.getQuantity() * (wholesale_price == 0.0 ? selectedProduct.getProduct().getPrice() : wholesale_price));
 
-                mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getName()).setValue(productCart);
-                mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("store").setValue(store.getName());
+                mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getProduct().getName()).setValue(productCart);
+                mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("store").setValue(store.getKeyStore());
                 mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("network").setValue(store.getNetwork());
             }
 
@@ -342,8 +343,10 @@ public class ProductListFragment extends Fragment {
 
                     for (DataSnapshot st : dataSnapshot.getChildren()) {
 
-                        selectedProduct = st.getValue(Product.class);
+                        selectedProduct = new ProductCart();
+                        selectedProduct.setProduct(st.getValue(Product.class));
                         selectedProduct.setName(st.getKey());
+
                         builder.show();
                     }
                 }
@@ -377,9 +380,13 @@ public class ProductListFragment extends Fragment {
                     }
 
                     if(promotions.size() != 0) {
+
                        for (Promotion p : promotions) {
                            validatePromotionProduct(p.getKey());
                        }
+
+                    }else{
+                        saveProductCart(0.0);
                     }
                 }
             }
@@ -407,12 +414,8 @@ public class ProductListFragment extends Fragment {
 
                             if(selectedProduct.getQuantity() >= promotionProduct.getQuantity()){
 
-                                cart.getProducts().add(selectedProduct);
-                                cart.setCount(cart.getCount() + 1);
-                                ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
-                                ((MainUserActivity)getActivity()).bottomBarBadge.show();
-
-                                saveProductCart(selectedProduct.getWholesale_price());
+                                cart.getProductCartList().add(selectedProduct);
+                                saveProductCart(selectedProduct.getProduct().getWholesale_price());
 
                             }else{
                                 saveProductCart(0.0);

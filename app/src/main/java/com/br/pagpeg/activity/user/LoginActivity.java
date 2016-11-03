@@ -57,6 +57,8 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        FirebaseAuth.getInstance().signOut();
         setContentView(R.layout.activity_login_user);
         Utils.hideKeyboard(LoginActivity.this);
 

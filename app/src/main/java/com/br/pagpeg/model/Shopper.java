@@ -24,11 +24,13 @@ public class Shopper implements Serializable {
 
     private String key;
 
+    private String one_signal_key;
+
     public Shopper(){
 
     }
 
-    public Shopper(String name,String number,String email,String user_img,String device_id, Boolean is_free,Integer rating){
+    public Shopper(String name,String number,String email,String user_img,String device_id, Boolean is_free,Integer rating,String one_signal_key){
         this.name = name;
         this.number = number;
         this.email = email;
@@ -36,6 +38,7 @@ public class Shopper implements Serializable {
         this.device_id = device_id;
         this.is_free = is_free;
         this.rating = rating;
+        this.one_signal_key = one_signal_key;
     }
 
     public String getName() {
@@ -100,5 +103,13 @@ public class Shopper implements Serializable {
 
     public void setRating(Integer rating) {
         this.rating = rating;
+    }
+
+    public String getOne_signal_key() {
+        return one_signal_key;
+    }
+
+    public void setOne_signal_key(String one_signal_key) {
+        this.one_signal_key = one_signal_key;
     }
 }

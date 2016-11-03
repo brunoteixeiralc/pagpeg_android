@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.Shopper;
 import com.br.pagpeg.utils.Utils;
@@ -34,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.onesignal.OneSignal;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -59,6 +61,7 @@ public class RegisterActivity extends Activity {
     private int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmapShopperImage =  null;
     private String deviceId = "";
+    private String one_signal_key="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +168,17 @@ public class RegisterActivity extends Activity {
 
     private void saveShopper(){
 
-        Shopper shopper = new Shopper(name.getText().toString(),number.getText().toString(),email.getText().toString(),shopper_img_url,deviceId,true,0);
+        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+            @Override
+            public void idsAvailable(String userId, String registrationId) {
+                Log.d("debug", "User:" + userId);
+                one_signal_key = userId;
+                if (registrationId != null)
+                    Log.d("debug", "registrationId:" + registrationId);
+            }
+        });
+
+        Shopper shopper = new Shopper(name.getText().toString(),number.getText().toString(),email.getText().toString(),shopper_img_url,deviceId,true,0,one_signal_key);
         mDatabase.child("shoppers").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(shopper);
 
         getShopper(FirebaseAuth.getInstance().getCurrentUser().getUid());

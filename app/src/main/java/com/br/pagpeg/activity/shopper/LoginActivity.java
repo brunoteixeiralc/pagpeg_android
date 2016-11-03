@@ -10,14 +10,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.br.pagpeg.R;
+import com.br.pagpeg.model.Shopper;
 import com.br.pagpeg.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -41,6 +45,7 @@ public class LoginActivity extends Activity {
 
         FirebaseAuth.getInstance().signOut();
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         accessCode = (EditText) findViewById(R.id.code);
         email = (EditText) findViewById(R.id.email);
@@ -76,15 +81,38 @@ public class LoginActivity extends Activity {
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("Firebase", "signInWithEmail:onComplete:" + task.isSuccessful());
-                        if (!task.isSuccessful()) {
-                            Log.w("Firebase", "signInWithEmail:failed", task.getException());
-                        }else{
-                            startActivity(new Intent(LoginActivity.this,MainShopperActivity.class));
-                        }
 
-                        Utils.closeDialog(LoginActivity.this);
+                        if (!task.isSuccessful()) {
+
+                            Utils.closeDialog(LoginActivity.this);
+                            Log.w("Firebase", "signInWithEmail:failed", task.getException());
+
+                        }else{
+                            getShopper(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        }
                     }
                 });
+    }
+
+    private void getShopper(String uid){
+
+        mDatabase.child("shoppers/" + uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Shopper shopper = dataSnapshot.getValue(Shopper.class);
+                Intent intent = new Intent(LoginActivity.this,MainShopperActivity.class);
+                intent.putExtra("shopper",shopper);
+                startActivity(intent);
+
+                Utils.closeDialog(LoginActivity.this);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

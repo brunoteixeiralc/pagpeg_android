@@ -1,18 +1,38 @@
 package com.br.pagpeg.fragment.shopper;
 
+import android.content.Intent;
+import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.Cart;
+import com.br.pagpeg.model.ProductCart;
 import com.br.pagpeg.model.Store;
+import com.br.pagpeg.model.User;
+import com.br.pagpeg.utils.Utils;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,20 +47,31 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Map;
+
+import permissions.dispatcher.NeedsPermission;
+import permissions.dispatcher.RuntimePermissions;
+
 /**
  * Created by brunolemgruber on 28/07/16.
  */
 
-public class OrderFragment extends Fragment implements OnMapReadyCallback {
+@RuntimePermissions
+public class OrderFragment extends Fragment implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     private View view;
-    private Button btnSeeOrder;
+    private Button btnSeeOrder,btnCall;
     private Fragment fragment;
     private SupportMapFragment mapFragment;
     private DatabaseReference mDatabase;
     private Cart order;
     private Store orderStore;
-    private TextView storeName,storeAddress,storeKm;
+    private TextView storeName,storeAddress,storeKm,userName,userNumber,shopperOrder;
+    private ImageView userImage;
+    private GoogleApiClient googleApiClient;
+    private Location storeLocation;
+    private ProgressBar progressBar;
+    private LinearLayout llMain,llNoOrder;
 
     @Nullable
     @Override
@@ -49,9 +80,24 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
         view = inflater.inflate(R.layout.content_order, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
+        googleApiClient = new GoogleApiClient.Builder(OrderFragment.this.getActivity())
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API).build();
+
+        llMain = (LinearLayout) view.findViewById(R.id.ll_main);
+        llNoOrder = (LinearLayout) view.findViewById(R.id.ll_empty_order);
         storeAddress = (TextView) view.findViewById(R.id.store_address);
         storeName = (TextView) view.findViewById(R.id.store_name);
         storeKm = (TextView) view.findViewById(R.id.store_km);
+        userImage = (ImageView) view.findViewById(R.id.user_image);
+        userName = (TextView) view.findViewById(R.id.user_name);
+        userNumber = (TextView) view.findViewById(R.id.user_number);
+        progressBar = (ProgressBar) view.findViewById(R.id.progress);
+        shopperOrder = (TextView) view.findViewById(R.id.shopper_order);
+
+        llNoOrder.setVisibility(View.VISIBLE);
+        llMain.setVisibility(View.GONE);
 
         btnSeeOrder = (Button) view.findViewById(R.id.see_order);
         btnSeeOrder.setOnClickListener(new View.OnClickListener() {
@@ -60,6 +106,14 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
                 fragment = new OrderTabFragment();
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+            }
+        });
+
+        btnCall = (Button) view.findViewById(R.id.btn_call);
+        btnCall.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                OrderFragmentPermissionsDispatcher.makeCallWithCheck(OrderFragment.this);
             }
         });
 
@@ -79,6 +133,8 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
     private void getOrder() {
 
+        Utils.openDialog(OrderFragment.this.getContext(),"Carregando pedido");
+
         mDatabase.child("cart_online").orderByChild("shopper").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -87,9 +143,23 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
                     for (DataSnapshot st : dataSnapshot.getChildren()) {
                         order = st.getValue(Cart.class);
+
+                        int countUnity = 0;
+                        for(Map.Entry<String, ProductCart> entry : order.getProducts().entrySet()) {
+                            ProductCart value = entry.getValue();
+                            countUnity =+ value.getQuantity();
+                        }
+                        shopperOrder.setText(order.getProducts().size() + " itens ( " + String.valueOf(countUnity) + " unidades )");
+
+                        llNoOrder.setVisibility(View.GONE);
+                        llMain.setVisibility(View.VISIBLE);
+
                         getStore(order.getNetwork(),order.getStore());
+                        getUser(st.getKey());
                     }
                 }
+
+                Utils.closeDialog(OrderFragment.this.getContext());
             }
 
             @Override
@@ -102,20 +172,65 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
     private void getStore(String network, String store){
 
-        mDatabase.child("network").child(network).child(store).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("network").child(network).child(store).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.hasChildren()) {
 
-                    orderStore = ((DataSnapshot)dataSnapshot.getChildren()).getValue(Store.class);
+                    orderStore = dataSnapshot.getValue(Store.class);
 
                     storeName.setText(orderStore.getName());
                     storeAddress.setText(orderStore.getAddress());
-                    storeAddress.setText(String.valueOf(orderStore.getDistance()) + " km");
+
+                    storeLocation=new Location("storeLocation");
+                    storeLocation.setLatitude(orderStore.getLat());
+                    storeLocation.setLongitude(orderStore.getLng());
+
+                    Location l = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
+                    Float distanceTo = l.distanceTo(storeLocation) / 1000;
+                    orderStore.setDistance(distanceTo);
+                    storeKm.setText(String.valueOf(orderStore.getDistance()) + " km");
 
                     mapFragment = (com.google.android.gms.maps.SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.store_map);
                     mapFragment.getMapAsync(OrderFragment.this);
+                 }
+             }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void getUser(String uuid){
+
+        mDatabase.child("users").child(uuid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.hasChildren()){
+
+                    User user = dataSnapshot.getValue(User.class);
+
+                    userName.setText(user.getName());
+                    userNumber.setText(user.getNumber());
+                    Glide.with(OrderFragment.this).load(user.getUser_img()).listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            progressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    }).diskCacheStrategy(DiskCacheStrategy.ALL).into(userImage);
+
+                 Utils.closeDialog(OrderFragment.this.getContext());
+
                 }
             }
 
@@ -124,5 +239,75 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback {
 
             }
         });
+
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        OrderFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+    }
+
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Log.i("Pagpeg", "Conectado ao google play service");
+        startLocationUpdates();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.i("Pagpeg", "Erro ao conectar: " + connectionResult);
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        Float distanceTo = location.distanceTo(storeLocation) / 1000;
+        orderStore.setDistance(distanceTo);
+        storeKm.setText(String.valueOf(orderStore.getDistance()) + " km");
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        googleApiClient.connect();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        stopLocationUpdates();
+        googleApiClient.disconnect();
+    }
+
+    @NeedsPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
+    public void getShopperLocation(){
+
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+    }
+
+    @NeedsPermission(android.Manifest.permission.CALL_PHONE)
+    public void makeCall(){
+        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + userNumber.getText().toString()));
+        startActivity(intent);
+    }
+
+    private void stopLocationUpdates(){
+        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+    }
+
+    private void startLocationUpdates(){
+        OrderFragmentPermissionsDispatcher.getShopperLocationWithCheck(this);
+    }
+
 }

@@ -1,6 +1,5 @@
 package com.br.pagpeg.fragment.user;
 
-import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,7 +33,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.maps.android.clustering.Cluster;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.Serializable;
@@ -44,9 +42,7 @@ import java.util.List;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 
-import static android.R.attr.fragment;
 import static com.br.pagpeg.R.id.map;
-import static com.br.pagpeg.R.id.toolbar;
 
 
 /**
@@ -301,6 +297,7 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
                                 store.setDistance(distanceTo);
 
                                 store.setNetwork(nt.getKey());
+                                store.setKeyStore(st.getKey());
 
                                 storeList.add(store);
                                 clManager.addItem(new ClusterMarkerLocation(new LatLng(store.getLat(), store.getLng()),store.getName(),store.getAddress()));

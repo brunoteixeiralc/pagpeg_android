@@ -1,4 +1,4 @@
-package com.br.pagpeg.fragment.user;
+package com.br.pagpeg.fragment.shopper;
 
 import android.Manifest;
 import android.content.Intent;
@@ -16,11 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
-import com.br.pagpeg.model.User;
+import com.br.pagpeg.model.Shopper;
 import com.br.pagpeg.utils.EnumIconBar;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
@@ -33,10 +32,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
@@ -47,38 +44,37 @@ import static android.app.Activity.RESULT_OK;
  * Created by brunolemgruber on 22/07/16.
  */
 @RuntimePermissions
-public class EditUserProfileFragment extends Fragment {
+public class EditShopperProfileFragment extends Fragment {
 
     private View view;
     private EditText email,name,number;
     private TextView changePhoto;
-    private ImageView profile_user;
     private Button btnUpdate;
     private DatabaseReference mDatabase;
-    private User user;
+    private Shopper shopper;
     private int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmapUserImage =  null;
     private CircleImageView circleImageView;
-    private String user_img_url;
+    private String shopper_img_url;
     private Toolbar toolbar;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.content_edit_user_profile, container, false);
+        view = inflater.inflate(R.layout.content_edit_shopper_profile, container, false);
 
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Editar Perfil");
 
-        Utils.setIconBar(EnumIconBar.EDITPROFILE,toolbar);
+        Utils.setIconBar(EnumIconBar.SHOPPEREDITPROFILE,toolbar);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        circleImageView = (CircleImageView) view.findViewById(R.id.user_image);
-        number = (EditText) view.findViewById(R.id.user_number);
-        email = (EditText) view.findViewById(R.id.user_email);
-        name = (EditText) view.findViewById(R.id.user_name);
+        circleImageView = (CircleImageView) view.findViewById(R.id.shopper_image);
+        number = (EditText) view.findViewById(R.id.shopper_number);
+        email = (EditText) view.findViewById(R.id.shopper_email);
+        name = (EditText) view.findViewById(R.id.shopper_name);
         changePhoto = (TextView) view.findViewById(R.id.change_image);
         changePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,24 +88,24 @@ public class EditUserProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-               Utils.openDialog(EditUserProfileFragment.this.getContext(),"Atualizando...");
+               Utils.openDialog(EditShopperProfileFragment.this.getContext(),"Atualizando...");
 
                if(bitmapUserImage != null){
                    saveImageStorage();
                }else{
-                   updateUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                   updateShopper(FirebaseAuth.getInstance().getCurrentUser().getUid());
                }
 
             }
         });
 
-        user = (User) getArguments().getSerializable("user");
-        if(user != null){
-            email.setText(user.getEmail());
-            name.setText(user.getName());
-            number.setText(user.getNumber());
-            if(user.getUser_img() != null){
-                Glide.with(this).load(user.getUser_img()).diskCacheStrategy(DiskCacheStrategy.ALL).into(circleImageView);
+        shopper = (Shopper) getArguments().getSerializable("shopper");
+        if(shopper != null){
+            email.setText(shopper.getEmail());
+            name.setText(shopper.getName());
+            number.setText(shopper.getNumber());
+            if(shopper.getUser_img() != null){
+                Glide.with(this).load(shopper.getUser_img()).diskCacheStrategy(DiskCacheStrategy.ALL).into(circleImageView);
             }
 
         }
@@ -121,7 +117,7 @@ public class EditUserProfileFragment extends Fragment {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        EditUserProfileFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
+        EditShopperProfileFragmentPermissionsDispatcher.onRequestPermissionsResult(this, requestCode, grantResults);
 
     }
 
@@ -133,7 +129,7 @@ public class EditUserProfileFragment extends Fragment {
             Uri uri = data.getData();
             try {
 
-                bitmapUserImage = MediaStore.Images.Media.getBitmap(EditUserProfileFragment.this.getContext().getContentResolver(), uri);
+                bitmapUserImage = MediaStore.Images.Media.getBitmap(EditShopperProfileFragment.this.getContext().getContentResolver(), uri);
                 circleImageView.setImageBitmap(bitmapUserImage);
                 circleImageView.setDrawingCacheEnabled(true);
                 circleImageView.buildDrawingCache();
@@ -158,7 +154,7 @@ public class EditUserProfileFragment extends Fragment {
 
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl(com.br.pagpeg.BuildConfig.ENDPOINTSTORAGE);
-        StorageReference imageRef = storageRef.child("users/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/profile.jpg");
+        StorageReference imageRef = storageRef.child("shoppers/" + FirebaseAuth.getInstance().getCurrentUser().getUid() + "/profile.jpg");
 
         Bitmap bitmap = circleImageView.getDrawingCache();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -175,30 +171,30 @@ public class EditUserProfileFragment extends Fragment {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                user_img_url = downloadUrl.toString();
-                updateUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                shopper_img_url = downloadUrl.toString();
+                updateShopper(FirebaseAuth.getInstance().getCurrentUser().getUid());
             }
         });
 
     }
 
-    private void updateUser(String uid){
+    private void updateShopper(String uid){
 
-        user = new User(name.getText().toString(),number.getText().toString(),email.getText().toString(),user.getUser_img() != null ? user.getUser_img() : "",user.getDevice_id(),user.getOne_signal_key());
-        if(!user_img_url.isEmpty()){
-            user.setUser_img(user_img_url);
+        shopper = new Shopper(name.getText().toString(),number.getText().toString(),email.getText().toString(),shopper.getUser_img() != null ? shopper.getUser_img() : "",shopper.getDevice_id(),shopper.getIs_free(),shopper.getRating(),shopper.getOne_signal_key());
+        if(shopper_img_url != null && !shopper_img_url.isEmpty()){
+            shopper.setUser_img(shopper_img_url);
         }
 
-        mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
+        mDatabase.child("shoppers").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(shopper);
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable("user",user);
+        bundle.putSerializable("shopper",shopper);
 
-        Fragment fragment = new UserProfileFragment();
+        Fragment fragment = new ShopperProfileFragment();
         fragment.setArguments(bundle);
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container, fragment).commit();
 
-        Utils.closeDialog(EditUserProfileFragment.this.getContext());
+        Utils.closeDialog(EditShopperProfileFragment.this.getContext());
     }
 }

@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.onesignal.OneSignal;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -60,6 +61,7 @@ public class RegisterActivity extends Activity {
     private int PICK_IMAGE_REQUEST = 1;
     private Bitmap bitmapUserImage =  null;
     private String deviceId = "";
+    private String one_signal_key = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,7 +168,17 @@ public class RegisterActivity extends Activity {
 
     private void saveUser(){
 
-        User user = new User(name.getText().toString(),number.getText().toString(),email.getText().toString(),user_img_url,deviceId);
+        OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
+            @Override
+            public void idsAvailable(String userId, String registrationId) {
+                Log.d("debug", "User:" + userId);
+                one_signal_key = userId;
+                if (registrationId != null)
+                    Log.d("debug", "registrationId:" + registrationId);
+            }
+        });
+
+        User user = new User(name.getText().toString(),number.getText().toString(),email.getText().toString(),user_img_url,deviceId,one_signal_key);
         mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
 
         getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());

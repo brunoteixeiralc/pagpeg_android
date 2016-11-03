@@ -9,13 +9,13 @@
     </style>
 
     <style name="AppTheme.WhiteTextAppearance">
-        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textColor">@color/colorAccent</item>
     </style>
 
     <style name="Dialog_Quantity" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/colorPrimary</item>
         <item name="android:textColorPrimary">@color/colorPrimary</item>
-        <item name="android:background">#FFFFFF</item>
+        <item name="android:background">@color/colorAccent</item>
     </style>
 
     <style name="Rating_Bar" parent="Theme.AppCompat.Light">
@@ -35,12 +35,12 @@
 
     <style name="labelWhiteTextField" parent="TextAppearance.AppCompat">
         <!-- Hint color and label color in FALSE state -->
-        <item name="android:textColorHint">@color/white</item>
+        <item name="android:textColorHint">@color/colorAccent</item>
         <item name="android:textSize">20sp</item>
         <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
-        <item name="colorAccent">@color/white</item>
-        <item name="colorControlNormal">@color/white</item>
-        <item name="colorControlActivated">@color/white</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="colorControlActivated">@color/colorAccent</item>
     </style>
 
 </resources>

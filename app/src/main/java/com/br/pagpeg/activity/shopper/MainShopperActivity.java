@@ -8,15 +8,16 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.fragment.shopper.GraphFragment;
 import com.br.pagpeg.fragment.shopper.OrderFragment;
 import com.br.pagpeg.fragment.shopper.OrderHistoryFragment;
-import com.br.pagpeg.fragment.shopper.ShopperProfileFragment;
 import com.br.pagpeg.fragment.shopper.RatingFragment;
+import com.br.pagpeg.fragment.shopper.ShopperProfileFragment;
+import com.br.pagpeg.model.Shopper;
+import com.onesignal.OneSignal;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.OnMenuTabClickListener;
@@ -40,17 +41,11 @@ public class MainShopperActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_user_main);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Pedido atual");
-        setSupportActionBar(toolbar);
+        OneSignal.sendTag("segment", "shopper");
 
-        mLogOut = (TextView) toolbar.findViewById(R.id.logout);
-        mLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Seu pedido");
+        setSupportActionBar(toolbar);
 
         mBottomBar = BottomBar.attach(this, savedInstanceState);
         mBottomBar.noNavBarGoodness();
@@ -64,23 +59,25 @@ public class MainShopperActivity extends AppCompatActivity {
                 switch (menuItemId){
 
                     case R.id.bottomBarItemOne:
-                        mLogOut.setVisibility(View.VISIBLE);
+
+                        Shopper shopper = (Shopper) getIntent().getSerializableExtra("shopper");
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("shopper",shopper);
                         fragment = new ShopperProfileFragment();
+                        fragment.setArguments(bundle);
+
                         break;
+
                     case R.id.bottomBarItemTwo:
-                        mLogOut.setVisibility(View.GONE);
                         fragment = new OrderFragment();
                         break;
                     case R.id.bottomBarItemThree:
-                        mLogOut.setVisibility(View.GONE);
                         fragment = new OrderHistoryFragment();
                         break;
                     case R.id.bottomBarItemFour:
-                        mLogOut.setVisibility(View.GONE);
                         fragment = new GraphFragment();
                         break;
                     case R.id.bottomBarItemFive:
-                        mLogOut.setVisibility(View.GONE);
                         fragment = new RatingFragment();
                         break;
 
@@ -94,23 +91,18 @@ public class MainShopperActivity extends AppCompatActivity {
             public void onMenuTabReSelected(@IdRes int menuItemId) {
                 switch (menuItemId){
                     case R.id.bottomBarItemOne:
-                        mLogOut.setVisibility(View.VISIBLE);
                         fragment = new ShopperProfileFragment();
                         break;
                     case R.id.bottomBarItemTwo:
-                        mLogOut.setVisibility(View.GONE);
                         fragment = new OrderFragment();
                         break;
                     case R.id.bottomBarItemThree:
-                        mLogOut.setVisibility(View.GONE);
                         fragment = new OrderHistoryFragment();
                         break;
                     case R.id.bottomBarItemFour:
-                        mLogOut.setVisibility(View.GONE);
                         fragment = new GraphFragment();
                         break;
                     case R.id.bottomBarItemFive:
-                        mLogOut.setVisibility(View.GONE);
                         fragment = new RatingFragment();
                         break;
                 }

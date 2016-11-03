@@ -19,7 +19,7 @@
             android:id="@+id/profile_image"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/shopper_profile"
+            android:src="@drawable/image_user"
             app:civ_border_width="2dp"
             app:civ_border_color="@color/white"
             android:layout_gravity="center|top"/>

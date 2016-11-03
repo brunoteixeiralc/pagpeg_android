@@ -18,16 +18,19 @@ public class User implements Serializable {
 
     private String device_id;
 
+    private String one_signal_key;
+
     public User(){
 
     }
 
-    public User(String name,String number,String email,String user_img,String device_id){
+    public User(String name,String number,String email,String user_img,String device_id,String one_signal_key){
         this.name = name;
         this.number = number;
         this.email = email;
         this.user_img = user_img;
         this.device_id = device_id;
+        this.one_signal_key = one_signal_key;
     }
 
     public String getName() {
@@ -68,5 +71,13 @@ public class User implements Serializable {
 
     public void setDevice_id(String device_id) {
         this.device_id = device_id;
+    }
+
+    public String getOne_signal_key() {
+        return one_signal_key;
+    }
+
+    public void setOne_signal_key(String one_signal_key) {
+        this.one_signal_key = one_signal_key;
     }
 }

@@ -30,6 +30,8 @@ public class Store implements Serializable {
 
     private String network;
 
+    private String keyStore;
+
     public String getAddress() {
         return address;
     }
@@ -116,5 +118,13 @@ public class Store implements Serializable {
 
     public void setNetwork(String network) {
         this.network = network;
+    }
+
+    public String getKeyStore() {
+        return keyStore;
+    }
+
+    public void setKeyStore(String keyStore) {
+        this.keyStore = keyStore;
     }
 }

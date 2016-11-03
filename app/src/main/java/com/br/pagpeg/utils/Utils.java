@@ -109,7 +109,16 @@ public final class Utils {
             case FINDINGSHOPPER:{
                 break;
             }
-
+            case SHOPPERORDER:{
+                break;
+            }
+            case SHOPPERPROFILE:{
+                mIconLogout.setVisibility(View.VISIBLE);
+                break;
+            }
+            case SHOPPEREDITPROFILE:{
+                break;
+            }
             default:break;
         }
 
