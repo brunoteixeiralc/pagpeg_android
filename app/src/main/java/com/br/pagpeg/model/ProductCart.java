@@ -16,12 +16,15 @@ public class ProductCart implements Serializable {
 
    private String name;
 
+   private String status;
+
    public ProductCart(){
    }
 
-    public ProductCart(String name,Integer quantity,Double price_total){
+    public ProductCart(String name,Integer quantity,Double price_total,String status){
         this.quantity = quantity;
         this.price_total = price_total;
+        this.status = status;
     }
 
     public Product getProduct() {
@@ -54,5 +57,13 @@ public class ProductCart implements Serializable {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

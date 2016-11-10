@@ -8,13 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-
 import com.br.pagpeg.R;
 import com.br.pagpeg.fragment.user.CartFragment;
 import com.br.pagpeg.fragment.user.MapFragment;
 import com.br.pagpeg.fragment.user.UserProfileFragment;
 import com.br.pagpeg.model.User;
-import com.onesignal.OneSignal;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.OnMenuTabClickListener;
@@ -38,8 +36,6 @@ public class MainUserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_user_main);
-
-        OneSignal.sendTag("segment", "user");
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Lojas nas proximidades");

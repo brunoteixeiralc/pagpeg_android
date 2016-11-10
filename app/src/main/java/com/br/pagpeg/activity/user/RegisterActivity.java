@@ -37,6 +37,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.onesignal.OneSignal;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
@@ -171,10 +174,24 @@ public class RegisterActivity extends Activity {
         OneSignal.idsAvailable(new OneSignal.IdsAvailableHandler() {
             @Override
             public void idsAvailable(String userId, String registrationId) {
-                Log.d("debug", "User:" + userId);
                 one_signal_key = userId;
-                if (registrationId != null)
-                    Log.d("debug", "registrationId:" + registrationId);
+            }
+        });
+
+        OneSignal.getTags(new OneSignal.GetTagsHandler() {
+            @Override
+            public void tagsAvailable(JSONObject tags) {
+
+                if(tags != null){
+                    try {
+                        tags.put("pagpeg_user", "user");
+                        OneSignal.sendTags(tags);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    OneSignal.sendTag("pagpeg_user","user");
+                }
             }
         });
 

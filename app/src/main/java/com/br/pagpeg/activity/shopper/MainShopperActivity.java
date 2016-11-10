@@ -17,7 +17,6 @@ import com.br.pagpeg.fragment.shopper.OrderHistoryFragment;
 import com.br.pagpeg.fragment.shopper.RatingFragment;
 import com.br.pagpeg.fragment.shopper.ShopperProfileFragment;
 import com.br.pagpeg.model.Shopper;
-import com.onesignal.OneSignal;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.OnMenuTabClickListener;
@@ -34,14 +33,13 @@ public class MainShopperActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private Fragment fragment;
     private TextView mLogOut;
+    private Bundle bundle;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_user_main);
-
-        OneSignal.sendTag("segment", "shopper");
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Seu pedido");
@@ -61,7 +59,7 @@ public class MainShopperActivity extends AppCompatActivity {
                     case R.id.bottomBarItemOne:
 
                         Shopper shopper = (Shopper) getIntent().getSerializableExtra("shopper");
-                        Bundle bundle = new Bundle();
+                        bundle = new Bundle();
                         bundle.putSerializable("shopper",shopper);
                         fragment = new ShopperProfileFragment();
                         fragment.setArguments(bundle);
@@ -69,8 +67,14 @@ public class MainShopperActivity extends AppCompatActivity {
                         break;
 
                     case R.id.bottomBarItemTwo:
+
+                        bundle = new Bundle();
+                        bundle.putString("shopper_uid",getIntent().getStringExtra("shopper_uid"));
                         fragment = new OrderFragment();
+                        fragment.setArguments(bundle);
+
                         break;
+
                     case R.id.bottomBarItemThree:
                         fragment = new OrderHistoryFragment();
                         break;

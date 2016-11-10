@@ -317,6 +317,7 @@ public class ProductListFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 ProductCart productCart = new ProductCart();
+                productCart.setStatus("Not Find");
                 productCart.setQuantity(selectedProduct.getQuantity());
                 productCart.setPrice_total(selectedProduct.getQuantity() * (wholesale_price == 0.0 ? selectedProduct.getProduct().getPrice() : wholesale_price));
 

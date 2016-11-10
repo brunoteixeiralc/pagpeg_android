@@ -1,6 +1,7 @@
 package com.br.pagpeg.fragment.user;
 
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import com.baoyachi.stepview.HorizontalStepView;
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.Shopper;
+import com.br.pagpeg.notification.SendNotification;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -41,6 +43,12 @@ public class FindShopperFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.content_find_shopper, container, false);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         if(shoppers == null)
@@ -53,7 +61,7 @@ public class FindShopperFragment extends Fragment {
 
     private void getShopper(){
 
-        mDatabase.child("shoppers").orderByChild("is_free").equalTo(true).limitToFirst(1).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("shoppers").orderByChild("is_free").equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
@@ -73,6 +81,8 @@ public class FindShopperFragment extends Fragment {
 
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("shopper",shoppers.get(0));
+
+                    SendNotification.sendNotificationShopper(shoppers.get(0).getName(),shoppers.get(0).getOne_signal_key(),shoppers.get(0).getKey());
 
                     fragment = new FindShopperProfileFragment();
                     fragment.setArguments(bundle);

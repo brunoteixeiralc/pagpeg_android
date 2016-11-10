@@ -117,7 +117,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
             }
         });
 
-        getOrder();
+        getOrder(getArguments().get("shopper_uid") == null ? FirebaseAuth.getInstance().getCurrentUser().getUid().toString() : (String)getArguments().get("shopper_uid"));
 
         return view;
     }
@@ -131,11 +131,11 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
         googleMap.moveCamera(cameraUpdate);
     }
 
-    private void getOrder() {
+    private void getOrder(String uid) {
 
         Utils.openDialog(OrderFragment.this.getContext(),"Carregando pedido");
 
-        mDatabase.child("cart_online").orderByChild("shopper").equalTo(FirebaseAuth.getInstance().getCurrentUser().getUid()).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.child("cart_online").orderByChild("shopper").equalTo(uid).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
