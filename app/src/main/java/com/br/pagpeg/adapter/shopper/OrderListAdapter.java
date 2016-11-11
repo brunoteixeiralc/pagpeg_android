@@ -5,9 +5,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.br.pagpeg.R;
-import com.br.pagpeg.model.Order;
+import com.br.pagpeg.model.ProductCart;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import java.util.List;
 
@@ -18,42 +26,50 @@ import java.util.List;
 public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.OrderListViewHolder> {
 
     protected static final String TAG = "pagpeg";
-    private final List<Order> orders;
     private OrderListOnClickListener orderListOnClickListener;
     private final Context context;
+    private List<ProductCart> productsCart;
 
-    public OrderListAdapter(OrderListOnClickListener orderProductOnClickListener, Context context, List<Order> orders) {
+    public OrderListAdapter(OrderListOnClickListener orderProductOnClickListener, Context context, List<ProductCart> productsCart) {
         this.context = context;
-        this.orders = orders;
+        this.productsCart = productsCart;
         this.orderListOnClickListener = orderProductOnClickListener;
     }
 
     @Override
     public int getItemCount() {
-        //return this.stores.size();
-        return 20;
+        return productsCart.size();
     }
 
     @Override
     public OrderListViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Infla a view do layout
+
         View view = LayoutInflater.from(context).inflate(R.layout.list_item_order, viewGroup, false);
 
-        // Cria o ViewHolder
         OrderListViewHolder holder = new OrderListViewHolder(view);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(final OrderListViewHolder holder, final int position) {
-        // Atualiza a view
-//        Friend a = friends.get(position);
-//
-//        holder.nome.setText(a.getNome());
-//        holder.nome.setTypeface(FontUtils.getRegular(context));
-//        holder.img.setImageResource(a.getImg());
 
-        // Click
+        ProductCart pc = productsCart.get(position);
+
+        holder.name.setText(pc.getProduct().getName() + " " + pc.getProduct().getUnit_quantity());
+        holder.quantity.setText(String.valueOf(pc.getQuantity()) + "x");
+        Glide.with(context).load(pc.getProduct().getImg()).listener(new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                holder.progressBar.setVisibility(View.GONE);
+                return false;
+            }
+        }).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.img);
+
         if (orderListOnClickListener != null) {
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -72,20 +88,19 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         public void onClickSticker(View view, int idx);
     }
 
-
-    // ViewHolder com as views
     public static class OrderListViewHolder extends RecyclerView.ViewHolder {
 
-        //        public TextView nome;
-//        public ImageView img;
-//
-//
+        public TextView name,quantity;
+        public ImageView img;
+        public ProgressBar progressBar;
+
         public OrderListViewHolder(View view) {
             super(view);
-//            // Cria as views para salvar no ViewHolder
-//            nome = (TextView) view.findViewById(R.id.nome);
-//            img = (ImageView) view.findViewById(R.id.img);
-//
+            name = (TextView) view.findViewById(R.id.name);
+            quantity = (TextView) view.findViewById(R.id.quantity);
+            img = (ImageView) view.findViewById(R.id.img);
+            progressBar = (ProgressBar) view.findViewById(R.id.progress);
+
         }
     }
 

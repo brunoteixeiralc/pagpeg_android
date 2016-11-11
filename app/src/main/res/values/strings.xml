@@ -73,6 +73,7 @@
     <string name="add_cart">Adicionar no carrinho</string>
     <string name="remove_cart">Remover do carrinho</string>
     <string name="has_the_product">Contêm produto</string>
+    <string name="has_not_the_product">Não contêm produto</string>
     <string name="edit">Editar</string>
     <string name="apply_discount">Aplicar desconto</string>
     <string name="buy">Comprar: R$ 100,00</string>

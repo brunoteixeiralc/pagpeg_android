@@ -3,17 +3,22 @@ package com.br.pagpeg.activity.shopper;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.br.pagpeg.R;
+import com.br.pagpeg.model.ProductCart;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -27,10 +32,10 @@ public class ProductDetailActivity extends AppCompatActivity {
     private CardView cardView;
     private Button findIt;
     private Toolbar toolbar;
-    private ImageView mIconBarCode;
-    private Snackbar snackbar;
-    private Fragment fragment;
-    private CoordinatorLayout coordinatorLayout;
+    private ProductCart productCart;
+    private TextView quantity,name,weight,category,price;
+    private ImageView img;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +45,44 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Detalhe do produto");
-        //mIconBarCode = (ImageView) toolbar.findViewById(R.id.ic_bar_code);
-        //mIconBarCode.setVisibility(View.VISIBLE);
         setSupportActionBar(toolbar);
+
+        quantity = (TextView) findViewById(R.id.quantity);
+        name = (TextView) findViewById(R.id.name);
+        weight = (TextView) findViewById(R.id.weight);
+        category = (TextView) findViewById(R.id.category);
+        price = (TextView) findViewById(R.id.price);
+        progressBar = (ProgressBar) findViewById(R.id.progress);
+        img = (ImageView) findViewById(R.id.img);
+
+        productCart = (ProductCart) getIntent().getSerializableExtra("productCart");
+
+        name.setText(productCart.getProduct().getName() + " " + productCart.getProduct().getUnit_quantity());
+        quantity.setText(String.valueOf(productCart.getQuantity()) + "x");
+        price.setText("R$ " + String.valueOf(productCart.getPrice_total()));
+        category.setText(productCart.getProduct().getCategory());
+        Glide.with(this).load(productCart.getProduct().getImg()).listener(new RequestListener<String, GlideDrawable>() {
+            @Override
+            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                return false;
+            }
+
+            @Override
+            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                progressBar.setVisibility(View.GONE);
+                return false;
+            }
+        }).diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
 
         cardView = (CardView)findViewById(R.id.cardViewAddCart);
         findIt = (Button) cardView.findViewById(R.id.findIt);
         findIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             startActivity(new Intent(ProductDetailActivity.this,ProductQuantityActivity.class));
+
+             Intent intent = new Intent(ProductDetailActivity.this,ProductQuantityActivity.class);
+             intent.putExtra("productCart",productCart);
+             startActivity(intent);
             }
         });
     }
@@ -58,41 +91,4 @@ public class ProductDetailActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
-
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//
-//        view = inflater.inflate(R.layout.content_shopper_product_detail, container, false);
-//
-////        coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorLayout);
-//
-////        snackbar = Snackbar
-////                .make(coordinatorLayout, "Produto adicionado.", Snackbar.LENGTH_LONG)
-////                .setActionTextColor(getResources().getColor(R.color.colorPrimary))
-////                .setAction("UNDO", new View.OnClickListener() {
-////                    @Override
-////                    public void onClick(View view) {
-////                        Snackbar snackbarUndo = Snackbar.make(coordinatorLayout, "Produto removido.", Snackbar.LENGTH_SHORT);
-////                        snackbarUndo.show();
-////                    }
-////                });
-//
-//        Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
-//        toolbarMainActivity.setVisibility(View.VISIBLE);
-//        toolbarMainActivity.setTitle("Detalhe do produto");
-//
-//        cardView = (CardView) view.findViewById(R.id.cardViewAddCart);
-//        findIt = (Button) cardView.findViewById(R.id.findIt);
-//        findIt.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                fragment = new ProductQuantityFragment();
-//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
-//            }
-//        });
-//
-//        return view;
-//    }
 }

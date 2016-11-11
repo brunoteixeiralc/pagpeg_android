@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +21,11 @@ import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.Cart;
+import com.br.pagpeg.model.Product;
 import com.br.pagpeg.model.ProductCart;
 import com.br.pagpeg.model.Store;
 import com.br.pagpeg.model.User;
+import com.br.pagpeg.utils.EnumIconBar;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -47,6 +50,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
 import java.util.Map;
 
 import permissions.dispatcher.NeedsPermission;
@@ -72,6 +76,9 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
     private Location storeLocation;
     private ProgressBar progressBar;
     private LinearLayout llMain,llNoOrder;
+    private List<ProductCart> productCarts;
+    int count;
+    private Toolbar toolbar;
 
     @Nullable
     @Override
@@ -79,6 +86,10 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
 
         view = inflater.inflate(R.layout.content_order, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        Utils.setIconBar(EnumIconBar.SHOPPERORDER,toolbar);
 
         googleApiClient = new GoogleApiClient.Builder(OrderFragment.this.getActivity())
                 .addConnectionCallbacks(this)
@@ -103,9 +114,9 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
         btnSeeOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragment = new OrderTabFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+
+           getProducts();
+
             }
         });
 
@@ -188,9 +199,11 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
                     storeLocation.setLongitude(orderStore.getLng());
 
                     Location l = LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-                    Float distanceTo = l.distanceTo(storeLocation) / 1000;
-                    orderStore.setDistance(distanceTo);
-                    storeKm.setText(String.valueOf(orderStore.getDistance()) + " km");
+                    if(l != null){
+                        Float distanceTo = l.distanceTo(storeLocation) / 1000;
+                        orderStore.setDistance(distanceTo);
+                        storeKm.setText(String.valueOf(orderStore.getDistance()) + " km");
+                    }
 
                     mapFragment = (com.google.android.gms.maps.SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.store_map);
                     mapFragment.getMapAsync(OrderFragment.this);
@@ -268,9 +281,12 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
     @Override
     public void onLocationChanged(Location location) {
 
-        Float distanceTo = location.distanceTo(storeLocation) / 1000;
-        orderStore.setDistance(distanceTo);
-        storeKm.setText(String.valueOf(orderStore.getDistance()) + " km");
+        if(location != null && storeLocation != null){
+            Float distanceTo = location.distanceTo(storeLocation) / 1000;
+            orderStore.setDistance(distanceTo);
+            storeKm.setText(String.valueOf(orderStore.getDistance()) + " km");
+        }
+
     }
 
     @Override
@@ -308,6 +324,47 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
 
     private void startLocationUpdates(){
         OrderFragmentPermissionsDispatcher.getShopperLocationWithCheck(this);
+    }
+
+    private void getProducts(){
+
+        count = 0;
+
+        for(final Map.Entry<String, ProductCart> entry : order.getProducts().entrySet()) {
+
+            final ProductCart value = entry.getValue();
+
+            mDatabase.child("product").child(entry.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    count++;
+
+                    if(dataSnapshot.hasChildren()){
+                        Product p = dataSnapshot.getValue(Product.class);
+                        p.setName(dataSnapshot.getKey());
+                        value.setProduct(p);
+                    }
+
+                    if(count >= order.getProducts().size()){
+
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("order",order);
+                        fragment = new OrderTabFragment();
+                        fragment.setArguments(bundle);
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
     }
 
 }

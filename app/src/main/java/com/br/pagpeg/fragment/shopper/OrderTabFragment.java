@@ -14,6 +14,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.br.pagpeg.R;
+import com.br.pagpeg.model.Cart;
+import com.br.pagpeg.model.ProductCart;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by brunolemgruber on 28/07/16.
@@ -25,12 +32,27 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
     private ViewPager mViewPager;
     private TabLayout tabLayout;
     private ImageView mIconOrderCompleted;
+    private Cart order;
+    private Bundle bundle;
+    private List<ProductCart> productCartsAll;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.content_order_list, container, false);
+
+        order = (Cart) getArguments().getSerializable("order");
+
+        if(productCartsAll == null)
+            productCartsAll = new ArrayList<>();
+
+        for(Map.Entry<String, ProductCart> entry : order.getProducts().entrySet()) {
+
+            final ProductCart value = entry.getValue();
+            productCartsAll.add(value);
+
+        }
 
         Toolbar toolbarMainActivity =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbarMainActivity.setVisibility(View.VISIBLE);
@@ -54,7 +76,7 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-
+        mViewPager.setCurrentItem(tab.getPosition());
     }
 
     @Override
@@ -77,12 +99,22 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
 
         @Override
         public Fragment getItem(int position) {
+
             if (position == 0) {
+
+                bundle = new Bundle();
+                bundle.putSerializable("productsCart", (Serializable) productCartsAll);
                 fragment = new OrderListItemFragment();
+                fragment.setArguments(bundle);
+
             } else if (position == 1) {
-                fragment = new Fragment();
+
+                fragment = new OrderListItemFoundFragment();
+
             }else if (position == 2) {
-                fragment = new Fragment();
+
+                fragment = new OrderListItemNotFoundFragment();
+
             }
             return fragment;
         }
