@@ -71,6 +71,30 @@
 
             </LinearLayout>
 
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/btn_not_find"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/has_not_the_product"
+                android:textSize="12sp"
+                android:padding="8dp"
+                android:background="@android:color/holo_red_light"
+                android:textColor="@android:color/white"
+                android:visibility="gone"/>
+
+            <Button
+                android:layout_marginTop="10dp"
+                android:id="@+id/btn_find"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/has_the_product"
+                android:textSize="12sp"
+                android:padding="8dp"
+                android:background="@color/colorPrimary"
+                android:textColor="@color/white"
+                android:visibility="gone"/>
+
         </LinearLayout>
 
     </LinearLayout>

@@ -13,6 +13,7 @@ import com.baoyachi.stepview.HorizontalStepView;
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.Shopper;
 import com.br.pagpeg.notification.SendNotification;
+import com.br.pagpeg.utils.EnumStatus;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -92,7 +93,7 @@ public class FindShopperFragment extends Fragment {
 
                     mDatabase.child("shoppers").child(shoppers.get(0).getKey()).child("is_free").setValue(false);
                     mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("shopper").setValue(shoppers.get(0).getKey());
-                    mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("status").setValue("Shopper Buying");
+                    mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("status").setValue(EnumStatus.Status.SHOPPER_BUYING.getName());
                 }
             }
 

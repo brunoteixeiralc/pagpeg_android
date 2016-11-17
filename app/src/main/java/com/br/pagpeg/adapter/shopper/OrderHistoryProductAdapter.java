@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.br.pagpeg.R;
-import com.br.pagpeg.model.Order;
+import com.br.pagpeg.model.Cart;
 
 import java.util.List;
 
@@ -18,11 +18,11 @@ import java.util.List;
 public class OrderHistoryProductAdapter extends RecyclerView.Adapter<OrderHistoryProductAdapter.OrderProductViewHolder> {
 
     protected static final String TAG = "pagpeg";
-    private final List<Order> orders;
+    private final List<Cart> orders;
     private OrderOProductOnClickListener orderProductOnClickListener;
     private final Context context;
 
-    public OrderHistoryProductAdapter(OrderOProductOnClickListener orderProductOnClickListener, Context context, List<Order> orders) {
+    public OrderHistoryProductAdapter(OrderOProductOnClickListener orderProductOnClickListener, Context context, List<Cart> orders) {
         this.context = context;
         this.orders = orders;
         this.orderProductOnClickListener = orderProductOnClickListener;

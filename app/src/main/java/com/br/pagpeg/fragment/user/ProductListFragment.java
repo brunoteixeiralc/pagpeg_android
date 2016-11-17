@@ -33,7 +33,8 @@ import com.br.pagpeg.model.PromotionProduct;
 import com.br.pagpeg.model.Store;
 import com.br.pagpeg.model.StoreCategory;
 import com.br.pagpeg.utils.DividerItemDecoration;
-import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.EnumStatus;
+import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -105,7 +106,7 @@ public class ProductListFragment extends Fragment {
         toolbar.setVisibility(View.VISIBLE);
         toolbar.setTitle(category.getName());
 
-        Utils.setIconBar(EnumIconBar.STOREPRODUCTS,toolbar);
+        Utils.setIconBar(EnumToolBar.STOREPRODUCTS,toolbar);
 
         mIconBarCode = (ImageView) toolbar.findViewById(R.id.ic_bar_code);
         mIconBarCode.setOnClickListener(new View.OnClickListener() {
@@ -317,7 +318,7 @@ public class ProductListFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 ProductCart productCart = new ProductCart();
-                productCart.setStatus("Not Find");
+                productCart.setStatus(EnumStatus.Status.PRODUCT_WAITING.getName());
                 productCart.setQuantity(selectedProduct.getQuantity());
                 productCart.setPrice_total(selectedProduct.getQuantity() * (wholesale_price == 0.0 ? selectedProduct.getProduct().getPrice() : wholesale_price));
 

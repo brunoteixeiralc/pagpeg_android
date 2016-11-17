@@ -33,6 +33,8 @@ public class Cart implements Serializable {
 
     private Double total;
 
+    private String user;
+
     public int getCount() {
         return count;
     }
@@ -119,5 +121,13 @@ public class Cart implements Serializable {
 
     public void setProducts(HashMap<String, ProductCart> products) {
         this.products = products;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
     }
 }

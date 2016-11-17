@@ -26,7 +26,7 @@ import com.br.pagpeg.adapter.user.CategoryAdapter;
 import com.br.pagpeg.model.Store;
 import com.br.pagpeg.model.StoreCategory;
 import com.br.pagpeg.utils.DividerItemDecoration;
-import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -99,7 +99,7 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
         toolbar.setVisibility(View.VISIBLE);
         toolbar.setTitle(store.getNetwork());
 
-        Utils.setIconBar(EnumIconBar.STOREDETAIL,toolbar);
+        Utils.setIconBar(EnumToolBar.STOREDETAIL,toolbar);
 
         name = (TextView) view.findViewById(R.id.name);
         openClose = (TextView) view.findViewById(R.id.openClose);

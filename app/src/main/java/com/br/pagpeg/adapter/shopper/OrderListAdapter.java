@@ -5,12 +5,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.ProductCart;
+import com.br.pagpeg.utils.EnumStatus;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -55,6 +57,14 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
 
         ProductCart pc = productsCart.get(position);
 
+        if(pc.getStatus().equalsIgnoreCase(EnumStatus.Status.PRODUCT_WAITING.getName())){
+            holder.btnNotFind.setVisibility(View.VISIBLE);
+            //holder.btnFind.setVisibility(View.GONE);
+        }else if (pc.getStatus().equalsIgnoreCase(EnumStatus.Status.PRODUCT_NOT_FIND.getName())){
+            //holder.btnFind.setVisibility(View.VISIBLE);
+            holder.btnNotFind.setVisibility(View.GONE);
+        }
+
         holder.name.setText(pc.getProduct().getName() + " " + pc.getProduct().getUnit_quantity());
         holder.quantity.setText(String.valueOf(pc.getQuantity()) + "x");
         Glide.with(context).load(pc.getProduct().getImg()).listener(new RequestListener<String, GlideDrawable>() {
@@ -70,22 +80,32 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             }
         }).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.img);
 
-        if (orderListOnClickListener != null) {
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+         holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    orderListOnClickListener.onClickSticker(holder.itemView, position); // A variável position é final
+                    orderListOnClickListener.onClickItem(holder.itemView, position);
                 }
-            });
+         });
 
-        }
+        holder.btnNotFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                orderListOnClickListener.onClickButton(holder.itemView, position);
+            }
+        });
 
-
+        holder.btnFind.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                orderListOnClickListener.onClickButton(holder.itemView, position);
+            }
+        });
 
     }
 
     public interface OrderListOnClickListener {
-        public void onClickSticker(View view, int idx);
+        public void onClickItem(View view, int idx);
+        public void onClickButton(View view, int idx);
     }
 
     public static class OrderListViewHolder extends RecyclerView.ViewHolder {
@@ -93,6 +113,7 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
         public TextView name,quantity;
         public ImageView img;
         public ProgressBar progressBar;
+        public Button btnNotFind,btnFind;
 
         public OrderListViewHolder(View view) {
             super(view);
@@ -100,6 +121,8 @@ public class OrderListAdapter extends RecyclerView.Adapter<OrderListAdapter.Orde
             quantity = (TextView) view.findViewById(R.id.quantity);
             img = (ImageView) view.findViewById(R.id.img);
             progressBar = (ProgressBar) view.findViewById(R.id.progress);
+            btnNotFind = (Button) view.findViewById(R.id.btn_not_find);
+            btnFind = (Button) view.findViewById(R.id.btn_find);
 
         }
     }

@@ -18,7 +18,7 @@ import com.br.pagpeg.activity.user.AddCreditCardActivity;
 import com.br.pagpeg.adapter.user.CreditCardAdapter;
 import com.br.pagpeg.model.CreditCard;
 import com.br.pagpeg.utils.DividerItemDecoration;
-import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -58,7 +58,7 @@ public class CreditCardFragment extends Fragment {
         toolbar.setVisibility(View.VISIBLE);
         toolbar.setTitle("Gerenciar seus cartões");
 
-        Utils.setIconBar(EnumIconBar.ADDCREDITCARD,toolbar);
+        Utils.setIconBar(EnumToolBar.ADDCREDITCARD,toolbar);
 
         mAddCreditCard = (ImageView) toolbar.findViewById(R.id.ic_add_credit_card);
         mAddCreditCard.setOnClickListener(new View.OnClickListener() {

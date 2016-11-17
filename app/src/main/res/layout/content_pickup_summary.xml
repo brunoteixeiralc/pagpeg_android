@@ -6,7 +6,6 @@
     android:layout_height="match_parent">
 
 
-
     <Button
         android:id="@+id/addCart"
         android:layout_width="match_parent"

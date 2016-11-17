@@ -17,7 +17,7 @@ import com.br.pagpeg.R;
 import com.br.pagpeg.adapter.user.StoreAdapter;
 import com.br.pagpeg.model.Store;
 import com.br.pagpeg.utils.DividerItemDecoration;
-import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 
 import java.util.List;
@@ -50,7 +50,7 @@ public class StoreListFragment extends Fragment {
         toolbar.setVisibility(View.VISIBLE);
         toolbar.setTitle("Lojas nas proximidades");
 
-        Utils.setIconBar(EnumIconBar.STORELIST,toolbar);
+        Utils.setIconBar(EnumToolBar.STORELIST,toolbar);
 
         mIconMapImageView = (ImageView) toolbar.findViewById(R.id.ic_mapStore);
         mIconMapImageView.setVisibility(View.VISIBLE);

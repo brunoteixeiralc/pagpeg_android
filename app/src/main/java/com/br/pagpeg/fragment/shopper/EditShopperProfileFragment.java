@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.Shopper;
-import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -67,7 +67,7 @@ public class EditShopperProfileFragment extends Fragment {
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Editar Perfil");
 
-        Utils.setIconBar(EnumIconBar.SHOPPEREDITPROFILE,toolbar);
+        Utils.setIconBar(EnumToolBar.SHOPPEREDITPROFILE,toolbar);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 

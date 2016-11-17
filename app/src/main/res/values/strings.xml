@@ -61,7 +61,7 @@
     <string name="last_comment">Último comentário:</string>
     <string name="size_product">Tamanho ou peso</string>
     <string name="department">Departamento</string>
-    <string name="unit_qty">5x</string>
+    <string name="unit_qty">0x</string>
 
     <!-- Buttons -->
     <string name="save">Salvar</string>

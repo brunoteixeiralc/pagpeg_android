@@ -23,7 +23,7 @@ import com.br.pagpeg.activity.user.MainUserActivity;
 import com.br.pagpeg.model.Cart;
 import com.br.pagpeg.model.Product;
 import com.br.pagpeg.model.ProductCart;
-import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -69,7 +69,7 @@ public class ProductDetailFragment extends Fragment {
         toolbar.setVisibility(View.VISIBLE);
         toolbar.setTitle(product.getName() + " - Detalhes");
 
-        Utils.setIconBar(EnumIconBar.PRODUCTSDETAIL,toolbar);
+        Utils.setIconBar(EnumToolBar.PRODUCTSDETAIL,toolbar);
 
         name.setText(product.getName() + " " + product.getUnit_quantity());
         price.setText("R$ " + product.getPrice());

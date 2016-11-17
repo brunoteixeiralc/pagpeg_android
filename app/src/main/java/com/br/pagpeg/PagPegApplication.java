@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.br.pagpeg.activity.shopper.MainShopperActivity;
+import com.br.pagpeg.activity.user.MainUserActivity;
 import com.onesignal.NotificationExtenderService;
 import com.onesignal.OSNotification;
 import com.onesignal.OSNotificationAction;
@@ -57,6 +58,16 @@ public class PagPegApplication extends Application {
                     intent.putExtra("shopper_uid",uid);
                     intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+
+                }else if (result.action.actionID.equalsIgnoreCase("visualizar_ordem_shopper")){
+
+                    String uid = (String) data.opt("user_uid");
+
+                    Intent intent = new Intent(PagPegApplication.this.getApplicationContext(), MainUserActivity.class);
+                    intent.putExtra("user_uid",uid);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+
                 }
             }
         }

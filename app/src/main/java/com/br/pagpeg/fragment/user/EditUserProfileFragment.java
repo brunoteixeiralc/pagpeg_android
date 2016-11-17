@@ -21,7 +21,7 @@ import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.User;
-import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -71,7 +71,7 @@ public class EditUserProfileFragment extends Fragment {
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Editar Perfil");
 
-        Utils.setIconBar(EnumIconBar.EDITPROFILE,toolbar);
+        Utils.setIconBar(EnumToolBar.EDITPROFILE,toolbar);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 

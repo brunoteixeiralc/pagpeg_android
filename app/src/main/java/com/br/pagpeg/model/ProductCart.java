@@ -10,6 +10,8 @@ public class ProductCart implements Serializable {
 
    private Integer quantity;
 
+   private Integer shopper_find_quantity;
+
    private Double price_total;
 
    private Product product;
@@ -65,5 +67,13 @@ public class ProductCart implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getShopper_find_quantity() {
+        return shopper_find_quantity;
+    }
+
+    public void setShopper_find_quantity(Integer shopper_find_quantity) {
+        this.shopper_find_quantity = shopper_find_quantity;
     }
 }

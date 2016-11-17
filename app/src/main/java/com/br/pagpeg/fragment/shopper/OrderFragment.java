@@ -25,7 +25,7 @@ import com.br.pagpeg.model.Product;
 import com.br.pagpeg.model.ProductCart;
 import com.br.pagpeg.model.Store;
 import com.br.pagpeg.model.User;
-import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -89,7 +89,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
 
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
-        Utils.setIconBar(EnumIconBar.SHOPPERORDER,toolbar);
+        Utils.setIconBar(EnumToolBar.SHOPPERORDER,toolbar);
 
         googleApiClient = new GoogleApiClient.Builder(OrderFragment.this.getActivity())
                 .addConnectionCallbacks(this)
@@ -154,6 +154,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
 
                     for (DataSnapshot st : dataSnapshot.getChildren()) {
                         order = st.getValue(Cart.class);
+                        order.setUser(st.getKey());
 
                         int countUnity = 0;
                         for(Map.Entry<String, ProductCart> entry : order.getProducts().entrySet()) {

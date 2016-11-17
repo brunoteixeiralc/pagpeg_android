@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.Shopper;
-import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -48,7 +48,7 @@ public class ShopperProfileFragment extends Fragment {
 
         Toolbar toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Minha conta");
-        Utils.setIconBar(EnumIconBar.SHOPPERPROFILE,toolbar);
+        Utils.setIconBar(EnumToolBar.SHOPPERPROFILE,toolbar);
 
         shopperImage = (ImageView) view.findViewById(R.id.shopper_image);
         shopperEmail = (TextView) view.findViewById(R.id.shopper_email);

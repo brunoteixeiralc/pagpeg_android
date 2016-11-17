@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.br.pagpeg.R;
 import com.br.pagpeg.activity.user.LoginActivity;
 import com.br.pagpeg.model.User;
-import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -45,7 +45,7 @@ public class UserProfileFragment extends Fragment {
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Minha conta");
 
-        Utils.setIconBar(EnumIconBar.EDITPROFILE,toolbar);
+        Utils.setIconBar(EnumToolBar.EDITPROFILE,toolbar);
 
         profile_user = (ImageView) view.findViewById(R.id.profile_image);
         labelName = (TextView) view.findViewById(R.id.label_name);

@@ -18,7 +18,7 @@ import com.br.pagpeg.R;
 import com.br.pagpeg.model.ClusterMarkerLocation;
 import com.br.pagpeg.model.Store;
 import com.br.pagpeg.utils.ClusterRenderer;
-import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -83,7 +83,7 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
         toolbar.setVisibility(View.VISIBLE);
         toolbar.setTitle("Lojas nas proximidades");
 
-        Utils.setIconBar(EnumIconBar.STOREMAP,toolbar);
+        Utils.setIconBar(EnumToolBar.STOREMAP,toolbar);
 
         mIconListImageView = (ImageView) toolbar.findViewById(R.id.ic_listStore);
         mIconListImageView.setOnClickListener(new View.OnClickListener() {

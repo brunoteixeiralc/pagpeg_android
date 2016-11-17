@@ -1,5 +1,6 @@
 package com.br.pagpeg.fragment.shopper;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -18,9 +19,13 @@ import com.br.pagpeg.activity.shopper.ProductDetailActivity;
 import com.br.pagpeg.adapter.shopper.OrderListAdapter;
 import com.br.pagpeg.model.ProductCart;
 import com.br.pagpeg.utils.DividerItemDecoration;
+import com.br.pagpeg.utils.EnumStatus;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,15 +38,18 @@ public class OrderListItemFragment extends Fragment {
     protected RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
     private RecyclerView.Adapter mAdapter;
-    private Fragment fragment;
     private List<ProductCart> productCartsAll;
     private ProductCart productCartSelect;
+    private DatabaseReference mDatabase;
+    public String user = "";
+    private int idxSelected;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.list_order_items, container, false);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         productCartsAll = (List<ProductCart>) getArguments().getSerializable("productsCart");
 
@@ -60,36 +68,85 @@ public class OrderListItemFragment extends Fragment {
     private OrderListAdapter.OrderListOnClickListener onClickListener() {
         return new OrderListAdapter.OrderListOnClickListener() {
             @Override
-            public void onClickSticker(View view, int idx) {
+            public void onClickItem(View view, int idx) {
+                idxSelected = idx;
                 productCartSelect = productCartsAll.get(idx);
                 IntentIntegrator.forSupportFragment(OrderListItemFragment.this).setCaptureActivity(BarCodeActivity.class).initiateScan();
+            }
+
+            @Override
+            public void onClickButton(View view, int idx) {
+
+                productCartSelect = productCartsAll.get(idx);
+                productCartSelect.setStatus(EnumStatus.Status.PRODUCT_NOT_FIND.getName());
+                mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("status").setValue(EnumStatus.Status.PRODUCT_NOT_FIND.getName());
+                productCartsAll.remove(idx);
+                updateView(productCartsAll);
+
+                Toast.makeText(getActivity(), "Produto não foi achado", Toast.LENGTH_LONG).show();
             }
         };
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
+        
+        if(requestCode == 1){
 
-            if(result.getContents() != null){
+            if(resultCode == Activity.RESULT_OK){
 
-                if(String.valueOf(productCartSelect.getProduct().getBar_code()).equalsIgnoreCase(result.getContents())){
+                productCartSelect = (ProductCart) data.getSerializableExtra("productCart");
+                mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("status").setValue(EnumStatus.Status.PRODUCT_FIND.getName());
+                mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("shopper_find_quantity").setValue(productCartSelect.getShopper_find_quantity());
+                productCartsAll.get(idxSelected).setStatus(EnumStatus.Status.PRODUCT_FIND.getName());
+                productCartsAll.get(idxSelected).setShopper_find_quantity(productCartSelect.getShopper_find_quantity());
+                productCartsAll.remove(idxSelected);
 
+                updateView(productCartsAll);
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {}
+            
+        }else{
+
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if(result != null) {
+
+                if(result.getContents() != null){
+
+                    if(String.valueOf(productCartSelect.getProduct().getBar_code()).equalsIgnoreCase(result.getContents())){
+
+                        Intent intent = new Intent(OrderListItemFragment.this.getActivity(),ProductDetailActivity.class);
+                        intent.putExtra("productCart",productCartSelect);
+                        startActivityForResult(intent,1);
+
+                    }else{
+                        Toast.makeText(getActivity(), "Produto não encontrado", Toast.LENGTH_LONG).show();
+                    }
+
+                } else {
+
+                    //INICIO TESTE EMULADOR
                     Intent intent = new Intent(OrderListItemFragment.this.getActivity(),ProductDetailActivity.class);
                     intent.putExtra("productCart",productCartSelect);
-                    startActivity(intent);
+                    startActivityForResult(intent,1);
+                    //FIM TESTE EMULADOR
 
-                }else{
-                    Toast.makeText(getActivity(), "Produto não encontrado", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getActivity(), "Produto não encontrado", Toast.LENGTH_LONG).show();
                 }
 
             } else {
-                Toast.makeText(getActivity(), "Produto não encontrado", Toast.LENGTH_LONG).show();
+                super.onActivityResult(requestCode, resultCode, data);
             }
-
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
         }
+  
+    }
+
+    public void updateView(List<ProductCart> productCarts){
+        productCartsAll = new ArrayList<>();
+        productCartsAll.addAll(productCarts);
+        mAdapter.notifyDataSetChanged();
     }
 }
+
+

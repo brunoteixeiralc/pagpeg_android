@@ -21,13 +21,29 @@
         android:paddingLeft="16dp"
         android:paddingRight="16dp">
 
-        <ImageView
-             android:id="@+id/img_logo_estabelecimento"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:src="@drawable/no_product"
-             android:scaleType="center"
-             android:layout_marginBottom="6dp"/>
+        <RelativeLayout
+            android:id="@+id/relative_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/no_product"
+                android:scaleType="center"
+                android:layout_marginBottom="6dp"/>
+
+            <ProgressBar
+                android:id="@+id/progress"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="visible"
+                android:indeterminateTint="@color/colorPrimary"/>
+
+        </RelativeLayout>
 
         <LinearLayout
          android:layout_width="match_parent"
@@ -95,7 +111,7 @@
               android:layout_width="0dp"
               android:layout_weight="0.2"
               android:layout_height="wrap_content"
-              android:hint="5"
+              android:hint="0"
               android:textSize="22sp"
               android:gravity="center"
               android:inputType="number"
@@ -106,7 +122,7 @@
               android:layout_weight="1"
               android:id="@+id/txt_quantity"
               android:layout_height="wrap_content"
-              android:text="/5"
+              android:text="/ 0"
               android:gravity="left"
               android:textSize="20sp"
               fontPath="fonts/Nexa-Bold.ttf"

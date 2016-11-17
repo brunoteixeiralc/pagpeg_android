@@ -23,7 +23,8 @@ import com.br.pagpeg.model.CreditCard;
 import com.br.pagpeg.model.Product;
 import com.br.pagpeg.model.ProductCart;
 import com.br.pagpeg.utils.DividerItemDecoration;
-import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.EnumToolBar;
+import com.br.pagpeg.utils.EnumStatus;
 import com.br.pagpeg.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -94,7 +95,7 @@ public class CartFragment  extends Fragment{
 
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
-        Utils.setIconBar(EnumIconBar.CART,toolbar);
+        Utils.setIconBar(EnumToolBar.CART,toolbar);
 
         View dialoglayout = CartFragment.this.getActivity().getLayoutInflater().inflate(R.layout.content_alert_discount, null);
         discount = (EditText) dialoglayout.findViewById(R.id.discount);
@@ -320,7 +321,7 @@ public class CartFragment  extends Fragment{
 
     private void saveCart(){
 
-        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("status").setValue("Finding shopper");
+        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("status").setValue(EnumStatus.Status.FINDING_SHOPPER.getName());
         mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("tax").setValue(taxDouble);
         mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("total").setValue(totalDouble);
         mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("total_price").setValue(totalPriceDouble);

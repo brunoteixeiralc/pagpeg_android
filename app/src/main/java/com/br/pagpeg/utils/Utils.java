@@ -59,7 +59,7 @@ public final class Utils {
             simpleArcDialog.dismiss();
     }
 
-    public static void setIconBar(EnumIconBar enumIconBar, Toolbar toolbar){
+    public static void setIconBar(EnumToolBar enumIconBar, Toolbar toolbar){
 
         mIconList = (ImageView) toolbar.findViewById(R.id.ic_listStore);
         mIconMap = (ImageView) toolbar.findViewById(R.id.ic_mapStore);

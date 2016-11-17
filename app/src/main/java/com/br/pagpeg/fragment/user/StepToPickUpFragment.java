@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 
 import com.baoyachi.stepview.HorizontalStepView;
 import com.br.pagpeg.R;
-import com.br.pagpeg.utils.EnumIconBar;
+import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 
 import java.util.ArrayList;
@@ -94,7 +94,7 @@ public class StepToPickUpFragment extends Fragment{
 
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Localizando shopper");
-        Utils.setIconBar(EnumIconBar.FINDINGSHOPPER,toolbar);
+        Utils.setIconBar(EnumToolBar.FINDINGSHOPPER,toolbar);
 
         stepView = (HorizontalStepView) view.findViewById(R.id.step_view);
         List<String> list = new ArrayList<>();
