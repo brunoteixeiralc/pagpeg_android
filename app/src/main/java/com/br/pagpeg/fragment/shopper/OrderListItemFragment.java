@@ -43,6 +43,7 @@ public class OrderListItemFragment extends Fragment {
     private DatabaseReference mDatabase;
     public String user = "";
     private int idxSelected;
+    private Double totalPriceShopper;
 
     @Nullable
     @Override
@@ -97,9 +98,12 @@ public class OrderListItemFragment extends Fragment {
 
                 productCartSelect = (ProductCart) data.getSerializableExtra("productCart");
                 mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("status").setValue(EnumStatus.Status.PRODUCT_FIND.getName());
-                mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("shopper_find_quantity").setValue(productCartSelect.getShopper_find_quantity());
+                mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("shopper_quantity").setValue(productCartSelect.getShopper_quantity());
+                mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("shopper_price_total").setValue(productCartSelect.getShopper_price_total());
+                mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("shopper_price_unit").setValue(productCartSelect.getShopper_price_unit());
+                mDatabase.child("cart_online").child(user).child("total_price_shopper").setValue(0.0);
                 productCartsAll.get(idxSelected).setStatus(EnumStatus.Status.PRODUCT_FIND.getName());
-                productCartsAll.get(idxSelected).setShopper_find_quantity(productCartSelect.getShopper_find_quantity());
+                productCartsAll.get(idxSelected).setShopper_quantity(productCartSelect.getShopper_quantity());
                 productCartsAll.remove(idxSelected);
 
                 updateView(productCartsAll);

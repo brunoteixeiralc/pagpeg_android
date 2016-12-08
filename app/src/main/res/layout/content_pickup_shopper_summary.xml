@@ -4,6 +4,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/total_user"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="Pedido : R$ 0,00"
+        android:textSize="14sp"
+        android:padding="8dp"
+        android:gravity="center"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"/>
+
+    <TextView
+        android:id="@+id/total_shopper"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:text="Shopper pedido : R$ 0,00"
+        android:textSize="14sp"
+        android:padding="8dp"
+        android:gravity="center"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"/>
+
+        </LinearLayout>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -38,7 +69,7 @@
                 android:layout_marginTop="10dp">
 
                     <Button
-                        android:id="@+id/see_order"
+                        android:id="@+id/buy_order"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/ok_confirm_shopper"

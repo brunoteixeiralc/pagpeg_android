@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import com.br.pagpeg.R;
@@ -54,6 +55,7 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
     private ArrayList<Fragment> mFragmentList;
     private Toolbar toolbar;
     private DatabaseReference mDatabase;
+    private Button btnBuyed;
 
     @Nullable
     @Override
@@ -74,6 +76,20 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
         mFragmentList.add(new OrderListItemNotFoundFragment());
 
         order = (Cart) getArguments().getSerializable("order");
+
+        btnBuyed = (Button) view.findViewById(R.id.btn_buyed);
+        if(order.getStatus().equalsIgnoreCase(EnumStatus.Status.SHOPPER_PAYING.getName())){
+            btnBuyed.setVisibility(View.VISIBLE);
+        }else{
+            btnBuyed.setVisibility(View.GONE);
+        }
+
+        btnBuyed.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
 
         if(productCartsAll == null)
         productCartsAll = new ArrayList<>();
@@ -101,8 +117,9 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         User user = dataSnapshot.getValue(User.class);
-                        SendNotification.sendNotificationUser(user.getName(),user.getOne_signal_key(),dataSnapshot.getKey());
+                        SendNotification.sendNotificationUser(user.getName(),user.getOne_signal_key(),dataSnapshot.getKey(), EnumStatus.Status.WAITING_USER_APPROVE.getName());
                         mDatabase.child("cart_online").child(dataSnapshot.getKey()).child("status").setValue(EnumStatus.Status.WAITING_USER_APPROVE.getName());
+                        mDatabase.child("cart_online").child(dataSnapshot.getKey()).child("total_shopper").setValue(0.0);
                     }
 
                     @Override

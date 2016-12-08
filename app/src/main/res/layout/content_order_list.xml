@@ -19,4 +19,15 @@
         android:layout_weight="1"
         android:background="@android:color/white"/>
 
+    <Button
+        android:id="@+id/btn_buyed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.04"
+        android:text="@string/buyed"
+        android:textSize="14sp"
+        android:background="@color/green_button"
+        android:textColor="@android:color/white"
+        android:visibility="gone"/>
+
 </LinearLayout>

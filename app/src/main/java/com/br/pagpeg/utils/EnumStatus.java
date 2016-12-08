@@ -10,7 +10,7 @@ public class EnumStatus {
 
         FINDING_SHOPPER("Finding Shopper"),
         SHOPPER_BUYING("Shopper Buying"),
-        WAITING_USER_APPROVE("Waiting Shopper To Approve"),
+        WAITING_USER_APPROVE("Waiting User To Approve"),
         USER_APPROVE("User Approve"),
         SHOPPER_PAYING("Shopper paying"),
         SHOPPER_PAYED("Shopper payed"),

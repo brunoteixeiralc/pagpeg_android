@@ -91,9 +91,9 @@ public class OrderListItemNotFoundFragment extends Fragment {
 
                 productCartSelect = (ProductCart) data.getSerializableExtra("productCart");
                 mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("status").setValue(EnumStatus.Status.PRODUCT_FIND.getName());
-                mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("shopper_find_quantity").setValue(productCartSelect.getShopper_find_quantity());
+                mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("shopper_quantity").setValue(productCartSelect.getShopper_quantity());
                 productCartsAll.get(idxSelected).setStatus(EnumStatus.Status.PRODUCT_FIND.getName());
-                productCartsAll.get(idxSelected).setShopper_find_quantity(productCartSelect.getShopper_find_quantity());
+                productCartsAll.get(idxSelected).setShopper_quantity(productCartSelect.getShopper_quantity());
                 productCartsAll.remove(idxSelected);
 
                 updateView(productCartsAll);

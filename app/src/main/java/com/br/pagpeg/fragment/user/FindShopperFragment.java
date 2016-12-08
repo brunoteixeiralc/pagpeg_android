@@ -83,13 +83,12 @@ public class FindShopperFragment extends Fragment {
                     Bundle bundle = new Bundle();
                     bundle.putSerializable("shopper",shoppers.get(0));
 
-                    SendNotification.sendNotificationShopper(shoppers.get(0).getName(),shoppers.get(0).getOne_signal_key(),shoppers.get(0).getKey());
+                    SendNotification.sendNotificationShopper(shoppers.get(0).getName(),shoppers.get(0).getOne_signal_key(),shoppers.get(0).getKey(),"Temos um novo pedido para você ",true);
 
-                    fragment = new FindShopperProfileFragment();
+                    fragment = new FindShopperProfileFragment(stepView);
                     fragment.setArguments(bundle);
                     FragmentTransaction transaction = getFragmentManager().beginTransaction();
                     transaction.replace(R.id.fragment_container_step, fragment).commit();
-                    stepView.setStepsViewIndicatorComplectingPosition(1);
 
                     mDatabase.child("shoppers").child(shoppers.get(0).getKey()).child("is_free").setValue(false);
                     mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("shopper").setValue(shoppers.get(0).getKey());

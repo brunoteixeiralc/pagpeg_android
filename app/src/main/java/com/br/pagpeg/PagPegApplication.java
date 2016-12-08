@@ -62,9 +62,11 @@ public class PagPegApplication extends Application {
                 }else if (result.action.actionID.equalsIgnoreCase("visualizar_ordem_shopper")){
 
                     String uid = (String) data.opt("user_uid");
+                    String status = (String) data.opt("status");
 
                     Intent intent = new Intent(PagPegApplication.this.getApplicationContext(), MainUserActivity.class);
                     intent.putExtra("user_uid",uid);
+                    intent.putExtra("status",status);
                     intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 

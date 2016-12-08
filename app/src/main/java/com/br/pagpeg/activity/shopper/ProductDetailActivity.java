@@ -42,6 +42,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ImageView img;
     private ProgressBar progressBar;
     private AlertDialog builder = null;
+    private EditText dialogQuantity,dialogPrice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         weight.setText(productCart.getProduct().getUnit_measurement() + " ( " + productCart.getProduct().getShort_unit_measurement() + " )");
         name.setText(productCart.getProduct().getName() + " " + productCart.getProduct().getUnit_quantity());
         quantity.setText(String.valueOf(productCart.getQuantity()) + "x");
-        price.setText("R$ " + String.valueOf(productCart.getPrice_total()));
+        price.setText("R$ " + String.valueOf(productCart.getPrice_unit()));
         category.setText(productCart.getProduct().getCategory());
         Glide.with(this).load(productCart.getProduct().getImg()).listener(new RequestListener<String, GlideDrawable>() {
             @Override
@@ -81,13 +82,15 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         }).diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
 
-        View dialoglayout = this.getLayoutInflater().inflate(R.layout.content_alert_dialog, null);
-        quantity = (EditText) dialoglayout.findViewById(R.id.quantity);
+        View dialoglayout = this.getLayoutInflater().inflate(R.layout.content_alert_dialog_shopper, null);
+        dialogQuantity = (EditText) dialoglayout.findViewById(R.id.quantity);
+        dialogPrice = (EditText) dialoglayout.findViewById(R.id.price);
+        dialogPrice.setText(String.valueOf(productCart.getPrice_unit()));
         builder = new AlertDialog.Builder(this, R.style.Dialog_Quantity)
                 .setPositiveButton("OK", null)
                 .setNegativeButton("Cancelar", null)
                 .setTitle("PagPeg")
-                .setMessage("Digite a quantidade que encontrou\n\nQuantidade pedida : " + productCart.getQuantity() + "\n")
+                .setMessage("Digite a quantidade que encontrou e verifique se o preço está correto\n\nQuantidade pedida : " + productCart.getQuantity() + "\n")
                 .setIcon(R.mipmap.ic_launcher)
                 .setView(dialoglayout)
                 .create();
@@ -100,7 +103,9 @@ public class ProductDetailActivity extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
 
-                        productCart.setShopper_find_quantity(Integer.parseInt(quantity.getText().toString()));
+                        productCart.setShopper_price_unit(Double.parseDouble(dialogPrice.getText().toString()));
+                        productCart.setShopper_quantity(Integer.parseInt(dialogQuantity.getText().toString()));
+                        productCart.setShopper_price_total(Integer.parseInt(dialogQuantity.getText().toString()) * productCart.getProduct().getPrice());
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("productCart",productCart);
                         setResult(Activity.RESULT_OK,returnIntent);

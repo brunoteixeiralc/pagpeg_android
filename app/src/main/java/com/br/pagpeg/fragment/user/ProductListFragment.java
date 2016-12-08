@@ -141,7 +141,7 @@ public class ProductListFragment extends Fragment {
                     }
                 });
 
-        View dialoglayout = ProductListFragment.this.getActivity().getLayoutInflater().inflate(R.layout.content_alert_dialog, null);
+        View dialoglayout = ProductListFragment.this.getActivity().getLayoutInflater().inflate(R.layout.content_alert_dialog_user, null);
         quantity = (EditText) dialoglayout.findViewById(R.id.quantity);
         builder = new AlertDialog.Builder(getActivity(), R.style.Dialog_Quantity)
                 .setPositiveButton("OK", null)
@@ -320,6 +320,7 @@ public class ProductListFragment extends Fragment {
                 ProductCart productCart = new ProductCart();
                 productCart.setStatus(EnumStatus.Status.PRODUCT_WAITING.getName());
                 productCart.setQuantity(selectedProduct.getQuantity());
+                productCart.setPrice_unit(wholesale_price == 0.0 ? selectedProduct.getProduct().getPrice() : wholesale_price);
                 productCart.setPrice_total(selectedProduct.getQuantity() * (wholesale_price == 0.0 ? selectedProduct.getProduct().getPrice() : wholesale_price));
 
                 mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getProduct().getName()).setValue(productCart);

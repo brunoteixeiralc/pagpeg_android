@@ -8,9 +8,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
 import com.br.pagpeg.R;
 import com.br.pagpeg.fragment.user.CartFragment;
 import com.br.pagpeg.fragment.user.MapFragment;
+import com.br.pagpeg.fragment.user.StepToPickUpFragment;
 import com.br.pagpeg.fragment.user.UserProfileFragment;
 import com.br.pagpeg.model.User;
 import com.roughike.bottombar.BottomBar;
@@ -30,6 +32,8 @@ public class MainUserActivity extends AppCompatActivity {
     private Fragment fragment;
     private Bundle bundle;
     public BottomBarBadge bottomBarBadge;
+    private String userUid;
+    private String status;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,7 +49,16 @@ public class MainUserActivity extends AppCompatActivity {
         mBottomBar.noNavBarGoodness();
         mBottomBar.setActiveTabColor(getResources().getColor(R.color.colorPrimary));
         mBottomBar.setItems(R.menu.bottombar_user_menu);
-        mBottomBar.selectTabAtPosition(1,true);
+
+        //usuário clicou na notificação
+        userUid = getIntent().getStringExtra("user_uid");
+        status = getIntent().getStringExtra("status");
+
+        if(userUid == null){
+            mBottomBar.selectTabAtPosition(1,true);
+        }else{
+            mBottomBar.selectTabAtPosition(2,true);
+        }
 
         mBottomBar.setOnMenuTabClickListener(new OnMenuTabClickListener() {
             @Override
@@ -67,9 +80,14 @@ public class MainUserActivity extends AppCompatActivity {
                         fragment = new MapFragment();
 
                         break;
+
                     case R.id.bottomBarItemThree:
 
-                        fragment = new CartFragment();
+                        if(userUid == null){
+                            fragment = new CartFragment();
+                        }else{
+                            fragment = new StepToPickUpFragment(status,userUid);
+                        }
 
                         break;
                 }

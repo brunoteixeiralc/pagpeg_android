@@ -10,9 +10,15 @@ public class ProductCart implements Serializable {
 
    private Integer quantity;
 
-   private Integer shopper_find_quantity;
+   private Integer shopper_quantity;
 
    private Double price_total;
+
+   private Double shopper_price_unit;
+
+   private Double shopper_price_total;
+
+   private Double price_unit;
 
    private Product product;
 
@@ -23,10 +29,19 @@ public class ProductCart implements Serializable {
    public ProductCart(){
    }
 
-    public ProductCart(String name,Integer quantity,Double price_total,String status){
+    public ProductCart(String name,Integer quantity,Double price_total,String status, Double price_unit){
         this.quantity = quantity;
         this.price_total = price_total;
         this.status = status;
+        this.price_unit = price_unit;
+    }
+
+    public Double getPrice_unit() {
+        return price_unit;
+    }
+
+    public void setPrice_unit(Double price_unit) {
+        this.price_unit = price_unit;
     }
 
     public Product getProduct() {
@@ -69,11 +84,27 @@ public class ProductCart implements Serializable {
         this.status = status;
     }
 
-    public Integer getShopper_find_quantity() {
-        return shopper_find_quantity;
+    public Double getShopper_price_total() {
+        return shopper_price_total;
     }
 
-    public void setShopper_find_quantity(Integer shopper_find_quantity) {
-        this.shopper_find_quantity = shopper_find_quantity;
+    public void setShopper_price_total(Double shopper_price_total) {
+        this.shopper_price_total = shopper_price_total;
+    }
+
+    public Double getShopper_price_unit() {
+        return shopper_price_unit;
+    }
+
+    public void setShopper_price_unit(Double shopper_price_unit) {
+        this.shopper_price_unit = shopper_price_unit;
+    }
+
+    public Integer getShopper_quantity() {
+        return shopper_quantity;
+    }
+
+    public void setShopper_quantity(Integer shopper_quantity) {
+        this.shopper_quantity = shopper_quantity;
     }
 }

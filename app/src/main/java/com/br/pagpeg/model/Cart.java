@@ -19,6 +19,8 @@ public class Cart implements Serializable {
 
     private Double total_price;
 
+    private Double total_price_shopper;
+
     private Double discount;
 
     private Double tax;
@@ -32,6 +34,8 @@ public class Cart implements Serializable {
     private String status;
 
     private Double total;
+
+    private Double total_shopper;
 
     private String user;
 
@@ -129,5 +133,21 @@ public class Cart implements Serializable {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public Double getTotal_shopper() {
+        return total_shopper;
+    }
+
+    public void setTotal_shopper(Double total_shopper) {
+        this.total_shopper = total_shopper;
+    }
+
+    public Double getTotal_price_shopper() {
+        return total_price_shopper;
+    }
+
+    public void setTotal_price_shopper(Double total_price_shopper) {
+        this.total_price_shopper = total_price_shopper;
     }
 }

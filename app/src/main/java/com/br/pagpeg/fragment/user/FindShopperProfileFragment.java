@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.baoyachi.stepview.HorizontalStepView;
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.Shopper;
 import com.bumptech.glide.Glide;
@@ -33,6 +34,11 @@ public class FindShopperProfileFragment extends Fragment {
     private RatingBar ratingBar;
     private ProgressBar progressBar;
     private Toolbar toolbar;
+    private HorizontalStepView stepView;
+
+    public FindShopperProfileFragment(HorizontalStepView stepView){
+        this.stepView = stepView;
+    }
 
     @Nullable
     @Override
@@ -69,6 +75,7 @@ public class FindShopperProfileFragment extends Fragment {
             }
         }).diskCacheStrategy(DiskCacheStrategy.ALL).into(image);
 
+        stepView.setStepsViewIndicatorComplectingPosition(1);
 
         return view;
     }

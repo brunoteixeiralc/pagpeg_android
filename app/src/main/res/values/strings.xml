@@ -69,6 +69,7 @@
     <string name="see_orders">Ver o pedido</string>
     <string name="ok_confirm_shopper">OK, pode comprar</string>
     <string name="get_my_products">Peguei meus produtos</string>
+    <string name="buyed">Finalizar compra</string>
     <string name="call">Ligar</string>
     <string name="add_cart">Adicionar no carrinho</string>
     <string name="remove_cart">Remover do carrinho</string>

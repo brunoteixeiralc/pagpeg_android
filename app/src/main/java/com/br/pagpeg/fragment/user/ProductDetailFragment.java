@@ -87,7 +87,7 @@ public class ProductDetailFragment extends Fragment {
             }
         }).diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
 
-        View dialoglayout = ProductDetailFragment.this.getActivity().getLayoutInflater().inflate(R.layout.content_alert_dialog, null);
+        View dialoglayout = ProductDetailFragment.this.getActivity().getLayoutInflater().inflate(R.layout.content_alert_dialog_user, null);
         quantity = (EditText) dialoglayout.findViewById(R.id.quantity);
         final AlertDialog builder = new AlertDialog.Builder(getActivity(), R.style.Dialog_Quantity)
                 .setPositiveButton("OK", null)

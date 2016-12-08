@@ -71,6 +71,7 @@ public class PickUpSummaryAdapter extends RecyclerView.Adapter<PickUpSummaryAdap
 
         public PickUpSummaryViewHolder(View view) {
             super(view);
+
         }
     }
 }

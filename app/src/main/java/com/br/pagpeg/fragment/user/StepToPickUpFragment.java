@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.baoyachi.stepview.HorizontalStepView;
 import com.br.pagpeg.R;
+import com.br.pagpeg.utils.EnumStatus;
 import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 
@@ -27,8 +28,20 @@ public class StepToPickUpFragment extends Fragment{
     private View view;
     public HorizontalStepView stepView;
     private Fragment fragment;
- //   private Handler myhandler;
     private Toolbar toolbar;
+    private String status = EnumStatus.Status.FINDING_SHOPPER.getName();
+    private String userUid;
+
+    public StepToPickUpFragment(){}
+
+    public StepToPickUpFragment(String status){
+        this.status = status;
+    }
+
+    public StepToPickUpFragment(String status,String userUid){
+        this.status = status;
+        this.userUid = userUid;
+    }
 
     @Nullable
     @Override
@@ -112,8 +125,21 @@ public class StepToPickUpFragment extends Fragment{
                 .setStepsViewIndicatorDefaultIcon(ContextCompat.getDrawable(getActivity(), R.drawable.default_icon))
                 .setStepsViewIndicatorAttentionIcon(ContextCompat.getDrawable(getActivity(), R.drawable.attention));
 
+        switch (status){
 
-        fragment = new FindShopperFragment(stepView);
+            case "Finding Shopper":
+                fragment = new FindShopperFragment(stepView);
+                break;
+            case "Shopper Buying":
+                fragment = new FindShopperProfileFragment(stepView);
+                break;
+            case "Waiting User To Approve":
+                fragment = new PickUpShopperSummaryFragment(stepView,userUid);
+                break;
+            default:
+                break;
+        }
+
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.fragment_container_step, fragment).commit();
 
