@@ -1,5 +1,6 @@
 package com.br.pagpeg.fragment.shopper;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
@@ -35,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 /**
@@ -55,7 +58,7 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
     private ArrayList<Fragment> mFragmentList;
     private Toolbar toolbar;
     private DatabaseReference mDatabase;
-    private Button btnBuyed;
+    private Button btnFinishOrder;
 
     @Nullable
     @Override
@@ -68,6 +71,11 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
             StrictMode.setThreadPolicy(policy);
         }
 
+        toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbar.setTitle("Pedido Atual");
+        Utils.setIconBar(EnumToolBar.SHOPPERORDER,toolbar);
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mFragmentList = new ArrayList<Fragment>();
@@ -77,17 +85,30 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
 
         order = (Cart) getArguments().getSerializable("order");
 
-        btnBuyed = (Button) view.findViewById(R.id.btn_buyed);
+        btnFinishOrder = (Button) view.findViewById(R.id.btn_buyed);
         if(order.getStatus().equalsIgnoreCase(EnumStatus.Status.SHOPPER_PAYING.getName())){
-            btnBuyed.setVisibility(View.VISIBLE);
+            btnFinishOrder.setVisibility(View.VISIBLE);
         }else{
-            btnBuyed.setVisibility(View.GONE);
+            btnFinishOrder.setVisibility(View.GONE);
         }
 
-        btnBuyed.setOnClickListener(new View.OnClickListener() {
+        btnFinishOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                mDatabase.child("users").child(order.getUser()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        User user = dataSnapshot.getValue(User.class);
+                        SendNotification.sendNotificationUser(user.getName(),user.getOne_signal_key(),dataSnapshot.getKey(), EnumStatus.Status.SHOPPER_PAYED.getName()," o shopper fez o pagamento com sucesso.");
+                        mDatabase.child("cart_online").child(dataSnapshot.getKey()).child("status").setValue(EnumStatus.Status.SHOPPER_PAYED.getName());
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
             }
         });
 
@@ -102,11 +123,6 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
 
         orderList();
 
-        toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
-        toolbar.setVisibility(View.VISIBLE);
-        toolbar.setTitle("Pedido Atual");
-        Utils.setIconBar(EnumToolBar.SHOPPERORDER,toolbar);
-
         mIconOrderCompleted = (ImageView) toolbar.findViewById(R.id.ic_order_completed);
         mIconOrderCompleted.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,7 +133,7 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         User user = dataSnapshot.getValue(User.class);
-                        SendNotification.sendNotificationUser(user.getName(),user.getOne_signal_key(),dataSnapshot.getKey(), EnumStatus.Status.WAITING_USER_APPROVE.getName());
+                        SendNotification.sendNotificationUser(user.getName(),user.getOne_signal_key(),dataSnapshot.getKey(), EnumStatus.Status.WAITING_USER_APPROVE.getName()," o shopper já pegou suas compras. Estamos esperando sua aprovação");
                         mDatabase.child("cart_online").child(dataSnapshot.getKey()).child("status").setValue(EnumStatus.Status.WAITING_USER_APPROVE.getName());
                         mDatabase.child("cart_online").child(dataSnapshot.getKey()).child("total_shopper").setValue(0.0);
                     }

@@ -59,7 +59,8 @@ public class PagPegApplication extends Application {
                     intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
 
-                }else if (result.action.actionID.equalsIgnoreCase("visualizar_ordem_shopper")){
+                }else if (result.action.actionID.equalsIgnoreCase("visualizar_ordem_shopper") ||
+                        result.action.actionID.equalsIgnoreCase("visualizar_compra_pronta")){
 
                     String uid = (String) data.opt("user_uid");
                     String status = (String) data.opt("status");
@@ -69,7 +70,6 @@ public class PagPegApplication extends Application {
                     intent.putExtra("status",status);
                     intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
-
                 }
             }
         }

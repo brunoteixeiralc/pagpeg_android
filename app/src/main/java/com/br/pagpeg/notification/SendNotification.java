@@ -1,5 +1,7 @@
 package com.br.pagpeg.notification;
 
+import com.br.pagpeg.utils.EnumStatus;
+
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -71,7 +73,7 @@ public class SendNotification {
         }
     }
 
-    public static void sendNotificationUser(String user_name,String one_signal_key,String uid, String status){
+    public static void sendNotificationUser(String user_name,String one_signal_key,String uid, String status, String content){
 
         try {
             String jsonResponse;
@@ -86,19 +88,24 @@ public class SendNotification {
             con.setRequestProperty("Authorization", "Basic ODI1NTdiMjUtN2EzNy00NjM1LWFhNDQtYjkyYmJlZGQ3Yzgw");
             con.setRequestMethod("POST");
 
-            String strJsonBody = "{"
+            StringBuffer strJsonBody = new StringBuffer("{"
                     +   "\"app_id\": \"bb7c6d67-b131-486b-9b58-27466efefd12\","
                     +   "\"include_player_ids\": [\"" + one_signal_key + "\"],"
                     +   "\"data\": {\"user_uid\": \"" + uid + "\", \"status\": \"" + status + "\"},"
-                    +   "\"contents\": {\"en\": \"" + user_name + ", o shopper já pegou suas compras. Estamos esperando sua aprovação\"},"
-                    +   "\"headings\": {\"en\": \"PagPeg - Notificação para o usuário\"},"
-                    +   "\"buttons\": [{\"id\": \"visualizar_ordem_shopper\", \"text\": \"Visualizar a compra do shopper\"}]"
-                    + "}";
+                    +   "\"contents\": {\"en\": \"" + user_name + content + "\"},"
+                    +   "\"headings\": {\"en\": \"PagPeg - Notificação para o usuário\"},");
 
+            if(status.equalsIgnoreCase(EnumStatus.Status.SHOPPER_PAYED.getName())){
+                strJsonBody.append(",\"buttons\": [{\"id\": \"visualizar_compra_pronta\", \"text\": \"Visualizar\"}]"
+                        + "}");
+            }else{
+                strJsonBody.append(",\"buttons\": [{\"id\": \"visualizar_ordem_shopper\", \"text\": \"Visualizar a compra do shopper\"}]"
+                        + "}");
+            }
 
             System.out.println("strJsonBody:\n" + strJsonBody);
 
-            byte[] sendBytes = strJsonBody.getBytes("UTF-8");
+            byte[] sendBytes = strJsonBody.toString().getBytes("UTF-8");
             con.setFixedLengthStreamingMode(sendBytes.length);
 
             OutputStream outputStream = con.getOutputStream();

@@ -136,6 +136,9 @@ public class StepToPickUpFragment extends Fragment{
             case "Waiting User To Approve":
                 fragment = new PickUpShopperSummaryFragment(stepView,userUid);
                 break;
+            case "Shopper payed":
+                fragment = new PickUpReadyFragment(stepView,userUid);
+                break;
             default:
                 break;
         }

@@ -190,7 +190,5 @@ public class PickUpShopperSummaryFragment extends Fragment {
 
             }
         });
-
-
     }
 }
