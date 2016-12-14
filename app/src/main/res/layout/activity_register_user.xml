@@ -2,10 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:gravity="center">
+    android:gravity="center"
+    android:baselineAligned="false"
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -40,24 +41,6 @@
             tools:ignore="MissingPrefix"/>
 
     </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/register_account"
-            android:padding="10dp"
-            android:textSize="14dp"
-            android:layout_marginLeft="10dp"
-            fontPath="fonts/Nexa-Bold.ttf"
-            tools:ignore="MissingPrefix"
-            android:textColor="@color/white"/>
-
-    </LinearLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -251,5 +234,23 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/register_account"
+            android:padding="10dp"
+            android:textSize="14dp"
+            android:layout_marginLeft="10dp"
+            fontPath="fonts/Nexa-Bold.ttf"
+            tools:ignore="MissingPrefix"
+            android:textColor="@color/white"/>
+
+    </LinearLayout>
 
 </LinearLayout>

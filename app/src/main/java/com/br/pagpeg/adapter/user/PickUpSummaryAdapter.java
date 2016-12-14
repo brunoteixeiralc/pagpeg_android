@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.br.pagpeg.R;
-import com.br.pagpeg.model.Product;
+import com.br.pagpeg.model.ProductCart;
 
 import java.util.List;
 
@@ -18,11 +18,11 @@ import java.util.List;
 public class PickUpSummaryAdapter extends RecyclerView.Adapter<PickUpSummaryAdapter.PickUpSummaryViewHolder> {
 
     protected static final String TAG = "pagpeg";
-    private final List<Product> products;
+    private List<ProductCart> products;
     private PickUpSummaryAdapter.PickUpSummaryOnClickListener pickUpSummaryOnClickListener;
     private final Context context;
 
-    public PickUpSummaryAdapter(PickUpSummaryAdapter.PickUpSummaryOnClickListener pickUpSummaryOnClickListener, Context context, List<Product> products) {
+    public PickUpSummaryAdapter(PickUpSummaryAdapter.PickUpSummaryOnClickListener pickUpSummaryOnClickListener, Context context, List<ProductCart> products) {
         this.context = context;
         this.products = products;
         this.pickUpSummaryOnClickListener = pickUpSummaryOnClickListener;
@@ -30,15 +30,14 @@ public class PickUpSummaryAdapter extends RecyclerView.Adapter<PickUpSummaryAdap
 
     @Override
     public int getItemCount() {
-        return 10;
+        return products.size();
     }
 
     @Override
     public PickUpSummaryAdapter.PickUpSummaryViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        // Infla a view do layout
+
         View view = LayoutInflater.from(context).inflate(R.layout.list_item_cart, viewGroup, false);
 
-        // Cria o ViewHolder
         PickUpSummaryAdapter.PickUpSummaryViewHolder holder = new PickUpSummaryAdapter.PickUpSummaryViewHolder(view);
         return holder;
     }
@@ -65,8 +64,6 @@ public class PickUpSummaryAdapter extends RecyclerView.Adapter<PickUpSummaryAdap
         public void onClickSticker(View view, int idx);
     }
 
-
-    // ViewHolder com as views
     public static class PickUpSummaryViewHolder extends RecyclerView.ViewHolder {
 
         public PickUpSummaryViewHolder(View view) {

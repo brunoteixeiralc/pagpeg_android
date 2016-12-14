@@ -17,12 +17,12 @@
     <string name="email">Email</string>
     <string name="phone">Telefone</string>
     <string name="wait_shopper_buy">Aguarde o shopper fazer sua compra.</string>
-    <string name="wait_user_to_get">Toshiro está lhe aguardando para entregar a sua compra.</string>
+    <string name="wait_user_to_get">Shopper está lhe aguardando para entregar a sua compra.</string>
     <string name="instructions">Instruções</string>
     <string name="route">Rota</string>
-    <string name="date_time_get_product">Pegue seus produtos antes de 23:00 do dia 4 de Outuble de 2016</string>
+    <string name="date_time_get_product">Pegue seus produtos antes de 00:00 do dia 4 de Outubro de 2016</string>
     <string name="locker">Locker 05 - Código 239892</string>
-    <string name="open_until">Aberta até as 23:00</string>
+    <string name="open_until">Aberta até as 00:00</string>
     <string name="rating_shopper">Classificar shopper</string>
     <string name="description">Descrição</string>
     <string name="price">R$ 0.00</string>

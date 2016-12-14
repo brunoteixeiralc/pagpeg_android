@@ -49,62 +49,6 @@ public class StepToPickUpFragment extends Fragment{
 
         view = inflater.inflate(R.layout.content_step_to_pickup, container, false);
 
-//        myhandler = new Handler();
-//
-//        myhandler.postDelayed(new Runnable()
-//        {
-//            @Override
-//            public void run()
-//            {
-//
-//                fragment = new FindShopperProfileFragment();
-//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                transaction.replace(R.id.fragment_container_step, fragment).commit();
-//                stepView.setStepsViewIndicatorComplectingPosition(1);
-//                toolbar.setTitle("Achamos seu shopper ideal");
-//                myhandler.postDelayed(new Runnable()
-//
-//                {
-//                    @Override
-//                    public void run() {
-//
-//                        fragment = new PickUpShopperSummaryFragment();
-//                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                        transaction.replace(R.id.fragment_container_step, fragment).commit();
-//                        stepView.setStepsViewIndicatorComplectingPosition(2);
-//                        toolbar.setTitle("Resumo da compra do shopper");
-//                        myhandler.postDelayed(new Runnable()
-//
-//                        {
-//                           @Override
-//                           public void run() {
-//
-//                               fragment = new PickUpReadyFragment();
-//                               FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                               transaction.replace(R.id.fragment_container_step, fragment).commit();
-//                               stepView.setStepsViewIndicatorComplectingPosition(3);
-//                               toolbar.setTitle("Sua compra está pronta!");
-//                               myhandler.postDelayed(new Runnable()
-//
-//                               {
-//                                   @Override
-//                                   public void run() {
-//
-//                                       fragment = new PickUpSummaryFragment();
-//                                       FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//                                       transaction.replace(R.id.fragment_container_step, fragment).commit();
-//                                       stepView.setStepsViewIndicatorComplectingPosition(4);
-//                                       toolbar.setTitle("Compra entregue.");
-//                                   }
-//                               },20000);
-//                           }
-//                        },20000);
-//                    }
-//                },20000);12345678
-//          }
-//
-//        }, 20000);
-
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Localizando shopper");
         Utils.setIconBar(EnumToolBar.FINDINGSHOPPER,toolbar);
@@ -136,8 +80,11 @@ public class StepToPickUpFragment extends Fragment{
             case "Waiting User To Approve":
                 fragment = new PickUpShopperSummaryFragment(stepView,userUid);
                 break;
-            case "Shopper payed":
+            case "Shopper Payed":
                 fragment = new PickUpReadyFragment(stepView,userUid);
+                break;
+            case "User Received":
+                fragment = new PickUpSummaryFragment(stepView);
                 break;
             default:
                 break;

@@ -6,16 +6,6 @@
     android:layout_height="match_parent">
 
 
-    <Button
-        android:id="@+id/addCart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/rating_shopper"
-        android:textSize="12sp"
-        android:padding="8dp"
-        android:background="@color/colorPrimaryDark"
-        android:textColor="@android:color/white"/>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -39,15 +29,31 @@
                 android:orientation="horizontal"
                 android:padding="8dp">
 
-                <fragment
-                    xmlns:map="http://schemas.android.com/apk/res-auto"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:id="@+id/map"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    map:cameraZoom="10"
-                    map:mapType="normal"
-                    map:liteMode="true"/>
+                <RelativeLayout
+                    android:id="@+id/relative_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/store_img"
+                        android:src="@drawable/roldao_img"
+                        tools:ignore="ContentDescription"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="center"
+                        android:adjustViewBounds="true"/>
+
+                    <ProgressBar
+                        android:id="@+id/progress"
+                        style="?android:attr/progressBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:visibility="visible"
+                        android:indeterminateTint="@color/colorPrimary"/>
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -61,72 +67,29 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <LinearLayout
+                         <TextView
+                            android:id="@+id/store_name"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/name"
-                                android:layout_width="0dp"
-                                android:layout_weight="1"
-                                android:layout_height="wrap_content"
-                                android:textSize="18sp"
-                                android:text="Roldão"
-                                android:gravity="start"
-                                android:textAlignment="viewStart"
-                                android:textColor="@android:color/black"/>
-
-                            <TextView
-                                android:id="@+id/km"
-                                android:layout_width="0dp"
-                                android:layout_weight="0.5"
-                                android:layout_height="wrap_content"
-                                android:textSize="14sp"
-                                android:text="@string/distance"
-                                android:gravity="end"
-                                fontPath="fonts/Nexa-Bold.ttf"
-                                tools:ignore="MissingPrefix"/>
-
-                        </LinearLayout>
+                            android:textSize="18sp"
+                            android:text="Roldão"
+                            android:gravity="start"
+                            android:textAlignment="viewStart"
+                            android:textColor="@android:color/black"/>
 
                         <TextView
-                            android:id="@+id/address"
+                            android:id="@+id/store_address"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Av. Fernão Dias Paes Leme, 391 - Centro - Várzea Pta"
                             android:textSize="12sp"
                             android:gravity="start"/>
 
-                        <TextView
-                            android:id="@+id/time"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/open_until"
-                            android:textSize="12sp"
-                            android:textColor="@color/colorPrimary"
-                            android:textStyle="normal|bold"
-                            android:layout_gravity="left"/>
-
                     </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
-
-            <!--<TextView-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="Resumo do seu pedido"-->
-                <!--android:textSize="15dp"-->
-                <!--android:padding="5dp"-->
-                <!--android:layout_marginTop="5dp"-->
-                <!--android:background="@color/white"-->
-                <!--android:textColor="@color/colorPrimary"-->
-                <!--fontPath="fonts/Nexa-Bold.ttf"-->
-                <!--android:gravity="center"-->
-                <!--tools:ignore="MissingPrefix"/>-->
-
 
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
@@ -146,5 +109,15 @@
         </LinearLayout>
 
     </ScrollView>
+
+    <Button
+        android:id="@+id/addCart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/rating_shopper"
+        android:textSize="12sp"
+        android:padding="8dp"
+        android:background="@color/colorPrimaryDark"
+        android:textColor="@android:color/white"/>
 
 </LinearLayout>

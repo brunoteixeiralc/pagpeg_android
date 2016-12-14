@@ -16,7 +16,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/profile_image"
+            android:id="@+id/img"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:src="@drawable/image_user"
@@ -34,7 +34,8 @@
             android:padding="16dp"
             android:textSize="14sp"
             fontPath="fonts/Nexa-Bold.ttf"
-            tools:ignore="MissingPrefix"/>
+            tools:ignore="MissingPrefix"
+            android:id="@+id/txt_img"/>
 
     </FrameLayout>
 
@@ -118,15 +119,31 @@
                 android:orientation="horizontal"
                 android:padding="8dp">
 
-                <fragment
-                    xmlns:map="http://schemas.android.com/apk/res-auto"
-                    android:name="com.google.android.gms.maps.SupportMapFragment"
-                    android:id="@+id/store_map"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    map:cameraZoom="10"
-                    map:mapType="normal"
-                    map:liteMode="true" />
+                <RelativeLayout
+                    android:id="@+id/relative_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:id="@+id/store_img"
+                        android:src="@drawable/roldao_img"
+                        tools:ignore="ContentDescription"
+                        android:scaleType="fitXY"
+                        android:layout_gravity="center"
+                        android:adjustViewBounds="true"/>
+
+                    <ProgressBar
+                        android:id="@+id/progress"
+                        style="?android:attr/progressBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:visibility="visible"
+                        android:indeterminateTint="@color/colorPrimary"/>
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -178,7 +195,7 @@
                             android:gravity="start"/>
 
                         <TextView
-                            android:id="@+id/time"
+                            android:id="@+id/store_time"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="@string/open_until"
@@ -201,7 +218,8 @@
                 android:padding="10dp"
                 android:textSize="10dp"
                 android:background="@color/colorPrimary"
-                android:textColor="@color/white"/>
+                android:textColor="@color/white"
+                android:id="@+id/txt_day_time_get"/>
 
         </LinearLayout>
 

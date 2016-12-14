@@ -93,7 +93,7 @@ public class SendNotification {
                     +   "\"include_player_ids\": [\"" + one_signal_key + "\"],"
                     +   "\"data\": {\"user_uid\": \"" + uid + "\", \"status\": \"" + status + "\"},"
                     +   "\"contents\": {\"en\": \"" + user_name + content + "\"},"
-                    +   "\"headings\": {\"en\": \"PagPeg - Notificação para o usuário\"},");
+                    +   "\"headings\": {\"en\": \"PagPeg - Notificação para o usuário\"}");
 
             if(status.equalsIgnoreCase(EnumStatus.Status.SHOPPER_PAYED.getName())){
                 strJsonBody.append(",\"buttons\": [{\"id\": \"visualizar_compra_pronta\", \"text\": \"Visualizar\"}]"
