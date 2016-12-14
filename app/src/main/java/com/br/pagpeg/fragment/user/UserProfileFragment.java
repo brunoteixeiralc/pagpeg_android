@@ -96,8 +96,12 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                Bundle bundle = new Bundle();
+                bundle.putString("id_client",user.getId_iugu());
+
                 logout.setVisibility(View.GONE);
                 fragment = new CreditCardFragment();
+                fragment.setArguments(bundle);
                 FragmentTransaction transaction = getFragmentManager().beginTransaction();
                 transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
             }

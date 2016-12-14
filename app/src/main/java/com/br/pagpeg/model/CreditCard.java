@@ -26,6 +26,8 @@ public class CreditCard implements Serializable {
 
     private String key;
 
+    private String display_number;
+
     public CreditCard(){
 
     }
@@ -111,5 +113,13 @@ public class CreditCard implements Serializable {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getDisplay_number() {
+        return display_number;
+    }
+
+    public void setDisplay_number(String display_number) {
+        this.display_number = display_number;
     }
 }

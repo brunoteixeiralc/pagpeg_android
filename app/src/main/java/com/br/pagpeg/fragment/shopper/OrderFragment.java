@@ -20,6 +20,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
+import com.br.pagpeg.activity.shopper.MainShopperActivity;
+import com.br.pagpeg.activity.user.MainUserActivity;
 import com.br.pagpeg.model.Cart;
 import com.br.pagpeg.model.Product;
 import com.br.pagpeg.model.ProductCart;
@@ -169,6 +171,15 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
                         getStore(order.getNetwork(),order.getStore());
                         getUser(st.getKey());
                     }
+
+                    //((MainShopperActivity)getActivity()).mBottomBar.makeBadgeForTabAt(1, getResources().getColor(R.color.colorPrimaryDark), 1);
+
+                }else{
+
+                    llNoOrder.setVisibility(View.VISIBLE);
+                    llMain.setVisibility(View.GONE);
+                   // ((MainShopperActivity)getActivity()).mBottomBar.makeBadgeForTabAt(1, getResources().getColor(R.color.colorPrimaryDark), 0);
+
                 }
 
                 Utils.closeDialog(OrderFragment.this.getContext());

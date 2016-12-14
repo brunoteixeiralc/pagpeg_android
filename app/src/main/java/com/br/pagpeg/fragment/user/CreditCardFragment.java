@@ -45,12 +45,15 @@ public class CreditCardFragment extends Fragment {
     private List<CreditCard> creditCards = new ArrayList<>();
     private DatabaseReference mDatabase;
     private Toolbar toolbar;
+    private String id_client;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.list_credit_card, container, false);
+        view = inflater.inflate(R.layout.list, container, false);
+
+        id_client = getArguments().getString("id_client");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -64,7 +67,11 @@ public class CreditCardFragment extends Fragment {
         mAddCreditCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(CreditCardFragment.this.getContext(),AddCreditCardActivity.class));
+
+                Intent intent  = new Intent(CreditCardFragment.this.getContext(),AddCreditCardActivity.class);
+                intent.putExtra("id_client",id_client);
+
+                startActivity(intent);
             }
         });
 

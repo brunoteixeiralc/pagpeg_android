@@ -34,6 +34,7 @@ public class MainShopperActivity extends AppCompatActivity {
     private Fragment fragment;
     private TextView mLogOut;
     private Bundle bundle;
+    private Shopper shopper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,7 +59,7 @@ public class MainShopperActivity extends AppCompatActivity {
 
                     case R.id.bottomBarItemOne:
 
-                        Shopper shopper = (Shopper) getIntent().getSerializableExtra("shopper");
+                        shopper = (Shopper) getIntent().getSerializableExtra("shopper");
                         bundle = new Bundle();
                         bundle.putSerializable("shopper",shopper);
                         fragment = new ShopperProfileFragment();
@@ -95,10 +96,21 @@ public class MainShopperActivity extends AppCompatActivity {
             public void onMenuTabReSelected(@IdRes int menuItemId) {
                 switch (menuItemId){
                     case R.id.bottomBarItemOne:
+
+                        shopper = (Shopper) getIntent().getSerializableExtra("shopper");
+                        bundle = new Bundle();
+                        bundle.putSerializable("shopper",shopper);
                         fragment = new ShopperProfileFragment();
+                        fragment.setArguments(bundle);
+
                         break;
                     case R.id.bottomBarItemTwo:
+
+                        bundle = new Bundle();
+                        bundle.putString("shopper_uid",getIntent().getStringExtra("shopper_uid"));
                         fragment = new OrderFragment();
+                        fragment.setArguments(bundle);
+
                         break;
                     case R.id.bottomBarItemThree:
                         fragment = new OrderHistoryFragment();

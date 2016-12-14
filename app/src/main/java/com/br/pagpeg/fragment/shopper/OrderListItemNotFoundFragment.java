@@ -49,7 +49,7 @@ public class OrderListItemNotFoundFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.list_order_items_not_found, container, false);
+        view = inflater.inflate(R.layout.list, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         productCartsAll = (List<ProductCart>) getArguments().getSerializable("productsCart");

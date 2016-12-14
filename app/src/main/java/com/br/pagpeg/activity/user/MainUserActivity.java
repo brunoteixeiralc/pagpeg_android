@@ -34,6 +34,7 @@ public class MainUserActivity extends AppCompatActivity {
     public BottomBarBadge bottomBarBadge;
     private String userUid;
     private String status;
+    private User user;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,7 +68,7 @@ public class MainUserActivity extends AppCompatActivity {
 
                     case R.id.bottomBarItemOne:
 
-                        User user = (User) getIntent().getSerializableExtra("user");
+                        user = (User) getIntent().getSerializableExtra("user");
                         bundle = new Bundle();
                         bundle.putSerializable("user",user);
                         fragment = new UserProfileFragment();
@@ -101,7 +102,11 @@ public class MainUserActivity extends AppCompatActivity {
                 switch (menuItemId){
                     case R.id.bottomBarItemOne:
 
+                        user = (User) getIntent().getSerializableExtra("user");
+                        bundle = new Bundle();
+                        bundle.putSerializable("user",user);
                         fragment = new UserProfileFragment();
+                        fragment.setArguments(bundle);
 
                         break;
                     case R.id.bottomBarItemTwo:
@@ -111,7 +116,11 @@ public class MainUserActivity extends AppCompatActivity {
                         break;
                     case R.id.bottomBarItemThree:
 
-                        fragment = new CartFragment();
+                        if(userUid == null){
+                            fragment = new CartFragment();
+                        }else{
+                            fragment = new StepToPickUpFragment(status,userUid);
+                        }
 
                         break;
 

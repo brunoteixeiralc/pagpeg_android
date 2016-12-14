@@ -82,7 +82,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/shopper_name"
-            android:text="Toshiro Mirante"
             android:gravity="center_horizontal"/>
 
     </LinearLayout>
@@ -103,7 +102,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/shopper_email"
-            android:text="toshi@gmail.com"
             android:gravity="center_horizontal"/>
 
     </LinearLayout>
@@ -124,7 +122,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/shopper_phone"
-            android:text="(61) 991189994"
             android:gravity="center_horizontal"/>
 
     </LinearLayout>

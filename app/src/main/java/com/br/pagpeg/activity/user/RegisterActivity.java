@@ -17,9 +17,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.User;
+import com.br.pagpeg.retrofit.RetrofitService;
+import com.br.pagpeg.retrofit.ServiceGenerator;
+import com.br.pagpeg.retrofit.model.Client;
 import com.br.pagpeg.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,8 +48,12 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
@@ -65,6 +73,7 @@ public class RegisterActivity extends Activity {
     private Bitmap bitmapUserImage =  null;
     private String deviceId = "";
     private String one_signal_key = "";
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -195,10 +204,9 @@ public class RegisterActivity extends Activity {
             }
         });
 
-        User user = new User(name.getText().toString(),number.getText().toString(),email.getText().toString(),user_img_url,deviceId,one_signal_key);
-        mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
+        user = new User(name.getText().toString(),number.getText().toString(),email.getText().toString(),user_img_url,deviceId,one_signal_key,"");
 
-        getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        registerClientIugu(user.getEmail(),user.getName());
 
     }
 
@@ -271,6 +279,37 @@ public class RegisterActivity extends Activity {
 
             }
         });
+    }
 
+    private void registerClientIugu(String email,String name){
+
+        RetrofitService service = ServiceGenerator.createService(RetrofitService.class);
+
+        Call<Client> call = service.clientRegister(email,name);
+
+        call.enqueue(new Callback<Client>() {
+            @Override
+            public void onResponse(Call<Client> call, Response<Client> response) {
+
+                if(response.isSuccessful()){
+
+                    Client client = response.body();
+                    user.setId_iugu(client.getId());
+                    mDatabase.child("users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(user);
+
+                    getUser(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                }else{
+
+                    Toast.makeText(getApplicationContext(),"Resposta não foi sucesso", Toast.LENGTH_SHORT).show();
+                    ResponseBody errorBody = response.errorBody();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Client> call, Throwable t) {
+                Toast.makeText(getApplicationContext(),"Erro na chamada ao servidor", Toast.LENGTH_SHORT);
+            }
+        });
     }
 }

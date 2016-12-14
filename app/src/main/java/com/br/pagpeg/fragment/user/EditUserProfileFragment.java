@@ -184,7 +184,7 @@ public class EditUserProfileFragment extends Fragment {
 
     private void updateUser(String uid){
 
-        user = new User(name.getText().toString(),number.getText().toString(),email.getText().toString(),user.getUser_img() != null ? user.getUser_img() : "",user.getDevice_id(),user.getOne_signal_key());
+        user = new User(name.getText().toString(),number.getText().toString(),email.getText().toString(),user.getUser_img() != null ? user.getUser_img() : "",user.getDevice_id(),user.getOne_signal_key(),user.getId_iugu());
         if(!user_img_url.isEmpty()){
             user.setUser_img(user_img_url);
         }

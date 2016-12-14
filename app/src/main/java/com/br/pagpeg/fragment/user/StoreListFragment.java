@@ -42,7 +42,7 @@ public class StoreListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.list_store, container, false);
+        view = inflater.inflate(R.layout.list, container, false);
 
         storeList = (List<Store>) getArguments().getSerializable("stores");
 

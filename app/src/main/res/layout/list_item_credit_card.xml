@@ -8,14 +8,14 @@
     <ImageView
         android:id="@+id/cc_flag_img"
         android:layout_width="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="0.2"
         android:layout_height="match_parent"
         android:src="@drawable/visa"/>
 
     <TextView
         android:id="@+id/cc_number"
         android:layout_width="0dp"
-        android:layout_weight="1"
+        android:layout_weight="0.8"
         android:layout_height="wrap_content"
         android:text="*******9876"
         android:textSize="14dp"
@@ -24,7 +24,7 @@
     <ImageView
         android:id="@+id/check"
         android:layout_width="0dp"
-        android:layout_weight="0.5"
+        android:layout_weight="0.2"
         android:layout_height="24dp"
         android:src="@drawable/check"
         android:visibility="invisible"/>
