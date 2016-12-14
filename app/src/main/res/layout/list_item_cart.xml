@@ -60,14 +60,14 @@
                 android:textAlignment="viewStart"
                 android:textColor="@android:color/black"/>
 
-            <!--<ImageView-->
-                <!--android:layout_width="35dp"-->
-                <!--android:layout_height="35dp"-->
-                <!--android:id="@+id/delete_cart"-->
-                <!--android:src="@drawable/cart_delete"-->
-                <!--tools:ignore="ContentDescription"-->
-                <!--android:scaleType="fitXY"-->
-                <!--android:layout_gravity="center"/>-->
+            <ImageView
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:id="@+id/delete_cart"
+                android:src="@drawable/cart_delete"
+                tools:ignore="ContentDescription"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"/>
 
         </LinearLayout>
 

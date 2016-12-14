@@ -33,6 +33,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -102,6 +103,9 @@ public class PickUpSummaryFragment extends Fragment{
             }
         }).diskCacheStrategy(DiskCacheStrategy.ALL).into(storeImg);
 
+        if (productCarts == null)
+            productCarts = new ArrayList<>();
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLayoutManager = new LinearLayoutManager(PickUpSummaryFragment.this.getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -128,7 +132,7 @@ public class PickUpSummaryFragment extends Fragment{
 
                     if (count >= order.getProducts().size()) {
 
-                        mAdapter = new PickUpSummaryAdapter(onClickListener(),PickUpSummaryFragment.this.getContext(),productCarts);
+                        mAdapter = new PickUpSummaryAdapter(PickUpSummaryFragment.this.getContext(),productCarts);
                         recyclerView.setAdapter(mAdapter);
                     }
                 }
@@ -141,15 +145,5 @@ public class PickUpSummaryFragment extends Fragment{
         }
 
         return view;
-    }
-
-    private PickUpSummaryAdapter.PickUpSummaryOnClickListener onClickListener() {
-        return new PickUpSummaryAdapter.PickUpSummaryOnClickListener() {
-            @Override
-            public void onClickSticker(View view, int idx) {
-
-
-            }
-        };
     }
 }
