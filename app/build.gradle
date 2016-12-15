@@ -48,6 +48,8 @@ android {
             versionNameSuffix '-DEBUG'
             buildConfigField "String", "ENDPOINTSTORAGE", "\"gs://pagpeg-debug-818a1.appspot.com\"";
             buildConfigField "boolean", "REPORT_CRASH", "false"
+            buildConfigField "String", "IUGU_KEY", "\"ZWYwMjQyYjVjZWI3ZmIwYTZiNGNlY2MyMTg2YWY4MTY6\""
+            buildConfigField "String", "ACCOUNT_ID_IUGU", "\"A479E66EE7F847AB8C5546C51320F7E1\""
             resValue "string", "google_maps_api_key", "AIzaSyBA0_YHih-j6VuOuaL6Kfx0MPT4zaptIt8"
         }
         homolog {
@@ -57,6 +59,8 @@ android {
             versionNameSuffix '-HOMOLOG'
             buildConfigField "String", "ENDPOINTSTORAGE", "\"gs://pagpeg-homol-df3da.appspot.com\"";
             buildConfigField "boolean", "REPORT_CRASH", "true"
+            buildConfigField "String", "IUGU_KEY", "\"ZWYwMjQyYjVjZWI3ZmIwYTZiNGNlY2MyMTg2YWY4MTY6\""
+            buildConfigField "String", "ACCOUNT_ID_IUGU", "\"A479E66EE7F847AB8C5546C51320F7E1\""
             resValue "string", "google_maps_api_key", "AIzaSyDhgkhyV7t-R03KjrRivf2POqGvRMb9zLc"
         }
         release {
@@ -67,6 +71,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             buildConfigField "String", "ENDPOINTSTORAGE", "\"gs://pagpeg-fc42f.appspot.com\"";
             buildConfigField "boolean", "REPORT_CRASH", "true"
+            buildConfigField "String", "IUGU_KEY", "\"MzY3YzQwZWU3ZjZhZjRiMDkzMDEyNzcwOTUxNTg4OGQ6\""
+            buildConfigField "String", "ACCOUNT_ID_IUGU", "\"A479E66EE7F847AB8C5546C51320F7E1\""
             resValue "string", "google_maps_api_key", "AIzaSyDhgkhyV7t-R03KjrRivf2POqGvRMb9zLc"
         }
     }

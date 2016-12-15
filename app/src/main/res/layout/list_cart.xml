@@ -36,12 +36,6 @@
                 android:orientation="horizontal"
                 android:padding="16dp">
 
-                <!--<ImageView-->
-                    <!--android:id="@+id/cc_flag_img"-->
-                    <!--android:layout_width="20dp"-->
-                    <!--android:layout_height="20dp"-->
-                    <!--android:src="@drawable/visa"/>-->
-
                 <TextView
                     android:id="@+id/cc_select"
                     android:layout_width="0dp"
@@ -101,7 +95,7 @@
                     android:id="@+id/tax"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Taxas estimadas : R$ 20,00"
+                    android:text="Taxas estimadas : R$ 00,00"
                     android:textSize="12sp"
                     android:gravity="right"/>
 
@@ -109,7 +103,7 @@
                     android:id="@+id/total"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Total estimado : R$ 80,00"
+                    android:text="Total estimado : R$ 00,00"
                     android:textSize="12sp"
                     android:gravity="right"/>
 

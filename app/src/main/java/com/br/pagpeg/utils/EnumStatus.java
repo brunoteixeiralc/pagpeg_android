@@ -11,7 +11,6 @@ public class EnumStatus {
         FINDING_SHOPPER("Finding Shopper"),
         SHOPPER_BUYING("Shopper Buying"),
         WAITING_USER_APPROVE("Waiting User To Approve"),
-        //USER_APPROVE("User Approve"),
         SHOPPER_PAYING("Shopper Paying"),
         SHOPPER_PAYED("Shopper Payed"),
         USER_RECEIVED("User Received"),

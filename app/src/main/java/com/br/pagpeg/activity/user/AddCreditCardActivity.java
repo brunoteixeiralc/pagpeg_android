@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import com.br.pagpeg.BuildConfig;
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.CreditCard;
 import com.br.pagpeg.retrofit.RetrofitService;
@@ -127,7 +128,7 @@ public class AddCreditCardActivity extends AppCompatActivity implements ActionOn
 
         RetrofitService service = ServiceGenerator.createService(RetrofitService.class);
 
-        Call<PaymentToken> call = service.paymentTokenRegister("A479E66EE7F847AB8C5546C51320F7E1","credit_card",true,creditCard.getCc_number(),creditCard.getCc_security_number(),
+        Call<PaymentToken> call = service.paymentTokenRegister(BuildConfig.ACCOUNT_ID_IUGU,"credit_card",true,creditCard.getCc_number(),creditCard.getCc_security_number(),
                 "João","Silva",String.valueOf(cc.getExpireMonth()),String.valueOf(cc.getExpireYear()));
 
         call.enqueue(new Callback<PaymentToken>() {
@@ -161,7 +162,6 @@ public class AddCreditCardActivity extends AppCompatActivity implements ActionOn
 
         RetrofitService service = ServiceGenerator.createService(RetrofitService.class);
 
-        //TODO  id_client dinamico
         Call<ClientPay> call = service.clientPaymentRegister(id_client,token,"Cartão de crédito");
 
         call.enqueue(new Callback<ClientPay>() {

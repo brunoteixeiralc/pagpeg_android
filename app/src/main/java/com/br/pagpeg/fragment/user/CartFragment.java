@@ -272,7 +272,7 @@ public class CartFragment  extends Fragment{
                 if (dataSnapshot.hasChildren()) {
                     for (DataSnapshot ss: dataSnapshot.getChildren()) {
                         CreditCard creditCard = ss.getValue(CreditCard.class);
-                        ccSelect.setText(creditCard.getCc_number());
+                        ccSelect.setText(creditCard.getDisplay_number());
                     }
                 }
             }

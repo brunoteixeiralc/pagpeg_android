@@ -54,9 +54,9 @@
     <string name="qty_order">0 pedido</string>
     <string name="qty_items_order">0 itens (0 unidades)</string>
     <string name="your_actual_rating">Sua avaliação atual</string>
-    <string name="total_order">242 \n Total de \npedidos</string>
-    <string name="order_rating">200 \n Pedidos \navaliados</string>
-    <string name="five_rating">190 \n 5 estrelas</string>
+    <string name="total_order">00 \n Total de \npedidos</string>
+    <string name="order_rating">00 \n Pedidos \navaliados</string>
+    <string name="five_rating">00 \n 5 estrelas</string>
     <string name="see_all">Ver todos...</string>
     <string name="last_comment">Último comentário:</string>
     <string name="size_product">Tamanho ou peso</string>
@@ -77,7 +77,7 @@
     <string name="has_not_the_product">Não contêm produto</string>
     <string name="edit">Editar</string>
     <string name="apply_discount">Aplicar desconto</string>
-    <string name="buy">Comprar: R$ 100,00</string>
+    <string name="buy">Comprar: R$ 00,00</string>
     <string name="found">Pronto,achei!</string>
     <string name="login">Login</string>
     <string name="register">Cadastrar</string>
