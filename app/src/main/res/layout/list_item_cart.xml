@@ -16,7 +16,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:id="@+id/img"
-        android:src="@drawable/no_product"
+        android:src="@drawable/no_img_product"
         tools:ignore="ContentDescription"
         android:scaleType="fitXY"
         android:layout_gravity="center"/>

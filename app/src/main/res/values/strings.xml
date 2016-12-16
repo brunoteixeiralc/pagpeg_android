@@ -38,6 +38,9 @@
     <string name="hint_password">Senha</string>
     <string name="select_image">Selecione uma imagem</string>
     <string name="change_image">Alterar sua foto</string>
+    <string name="discount">Ver as ofertas do dia</string>
+    <string name="no_product">Sem nenhum produto nesta categoria</string>
+    <string name="no_credit_card">Sem nenhum cartão de crédito cadastrado</string>
 
     <!--Shopper -->
     <string name="register_account_shopper">Precisamos de alguns dados</string>

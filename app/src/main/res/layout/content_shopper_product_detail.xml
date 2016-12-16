@@ -40,7 +40,7 @@
                 android:id="@+id/img"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:src="@drawable/no_product"
+                android:src="@drawable/no_img_product"
                 android:scaleType="center"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true" />

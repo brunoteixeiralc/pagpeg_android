@@ -17,6 +17,8 @@ public class Promotion implements Serializable {
 
     private Long end;
 
+    private String catalog;
+
     private List<PromotionProduct> promotionProducts;
 
     public List<PromotionProduct> getPromotionProducts() {
@@ -57,5 +59,13 @@ public class Promotion implements Serializable {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getCatalog() {
+        return catalog;
+    }
+
+    public void setCatalog(String catalog) {
+        this.catalog = catalog;
     }
 }

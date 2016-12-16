@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.activity.user.AddCreditCardActivity;
@@ -46,6 +48,9 @@ public class CreditCardFragment extends Fragment {
     private DatabaseReference mDatabase;
     private Toolbar toolbar;
     private String id_client;
+    private ImageView noContentImg;
+    private TextView noContentTxt;
+    private LinearLayout llEmpty;
 
     @Nullable
     @Override
@@ -56,6 +61,10 @@ public class CreditCardFragment extends Fragment {
         id_client = getArguments().getString("id_client");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        llEmpty = (LinearLayout) view.findViewById(R.id.ll_empty);
+        noContentImg = (ImageView) view.findViewById(R.id.no_content_img);
+        noContentTxt = (TextView) view.findViewById(R.id.no_content_txt);
 
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
@@ -95,8 +104,28 @@ public class CreditCardFragment extends Fragment {
                         creditCard.setKey(ss.getKey());
                         creditCards.add(creditCard);
                     }
-                    mAdapter = new CreditCardAdapter(onClickListener(),CreditCardFragment.this.getContext(),creditCards,mDatabase);
-                    recyclerView.setAdapter(mAdapter);
+
+                    if(creditCards.size() == 0){
+
+                        recyclerView.setVisibility(View.GONE);
+                        llEmpty.setVisibility(View.VISIBLE);
+                        noContentTxt.setText(R.string.no_credit_card);
+                        noContentImg.setBackground(getResources().getDrawable(R.drawable.no_credit_card));
+
+                    }else{
+
+                        recyclerView.setVisibility(View.VISIBLE);
+                        llEmpty.setVisibility(View.GONE);
+                        mAdapter = new CreditCardAdapter(onClickListener(),CreditCardFragment.this.getContext(),creditCards,mDatabase);
+                        recyclerView.setAdapter(mAdapter);
+                    }
+
+                }else{
+
+                    recyclerView.setVisibility(View.GONE);
+                    llEmpty.setVisibility(View.VISIBLE);
+                    noContentTxt.setText(R.string.no_credit_card);
+                    noContentImg.setBackground(getResources().getDrawable(R.drawable.no_credit_card));
                 }
             }
 

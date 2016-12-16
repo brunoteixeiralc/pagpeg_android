@@ -110,6 +110,30 @@
                         android:textSize="12sp"
                         android:gravity="start"/>
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:src="@drawable/catalog"
+                            android:id="@+id/catalog"
+                            android:visibility="gone"/>
+
+                        <TextView
+                            android:id="@+id/txt_catalog"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:text="@string/discount"
+                            android:textSize="14sp"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/colorPrimary"
+                            android:visibility="gone"/>
+
+                    </LinearLayout>
+
                 </LinearLayout>
 
             </LinearLayout>

@@ -7,7 +7,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,7 +37,6 @@ import com.bumptech.glide.request.target.Target;
 public class ProductDetailFragment extends Fragment {
 
     private View view;
-    private CardView cardView;
     private Button btnAddCart,btnRemoveCart;
     private Snackbar snackbar;
     private CoordinatorLayout coordinatorLayout;
@@ -140,8 +138,7 @@ public class ProductDetailFragment extends Fragment {
                     }
                 });
 
-        cardView = (CardView) view.findViewById(R.id.cardViewAddCart);
-        btnAddCart = (Button) cardView.findViewById(R.id.addCart);
+        btnAddCart = (Button) view.findViewById(R.id.addCart);
         btnAddCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,7 +149,7 @@ public class ProductDetailFragment extends Fragment {
             }
         });
 
-        btnRemoveCart = (Button) cardView.findViewById(R.id.removeCart);
+        btnRemoveCart = (Button) view.findViewById(R.id.removeCart);
         btnRemoveCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

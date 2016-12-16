@@ -1,5 +1,6 @@
 package com.br.pagpeg.fragment.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -22,7 +23,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
+import com.br.pagpeg.activity.user.OpenCatalog;
 import com.br.pagpeg.adapter.user.CategoryAdapter;
+import com.br.pagpeg.model.Promotion;
 import com.br.pagpeg.model.Store;
 import com.br.pagpeg.model.StoreCategory;
 import com.br.pagpeg.utils.DividerItemDecoration;
@@ -47,6 +50,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,12 +67,16 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
     private Store store;
     private SupportMapFragment mapFragment;
     private Fragment fragment;
-    private TextView name,address,openClose,distance;
+    private TextView name,address,openClose,distance,txtCatalog;
     private ProgressBar progressBar;
     public ImageView img;
     private DatabaseReference mDatabase;
     private List<StoreCategory> storeCategories  = new ArrayList<>();
     private Toolbar toolbar;
+    private ImageView catalog;
+    private Promotion promotion;
+    private List<Promotion> promotions;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,6 +109,10 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
         toolbar.setTitle(store.getNetwork());
 
         Utils.setIconBar(EnumToolBar.STOREDETAIL,toolbar);
+
+        catalog = (ImageView) view.findViewById(R.id.catalog);
+        txtCatalog = (TextView) view.findViewById(R.id.txt_catalog);
+        validatePromotionNetwork();
 
         name = (TextView) view.findViewById(R.id.name);
         openClose = (TextView) view.findViewById(R.id.openClose);
@@ -154,13 +167,11 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
                 new MenuItemCompat.OnActionExpandListener() {
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
-
                         return true;
                     }
 
                     @Override
                     public boolean onMenuItemActionExpand(MenuItem item) {
-
                         return true;
                     }
                 });
@@ -232,5 +243,87 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
 
             }
         });
+    }
+
+    private void validatePromotionNetwork(){
+
+        mDatabase.child("promotions").child(store.getNetwork()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                promotions = new ArrayList<Promotion>();
+                java.util.Date date = new java.util.Date();
+
+                if (dataSnapshot.hasChildren()) {
+
+                    for (DataSnapshot st : dataSnapshot.getChildren()) {
+
+                        promotion = st.getValue(Promotion.class);
+                        promotion.setKey(st.getKey());
+                        boolean isValidate = validateDates((date.getTime()/1000),promotion.getStart(),promotion.getEnd());
+                        if(isValidate)
+                            promotions.add(promotion);
+                    }
+
+                    if(promotions.size() != 0) {
+
+                        catalog.setVisibility(View.VISIBLE);
+                        txtCatalog.setVisibility(View.VISIBLE);
+
+                        catalog.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                openPdf(promotions.get(0).getCatalog());
+                            }
+                        });
+
+                        txtCatalog.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                openPdf(promotions.get(0).getCatalog());
+                            }
+                        });
+
+                    }else{
+
+                        catalog.setVisibility(View.GONE);
+                        txtCatalog.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private boolean validateDates(Long dateNow, Long date1, Long date2){
+
+        Date dNow = new Date(dateNow * 1000);
+        Date d1 = new Date(date1 * 1000);
+        Date d2 = new Date(date2 * 1000);
+
+        Calendar calNow = Calendar.getInstance();
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        calNow.setTime(dNow);
+        cal1.setTime(d1);
+        cal2.setTime(d2);
+
+        if(calNow.after(cal1) || calNow.equals(cal1)){
+            if(calNow.before(cal2) || calNow.equals(cal2)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void openPdf(String urlPdf){
+
+        Intent intent = new Intent(DetailStoreFragment.this.getContext(),OpenCatalog.class);
+        intent.putExtra("url", urlPdf);
+        startActivity(intent);
     }
 }

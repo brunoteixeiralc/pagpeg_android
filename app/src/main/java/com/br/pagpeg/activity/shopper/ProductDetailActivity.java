@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -33,8 +32,6 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
-    private View view;
-    private CardView cardView;
     private Button findIt;
     private Toolbar toolbar;
     private ProductCart productCart;
@@ -83,8 +80,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         }).diskCacheStrategy(DiskCacheStrategy.ALL).into(img);
 
         View dialoglayout = this.getLayoutInflater().inflate(R.layout.content_alert_dialog_shopper, null);
-        dialogQuantity = (EditText) dialoglayout.findViewById(R.id.quantity);
-        dialogPrice = (EditText) dialoglayout.findViewById(R.id.price);
+        dialogQuantity = (EditText) dialoglayout.findViewById(R.id.dialog_quantity);
+        dialogPrice = (EditText) dialoglayout.findViewById(R.id.dialog_price);
         dialogPrice.setText(String.valueOf(productCart.getPrice_unit()));
         builder = new AlertDialog.Builder(this, R.style.Dialog_Quantity)
                 .setPositiveButton("OK", null)
@@ -130,8 +127,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             }
         });
 
-        cardView = (CardView)findViewById(R.id.cardViewAddCart);
-        findIt = (Button) cardView.findViewById(R.id.findIt);
+        findIt = (Button) findViewById(R.id.findIt);
         findIt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

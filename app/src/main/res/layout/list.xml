@@ -15,6 +15,38 @@
         android:dividerHeight="0dp"
         android:listSelector="@android:color/transparent"
         android:scrollbarStyle="outsideOverlay"
-        android:scrollbars="vertical"/>
+        android:scrollbars="vertical"
+        android:visibility="visible"/>
+
+    <LinearLayout
+        android:id="@+id/ll_empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:layout_marginTop="50dp">
+
+        <ImageView
+            android:id="@+id/no_content_img"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/no_credit_card"
+            android:alpha="0.8"/>
+
+        <TextView
+            android:id="@+id/no_content_txt"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="20sp"
+            android:text="Sem nenhum cartão cadastrado"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:minLines="2"/>
+
+    </LinearLayout>
 
 </LinearLayout>

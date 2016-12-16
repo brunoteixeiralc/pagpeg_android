@@ -95,9 +95,12 @@ public class ShopperProfileFragment extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 FirebaseAuth.getInstance().signOut();
                 getFragmentManager().beginTransaction().remove(ShopperProfileFragment.this).commit();
-                startActivity(new Intent(ShopperProfileFragment.this.getActivity(), com.br.pagpeg.activity.shopper.LoginActivity.class));
+                Intent intent = new Intent(ShopperProfileFragment.this.getActivity(), com.br.pagpeg.activity.shopper.LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 

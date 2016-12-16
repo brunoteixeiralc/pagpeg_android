@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.br.pagpeg.R;
@@ -63,7 +65,6 @@ public class ProductListFragment extends Fragment {
     private Fragment fragment;
     private ImageView mIconBarCode;
     private Snackbar snackbar;
-    private CoordinatorLayout coordinatorLayout;
     private AlertDialog builder = null;
     private StoreCategory category;
     private DatabaseReference mDatabase;
@@ -75,6 +76,10 @@ public class ProductListFragment extends Fragment {
     private Store store;
     private Promotion promotion;
     private List<Promotion> promotions;
+    private ImageView noContentImg;
+    private TextView noContentTxt;
+    private LinearLayout llEmpty;
+    private CoordinatorLayout coordinatorLayout;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,6 +106,10 @@ public class ProductListFragment extends Fragment {
         view = inflater.inflate(R.layout.list_product, container, false);
 
         coordinatorLayout = (CoordinatorLayout) view.findViewById(R.id.coordinatorLayout);
+
+        llEmpty = (LinearLayout) view.findViewById(R.id.ll_empty);
+        noContentImg = (ImageView) view.findViewById(R.id.no_content_img);
+        noContentTxt = (TextView) view.findViewById(R.id.no_content_txt);
 
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setVisibility(View.VISIBLE);
@@ -136,7 +145,7 @@ public class ProductListFragment extends Fragment {
 
                         removeProduct();
 
-                        Snackbar snackbarUndo = Snackbar.make(coordinatorLayout, "Produto removido.", Snackbar.LENGTH_SHORT);
+                        Snackbar snackbarUndo = Snackbar.make(ProductListFragment.this.getView(), "Produto removido.", Snackbar.LENGTH_SHORT);
                         snackbarUndo.show();
                     }
                 });
@@ -259,10 +268,21 @@ public class ProductListFragment extends Fragment {
                     }
                 }
 
-                if(products.size() != 0)
+                if(products.size() != 0){
 
+                    recyclerView.setVisibility(View.VISIBLE);
+                    llEmpty.setVisibility(View.GONE);
                     mAdapter = new ProductAdapter(onClickListenerCart(),onClickListener(),ProductListFragment.this.getContext(),products);
                     recyclerView.setAdapter(mAdapter);
+
+                }else{
+
+                    recyclerView.setVisibility(View.GONE);
+                    llEmpty.setVisibility(View.VISIBLE);
+                    noContentTxt.setText(R.string.no_product);
+                    noContentImg.setBackground(getResources().getDrawable(R.drawable.no_product));
+
+                }
 
                     Utils.closeDialog(ProductListFragment.this.getContext());
             }

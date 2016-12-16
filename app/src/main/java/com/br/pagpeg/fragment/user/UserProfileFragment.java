@@ -71,9 +71,12 @@ public class UserProfileFragment extends Fragment {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 FirebaseAuth.getInstance().signOut();
                 getFragmentManager().beginTransaction().remove(UserProfileFragment.this).commit();
-                startActivity(new Intent(UserProfileFragment.this.getActivity(), LoginActivity.class));
+                Intent intent = new Intent(UserProfileFragment.this.getActivity(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
             }
         });
 
