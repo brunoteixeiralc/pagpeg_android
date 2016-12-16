@@ -104,7 +104,7 @@
 
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:id="@+id/recyclerView"
                 android:cacheColorHint="@android:color/transparent"
                 android:clipToPadding="false"
@@ -116,6 +116,16 @@
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingBottom="16dp"/>
+
+            <Button
+                android:id="@+id/finish"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/ok_summary"
+                android:textSize="12sp"
+                android:padding="8dp"
+                android:background="@color/colorPrimary"
+                android:textColor="@android:color/white"/>
 
         </LinearLayout>
 

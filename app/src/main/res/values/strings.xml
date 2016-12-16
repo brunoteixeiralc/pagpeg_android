@@ -71,6 +71,7 @@
     <string name="confirm">Confirmar</string>
     <string name="see_orders">Ver o pedido</string>
     <string name="ok_confirm_shopper">OK, pode comprar</string>
+    <string name="ok_summary">OK, tudo certo.Finalizar!</string>
     <string name="get_my_products">Peguei meus produtos</string>
     <string name="buyed">Compra finalizada</string>
     <string name="call">Ligar</string>

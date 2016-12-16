@@ -40,11 +40,14 @@ public class LoginActivity extends Activity {
     private EditText accessCode,email;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private String shopperId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_shopper);
+
+        shopperId = getIntent().getStringExtra("shopper_uid");
 
         FirebaseAuth.getInstance().signOut();
         mAuth = FirebaseAuth.getInstance();
@@ -105,6 +108,8 @@ public class LoginActivity extends Activity {
 
                 Shopper shopper = dataSnapshot.getValue(Shopper.class);
                 Intent intent = new Intent(LoginActivity.this,MainShopperActivity.class);
+                if(shopperId != null)
+                    intent.putExtra("shopper_uid",shopperId);
                 intent.putExtra("shopper",shopper);
                 startActivity(intent);
 

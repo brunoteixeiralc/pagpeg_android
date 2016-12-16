@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.br.pagpeg.R;
 import com.br.pagpeg.activity.ChooseActivity;
 import com.br.pagpeg.model.User;
+import com.br.pagpeg.utils.EnumStatus;
 import com.br.pagpeg.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -41,6 +42,8 @@ public class LoginActivity extends Activity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private DatabaseReference mDatabase;
+    private String userUID;
+    private String status;
 
     @Override
     public void onStart() {
@@ -63,6 +66,9 @@ public class LoginActivity extends Activity {
         FirebaseAuth.getInstance().signOut();
         setContentView(R.layout.activity_login_user);
         Utils.hideKeyboard(LoginActivity.this);
+
+        userUID = getIntent().getStringExtra("user_uid");
+        status = getIntent().getStringExtra("status");
 
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -120,6 +126,10 @@ public class LoginActivity extends Activity {
              User user = dataSnapshot.getValue(User.class);
              Intent intent = new Intent(LoginActivity.this,MainUserActivity.class);
              intent.putExtra("user",user);
+             if(userUID != null)
+                 intent.putExtra("user_uid",userUID);
+             if(status != null)
+                 intent.putExtra("status",status);
              startActivity(intent);
 
              Utils.closeDialog(LoginActivity.this);

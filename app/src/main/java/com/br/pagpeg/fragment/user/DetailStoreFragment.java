@@ -1,6 +1,7 @@
 package com.br.pagpeg.fragment.user;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -49,6 +50,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -325,5 +328,6 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
         Intent intent = new Intent(DetailStoreFragment.this.getContext(),OpenCatalog.class);
         intent.putExtra("url", urlPdf);
         startActivity(intent);
+
     }
 }
