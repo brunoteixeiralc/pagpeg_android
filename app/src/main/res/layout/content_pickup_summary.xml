@@ -7,7 +7,7 @@
 
 
     <Button
-        android:id="@+id/addCart"
+        android:id="@+id/rating_shopper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/rating_shopper"

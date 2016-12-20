@@ -1,9 +1,12 @@
 package com.br.pagpeg.fragment.user;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +14,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.baoyachi.stepview.HorizontalStepView;
@@ -21,12 +26,14 @@ import com.br.pagpeg.adapter.user.PickUpSummaryAdapter;
 import com.br.pagpeg.model.Cart;
 import com.br.pagpeg.model.Product;
 import com.br.pagpeg.model.ProductCart;
+import com.br.pagpeg.model.Shopper;
 import com.br.pagpeg.model.Store;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -56,7 +63,11 @@ public class PickUpSummaryFragment extends Fragment{
     private Cart order;
     private DatabaseReference mDatabase;
     private List<ProductCart> productCarts;
-    int count;
+    private Button ratingShopper,finishOrder;
+    private RatingBar ratingBar;
+    private AlertDialog builder = null;
+    int count,countRating;
+
 
     public PickUpSummaryFragment(){}
 
@@ -71,6 +82,7 @@ public class PickUpSummaryFragment extends Fragment{
         view = inflater.inflate(R.layout.content_pickup_summary, container, false);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("rated").setValue(false);
 
         if (android.os.Build.VERSION.SDK_INT > 9) {
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
@@ -83,10 +95,83 @@ public class PickUpSummaryFragment extends Fragment{
         store = (Store) getArguments().getSerializable("store");
         order = (Cart) getArguments().getSerializable("order");
 
+        ratingShopper = (Button) view.findViewById(R.id.rating_shopper);
+        ratingShopper.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                builder.show();
+            }
+        });
+
+        finishOrder = (Button) view.findViewById(R.id.finish);
+        finishOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mDatabase.child("history").push().child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(order);
+                mDatabase.child("history").orderByChild("rated").equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).removeValue();
+                        countRating = (int) dataSnapshot.getChildrenCount();
+                        getShopper(order.getShopper());
+
+                        Fragment fragment = new MapFragment();
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment_container, fragment).commit();
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+        });
+
         storeAddress = (TextView) view.findViewById(R.id.store_address);
         storeName = (TextView) view.findViewById(R.id.store_name);
         storeImg = (ImageView) view.findViewById(R.id.store_img);
         progressBar = (ProgressBar) view.findViewById(R.id.progress);
+
+        View dialoglayout = PickUpSummaryFragment.this.getActivity().getLayoutInflater().inflate(R.layout.content_alert_dialog_shopper_rating, null);
+        ratingBar = (RatingBar) dialoglayout.findViewById(R.id.rating);
+        builder = new AlertDialog.Builder(getActivity(), R.style.Dialog_Quantity)
+                .setPositiveButton("OK", null)
+                .setNegativeButton("Cancelar", null)
+                .setTitle("PagPeg")
+                .setMessage("Classifique seu shopper")
+                .setIcon(R.mipmap.ic_launcher)
+                .setView(dialoglayout)
+                .create();
+
+        builder.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog) {
+                final Button btnAccept = builder.getButton(AlertDialog.BUTTON_POSITIVE);
+                btnAccept.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        builder.dismiss();
+                        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("rated").setValue(true);
+                        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("rate").setValue(Math.round(ratingBar.getRating()));
+
+                        order.setRated(true);
+                        order.setRate(Math.round(ratingBar.getRating()));
+                    }
+                });
+
+                final Button btnDecline = builder.getButton(DialogInterface.BUTTON_NEGATIVE);
+                btnDecline.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        builder.dismiss();
+                    }
+                });
+            }
+        });
 
         storeAddress.setText(store.getAddress());
         storeName.setText(store.getName());
@@ -145,5 +230,25 @@ public class PickUpSummaryFragment extends Fragment{
         }
 
         return view;
+    }
+
+    private void getShopper(String uid){
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("shoppers/" + uid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                Shopper shopper = dataSnapshot.getValue(Shopper.class);
+                mDatabase.child("shoppers").child(dataSnapshot.getKey()).child("rating").setValue(Math.round(((shopper.getRating() * countRating) + ratingBar.getRating()))/(countRating + 1));
+                mDatabase.child("shoppers").child(dataSnapshot.getKey()).child("is_free").setValue(true);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
     }
 }

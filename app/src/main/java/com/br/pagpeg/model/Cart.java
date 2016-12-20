@@ -39,6 +39,10 @@ public class Cart implements Serializable {
 
     private String user;
 
+    private Boolean rated;
+
+    private Integer rate;
+
     public int getCount() {
         return count;
     }
@@ -149,5 +153,21 @@ public class Cart implements Serializable {
 
     public void setTotal_price_shopper(Double total_price_shopper) {
         this.total_price_shopper = total_price_shopper;
+    }
+
+    public Boolean getRated() {
+        return rated;
+    }
+
+    public void setRated(Boolean rated) {
+        this.rated = rated;
+    }
+
+    public Integer getRate() {
+        return rate;
+    }
+
+    public void setRate(Integer rate) {
+        this.rate = rate;
     }
 }
