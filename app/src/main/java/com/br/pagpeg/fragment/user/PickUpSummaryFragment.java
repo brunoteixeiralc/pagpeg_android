@@ -108,7 +108,7 @@ public class PickUpSummaryFragment extends Fragment{
             @Override
             public void onClick(View v) {
 
-                mDatabase.child("history").push().child(FirebaseAuth.getInstance().getCurrentUser().getUid()).setValue(order);
+                mDatabase.child("history").push().child(order.getShopper()).setValue(order);
                 mDatabase.child("history").orderByChild("rated").equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {

@@ -122,6 +122,9 @@ public final class Utils {
             case SHOPPEREDITPROFILE:{
                 break;
             }
+            case SHOPPERHISTORY:{
+                break;
+            }
             default:break;
         }
 

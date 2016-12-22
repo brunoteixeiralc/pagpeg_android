@@ -43,6 +43,8 @@ public class Cart implements Serializable {
 
     private Integer rate;
 
+    private Store storeDetail;
+
     public int getCount() {
         return count;
     }
@@ -169,5 +171,13 @@ public class Cart implements Serializable {
 
     public void setRate(Integer rate) {
         this.rate = rate;
+    }
+
+    public Store getStoreDetail() {
+        return storeDetail;
+    }
+
+    public void setStoreDetail(Store storeDetail) {
+        this.storeDetail = storeDetail;
     }
 }
