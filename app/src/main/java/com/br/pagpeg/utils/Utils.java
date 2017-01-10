@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.Toolbar;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
@@ -39,6 +40,12 @@ public final class Utils {
             ((InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE)).
                     hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.SHOW_FORCED);
         }
+    }
+
+    public static String getTelephoneNumber(Context context){
+        TelephonyManager tMgr =(TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+        String mPhoneNumber = tMgr.getLine1Number();
+        return mPhoneNumber;
     }
 
     public static void openDialog(Context context, String text){

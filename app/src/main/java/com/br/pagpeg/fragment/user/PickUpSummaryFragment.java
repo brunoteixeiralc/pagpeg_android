@@ -68,7 +68,6 @@ public class PickUpSummaryFragment extends Fragment{
     private AlertDialog builder = null;
     int count,countRating;
 
-
     public PickUpSummaryFragment(){}
 
     public PickUpSummaryFragment(HorizontalStepView stepView) {

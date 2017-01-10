@@ -36,6 +36,8 @@ public class FindShopperFragment extends Fragment {
     private Fragment fragment;
     private HorizontalStepView stepView;
 
+    public FindShopperFragment(){}
+
     public FindShopperFragment(HorizontalStepView stepView){
         this.stepView = stepView;
     }

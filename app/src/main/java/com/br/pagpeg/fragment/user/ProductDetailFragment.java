@@ -127,7 +127,7 @@ public class ProductDetailFragment extends Fragment {
         snackbar = Snackbar
                 .make(coordinatorLayout, "Produto adicionado.", Snackbar.LENGTH_LONG)
                 .setActionTextColor(getResources().getColor(R.color.colorPrimary))
-                .setAction("UNDO", new View.OnClickListener() {
+                .setAction(R.string.undo, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 

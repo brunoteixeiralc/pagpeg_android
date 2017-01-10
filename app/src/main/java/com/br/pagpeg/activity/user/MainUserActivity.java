@@ -69,8 +69,10 @@ public class MainUserActivity extends AppCompatActivity {
                     case R.id.bottomBarItemOne:
 
                         user = (User) getIntent().getSerializableExtra("user");
-                        bundle = new Bundle();
-                        bundle.putSerializable("user",user);
+                        if(user != null){
+                            bundle = new Bundle();
+                            bundle.putSerializable("user",user);
+                        }
                         fragment = new UserProfileFragment();
                         fragment.setArguments(bundle);
 

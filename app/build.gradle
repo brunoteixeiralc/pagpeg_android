@@ -4,6 +4,10 @@ apply plugin: 'com.google.gms.google-services'
 
 android {
 
+    lintOptions {
+        checkReleaseBuilds false
+    }
+
     signingConfigs {
         release {
             keyAlias 'pagpeg'
@@ -51,6 +55,7 @@ android {
             buildConfigField "String", "IUGU_KEY", "\"ZWYwMjQyYjVjZWI3ZmIwYTZiNGNlY2MyMTg2YWY4MTY6\""
             buildConfigField "String", "ACCOUNT_ID_IUGU", "\"A479E66EE7F847AB8C5546C51320F7E1\""
             resValue "string", "google_maps_api_key", "AIzaSyBA0_YHih-j6VuOuaL6Kfx0MPT4zaptIt8"
+            resValue "string", "app_name","PagPeg (Debug)"
         }
         homolog {
             signingConfig signingConfigs.release
@@ -62,6 +67,7 @@ android {
             buildConfigField "String", "IUGU_KEY", "\"ZWYwMjQyYjVjZWI3ZmIwYTZiNGNlY2MyMTg2YWY4MTY6\""
             buildConfigField "String", "ACCOUNT_ID_IUGU", "\"A479E66EE7F847AB8C5546C51320F7E1\""
             resValue "string", "google_maps_api_key", "AIzaSyDhgkhyV7t-R03KjrRivf2POqGvRMb9zLc"
+            resValue "string", "app_name","PagPeg (Homol)"
         }
         release {
             signingConfig signingConfigs.release
@@ -74,6 +80,7 @@ android {
             buildConfigField "String", "IUGU_KEY", "\"MzY3YzQwZWU3ZjZhZjRiMDkzMDEyNzcwOTUxNTg4OGQ6\""
             buildConfigField "String", "ACCOUNT_ID_IUGU", "\"A479E66EE7F847AB8C5546C51320F7E1\""
             resValue "string", "google_maps_api_key", "AIzaSyDhgkhyV7t-R03KjrRivf2POqGvRMb9zLc"
+            resValue "string", "app_name","PagPeg"
         }
     }
 }

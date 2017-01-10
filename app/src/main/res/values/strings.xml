@@ -1,7 +1,5 @@
 <resources>
 
-    <string name="app_name">pagpeg</string>
-
     <!-- Wizard User -->
     <string name="intro1">O usuário seleciona a loja e já pode ir adicionando os produtos no carrinho e ao final paga pelo próprio aplicativo</string>
     <string name="intro2">No horário agendado, o usuário se dirige até a loja desejada para pegar a sua compra que estará pronto para ser entregue</string>
@@ -84,13 +82,18 @@
     <string name="buy">Comprar: R$ 00,00</string>
     <string name="found">Pronto,achei!</string>
     <string name="login">Login</string>
+    <string name="do_login">Fazer login ou me cadastrar</string>
     <string name="register">Cadastrar</string>
 
     <!-- Errors -->
     <string name="create_user_error">Erro ao se cadastrar o usuário , tente novamente mais tarde.</string>
+    <string name="error_wrong_email">Email incorreto, tente novamente.</string>
+    <string name="error_user_not_exist">Usuário não existe no pagpeg.</string>
+    <string name="error_wrong_password">Senha incorreta, tente novamente.</string>
 
      <!-- Static -->
      <string name="desc_product_test">teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste</string>
+    <string name="undo">Desfazer</string>
 
 </resources>
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -15,7 +16,7 @@ import android.widget.TextView;
 import com.br.pagpeg.R;
 import com.br.pagpeg.activity.ChooseActivity;
 import com.br.pagpeg.model.User;
-import com.br.pagpeg.utils.EnumStatus;
+import com.br.pagpeg.utils.ErrorException;
 import com.br.pagpeg.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -171,6 +172,15 @@ public class LoginActivity extends Activity {
                         Log.d("Firebase", "signInWithEmail:onComplete:" + task.isSuccessful());
                         if (!task.isSuccessful()) {
                             Log.w("Firebase", "signInWithEmail:failed", task.getException());
+
+                            Exception exc = task.getException();
+                            new AlertDialog.Builder(LoginActivity.this,R.style.Dialog_Quantity)
+                                    .setPositiveButton("OK", null)
+                                    .setTitle("PagPeg")
+                                    .setIcon(R.mipmap.ic_launcher)
+                                    .setMessage(ErrorException.authFirebaseError(exc.getMessage(),LoginActivity.this))
+                                    .create()
+                                    .show();
                         }
 
                         Utils.closeDialog(LoginActivity.this);

@@ -15,7 +15,6 @@ import com.br.pagpeg.R;
 import com.br.pagpeg.model.CreditCard;
 import com.br.pagpeg.retrofit.RetrofitService;
 import com.br.pagpeg.retrofit.ServiceGenerator;
-import com.br.pagpeg.retrofit.model.Client;
 import com.br.pagpeg.retrofit.model.ClientPay;
 import com.br.pagpeg.retrofit.model.PaymentToken;
 import com.google.firebase.auth.FirebaseAuth;
@@ -129,7 +128,7 @@ public class AddCreditCardActivity extends AppCompatActivity implements ActionOn
         RetrofitService service = ServiceGenerator.createService(RetrofitService.class);
 
         Call<PaymentToken> call = service.paymentTokenRegister(BuildConfig.ACCOUNT_ID_IUGU,"credit_card",true,creditCard.getCc_number(),creditCard.getCc_security_number(),
-                "João","Silva",String.valueOf(cc.getExpireMonth()),String.valueOf(cc.getExpireYear()));
+                "BRUNO","T L CORREA",String.valueOf(cc.getExpireMonth()),String.valueOf(cc.getExpireYear()));
 
         call.enqueue(new Callback<PaymentToken>() {
             @Override

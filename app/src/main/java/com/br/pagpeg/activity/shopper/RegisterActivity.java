@@ -65,6 +65,7 @@ public class RegisterActivity extends Activity {
     private Bitmap bitmapShopperImage =  null;
     private String deviceId = "";
     private String one_signal_key="";
+    private String actualNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -211,6 +212,11 @@ public class RegisterActivity extends Activity {
             deviceId = mTelephony.getDeviceId();
         }else{
             deviceId = Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+        }
+
+        actualNumber = Utils.getTelephoneNumber(this);
+        if(actualNumber != null){
+            number.setText(actualNumber);
         }
     }
 

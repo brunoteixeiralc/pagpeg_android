@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
@@ -29,12 +30,14 @@ import com.google.firebase.auth.FirebaseAuth;
 public class UserProfileFragment extends Fragment {
 
     private View view;
-    private Button editProfile;
+    private Button editProfile,btnRegister;
     private Fragment fragment;
     private TextView manageCC,logout,email,number,name,labelName;
     private ImageView profile_user;
     private Bundle bundle;
     private Toolbar toolbar;
+    private User user;
+    private LinearLayout linearLayout;
 
     @Nullable
     @Override
@@ -52,19 +55,7 @@ public class UserProfileFragment extends Fragment {
         email = (TextView) view.findViewById(R.id.user_email);
         name = (TextView) view.findViewById(R.id.user_name);
         number = (TextView) view.findViewById(R.id.user_phone);
-
-        final User user = (User) getArguments().getSerializable("user");
-
-        if(user != null){
-            labelName.setText(user.getName());
-            email.setText(user.getEmail());
-            name.setText(user.getName());
-            number.setText(user.getNumber());
-            if(user.getUser_img() != null){
-                Glide.with(this).load(user.getUser_img()).diskCacheStrategy(DiskCacheStrategy.ALL).into(profile_user);
-            }
-
-        }
+        linearLayout = (LinearLayout) view.findViewById(R.id.ll);
 
         logout = (TextView) toolbar.findViewById(R.id.logout);
         logout.setVisibility(View.VISIBLE);
@@ -79,6 +70,37 @@ public class UserProfileFragment extends Fragment {
                 startActivity(intent);
             }
         });
+
+        btnRegister = (Button) view.findViewById(R.id.btn_register);
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        if(getArguments() != null){
+
+            user = (User) getArguments().getSerializable("user");
+
+            labelName.setText(user.getName());
+            email.setText(user.getEmail());
+            name.setText(user.getName());
+            number.setText(user.getNumber());
+            if(user.getUser_img() != null){
+                Glide.with(this).load(user.getUser_img()).diskCacheStrategy(DiskCacheStrategy.ALL).into(profile_user);
+            }
+
+            linearLayout.setVisibility(View.VISIBLE);
+            btnRegister.setVisibility(View.GONE);
+            logout.setVisibility(View.VISIBLE);
+
+        }else{
+
+            linearLayout.setVisibility(View.GONE);
+            btnRegister.setVisibility(View.VISIBLE);
+            logout.setVisibility(View.GONE);
+        }
 
         editProfile = (Button) view.findViewById(R.id.edit_profile);
         editProfile.setOnClickListener(new View.OnClickListener() {

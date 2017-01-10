@@ -18,7 +18,6 @@ import android.widget.Toast;
 import com.baoyachi.stepview.HorizontalStepView;
 import com.br.pagpeg.R;
 import com.br.pagpeg.adapter.user.PickUpShopperSummaryAdapter;
-import com.br.pagpeg.fragment.shopper.OrderFragment;
 import com.br.pagpeg.model.Cart;
 import com.br.pagpeg.model.CreditCard;
 import com.br.pagpeg.model.Product;
@@ -29,15 +28,8 @@ import com.br.pagpeg.notification.SendNotification;
 import com.br.pagpeg.retrofit.RetrofitService;
 import com.br.pagpeg.retrofit.ServiceGenerator;
 import com.br.pagpeg.retrofit.model.Charge;
-import com.br.pagpeg.retrofit.model.ClientPay;
 import com.br.pagpeg.utils.EnumStatus;
 import com.br.pagpeg.utils.Utils;
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.RequestListener;
-import com.bumptech.glide.request.target.Target;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -73,6 +65,8 @@ public class PickUpShopperSummaryFragment extends Fragment {
     private Button btnBuyOrder;
     private User user;
     private CreditCard creditCard;
+
+    public PickUpShopperSummaryFragment(){}
 
     public PickUpShopperSummaryFragment(HorizontalStepView stepView) {
         this.stepView = stepView;
