@@ -19,12 +19,11 @@ import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.adapter.user.CartAdapter;
-import com.br.pagpeg.model.CreditCard;
 import com.br.pagpeg.model.Product;
 import com.br.pagpeg.model.ProductCart;
 import com.br.pagpeg.utils.DividerItemDecoration;
-import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.EnumStatus;
+import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -66,14 +65,12 @@ public class CartFragment  extends Fragment{
         view = inflater.inflate(R.layout.list_cart, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
-        Utils.openDialog(CartFragment.this.getContext(),"Carregando produtos");
-
         if(productCarts == null){
             productCarts = new ArrayList<>();
         }
 
         txtDiscount = (TextView) view.findViewById(R.id.discount);
-        ccSelect = (TextView) view.findViewById(R.id.cc_select);
+        //ccSelect = (TextView) view.findViewById(R.id.cc_select);
         txtTotal = (TextView) view.findViewById(R.id.total);
         txtTax = (TextView) view.findViewById(R.id.tax);
 
@@ -89,8 +86,14 @@ public class CartFragment  extends Fragment{
 
         }
 
-        getProductsCart();
-        getDefaultCard();
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+
+            Utils.openDialog(CartFragment.this.getContext(),"Carregando produtos");
+
+            getProductsCart();
+            //getDefaultCard();
+        }
+
         getTax();
 
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
@@ -152,16 +155,16 @@ public class CartFragment  extends Fragment{
             }
         });
 
-        btnCCManage = (Button) view.findViewById(R.id.ccManage);
-        btnCCManage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                fragment = new CreditCardFragment();
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
-            }
-        });
+//        btnCCManage = (Button) view.findViewById(R.id.ccManage);
+//        btnCCManage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                fragment = new CreditCardFragment();
+//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+//            }
+//        });
 
         return  view;
     }
@@ -261,28 +264,28 @@ public class CartFragment  extends Fragment{
 
     }
 
-    private void getDefaultCard() {
-
-        mDatabase.child("credit_card/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("is_default").equalTo(true).limitToFirst(1).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                ccSelect.setText("");
-
-                if (dataSnapshot.hasChildren()) {
-                    for (DataSnapshot ss: dataSnapshot.getChildren()) {
-                        CreditCard creditCard = ss.getValue(CreditCard.class);
-                        ccSelect.setText(creditCard.getDisplay_number());
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void getDefaultCard() {
+//
+//        mDatabase.child("credit_card/" + FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("is_default").equalTo(true).limitToFirst(1).addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                ccSelect.setText("");
+//
+//                if (dataSnapshot.hasChildren()) {
+//                    for (DataSnapshot ss: dataSnapshot.getChildren()) {
+//                        CreditCard creditCard = ss.getValue(CreditCard.class);
+//                        ccSelect.setText(creditCard.getDisplay_number());
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     private void getTax(){
 

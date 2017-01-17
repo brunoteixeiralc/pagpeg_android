@@ -297,14 +297,19 @@ public class ProductListFragment extends Fragment {
 
     private void addProduct(){
 
-        selectedProduct.setQuantity(Integer.parseInt(quantity.getText().toString()));
+        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
 
-        cart.setCount(cart.getCount() + 1);
-        ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
-        ((MainUserActivity)getActivity()).bottomBarBadge.show();
+            selectedProduct.setQuantity(Integer.parseInt(quantity.getText().toString()));
 
-        validatePromotionNetwork();
+            cart.setCount(cart.getCount() + 1);
+            ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
+            ((MainUserActivity)getActivity()).bottomBarBadge.show();
 
+            validatePromotionNetwork();
+
+        }else {
+        //TODO ir para a tela do login actitivyt
+        }
     }
 
     private void removeProduct(){
@@ -320,41 +325,41 @@ public class ProductListFragment extends Fragment {
 
     private void deleteProductCart(){
 
-        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+       mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+           @Override
+           public void onDataChange(DataSnapshot dataSnapshot) {
                 mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getName()).removeValue();
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+           }
+           @Override
+             public void onCancelled(DatabaseError databaseError) {
             }
         });
     }
 
     private void saveProductCart(final Double wholesale_price){
 
-        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                ProductCart productCart = new ProductCart();
-                productCart.setStatus(EnumStatus.Status.PRODUCT_WAITING.getName());
-                productCart.setQuantity(selectedProduct.getQuantity());
-                productCart.setPrice_unit(wholesale_price == 0.0 ? selectedProduct.getProduct().getPrice() : wholesale_price);
-                productCart.setPrice_total(selectedProduct.getQuantity() * (wholesale_price == 0.0 ? selectedProduct.getProduct().getPrice() : wholesale_price));
+                    ProductCart productCart = new ProductCart();
+                    productCart.setStatus(EnumStatus.Status.PRODUCT_WAITING.getName());
+                    productCart.setQuantity(selectedProduct.getQuantity());
+                    productCart.setPrice_unit(wholesale_price == 0.0 ? selectedProduct.getProduct().getPrice() : wholesale_price);
+                    productCart.setPrice_total(selectedProduct.getQuantity() * (wholesale_price == 0.0 ? selectedProduct.getProduct().getPrice() : wholesale_price));
 
-                mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getProduct().getName()).setValue(productCart);
-                mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("store").setValue(store.getKeyStore());
-                mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("network").setValue(store.getNetwork());
-            }
+                    mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getProduct().getName()).setValue(productCart);
+                    mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("store").setValue(store.getKeyStore());
+                    mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("network").setValue(store.getNetwork());
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
 
-    }
+        }
 
     private void getBarCode(String code){
 

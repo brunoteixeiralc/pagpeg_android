@@ -7,16 +7,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
-import com.br.pagpeg.activity.ChooseActivity;
 import com.br.pagpeg.model.User;
 import com.br.pagpeg.utils.ErrorException;
+import com.br.pagpeg.utils.UserSingleton;
 import com.br.pagpeg.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -82,6 +81,7 @@ public class LoginActivity extends Activity {
 
                     FirebaseUser userLogged = firebaseAuth.getCurrentUser();
                     getUser(userLogged.getUid());
+
                     Log.d("Firebase", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     Log.d("Firebase", "onAuthStateChanged:signed_out");
@@ -98,7 +98,8 @@ public class LoginActivity extends Activity {
             @Override
             public void onClick(View v) {
                 Utils.hideKeyboard(LoginActivity.this);
-                startActivity(new Intent(v.getContext(),RegisterActivity.class));
+                startActivityForResult(new Intent(v.getContext(),RegisterActivity.class),1);
+                //startActivity(new Intent(v.getContext(),RegisterActivity.class));
             }
         });
 
@@ -125,13 +126,14 @@ public class LoginActivity extends Activity {
          public void onDataChange(DataSnapshot dataSnapshot) {
 
              User user = dataSnapshot.getValue(User.class);
-             Intent intent = new Intent(LoginActivity.this,MainUserActivity.class);
-             intent.putExtra("user",user);
-             if(userUID != null)
-                 intent.putExtra("user_uid",userUID);
-             if(status != null)
-                 intent.putExtra("status",status);
-             startActivity(intent);
+
+             Intent returnIntent = new Intent();
+             returnIntent.putExtra("user",user);
+             setResult(Activity.RESULT_OK,returnIntent);
+             finish();
+
+             UserSingleton userSingleton = UserSingleton.getInstance();
+             userSingleton.setUser(user);
 
              Utils.closeDialog(LoginActivity.this);
          }
@@ -141,23 +143,6 @@ public class LoginActivity extends Activity {
 
          }
      });
-
-    }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK) {
-            onBackPressed();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        Intent intent = new Intent(this, ChooseActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
 
     }
 
@@ -186,5 +171,21 @@ public class LoginActivity extends Activity {
                         Utils.closeDialog(LoginActivity.this);
                     }
                 });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == 1){
+            if(resultCode == RESULT_OK){
+
+                User user = (User) data.getSerializableExtra("user");
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("user",user);
+                setResult(Activity.RESULT_OK,returnIntent);
+                finish();
+            }
+        }
     }
 }

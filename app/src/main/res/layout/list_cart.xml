@@ -30,32 +30,32 @@
                 android:textColor="@android:color/white"
                 android:layout_margin="5dp"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="16dp">
+            <!--<LinearLayout-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:padding="16dp">-->
 
-                <TextView
-                    android:id="@+id/cc_select"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:text="Sem cartão selecionado"
-                    android:textSize="12sp"
-                    android:gravity="center"/>
+                <!--<TextView-->
+                    <!--android:id="@+id/cc_select"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Sem cartão selecionado"-->
+                    <!--android:textSize="12sp"-->
+                    <!--android:gravity="center"/>-->
 
-                <Button
-                    android:id="@+id/ccManage"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.8"
-                    android:layout_height="30dp"
-                    android:text="@string/manage_credit_card"
-                    android:textSize="12sp"
-                    android:background="@color/colorPrimary"
-                    android:textColor="@android:color/white"/>
+                <!--<Button-->
+                    <!--android:id="@+id/ccManage"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_weight="0.8"-->
+                    <!--android:layout_height="30dp"-->
+                    <!--android:text="@string/manage_credit_card"-->
+                    <!--android:textSize="12sp"-->
+                    <!--android:background="@color/colorPrimary"-->
+                    <!--android:textColor="@android:color/white"/>-->
 
-            </LinearLayout>
+            <!--</LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"

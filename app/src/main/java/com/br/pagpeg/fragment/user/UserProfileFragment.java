@@ -15,13 +15,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
+import com.br.pagpeg.activity.ChooseActivity;
 import com.br.pagpeg.activity.user.LoginActivity;
 import com.br.pagpeg.model.User;
 import com.br.pagpeg.utils.EnumToolBar;
+import com.br.pagpeg.utils.UserSingleton;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.auth.FirebaseAuth;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by brunolemgruber on 22/07/16.
@@ -32,12 +36,13 @@ public class UserProfileFragment extends Fragment {
     private View view;
     private Button editProfile,btnRegister;
     private Fragment fragment;
-    private TextView manageCC,logout,email,number,name,labelName;
+    private TextView logout,email,number,name,labelName;
     private ImageView profile_user;
     private Bundle bundle;
     private Toolbar toolbar;
     private User user;
     private LinearLayout linearLayout;
+    private UserSingleton userSingleton;
 
     @Nullable
     @Override
@@ -63,9 +68,12 @@ public class UserProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                if(userSingleton.getUser() != null)
+                    userSingleton.setUser(null);
+
                 FirebaseAuth.getInstance().signOut();
                 getFragmentManager().beginTransaction().remove(UserProfileFragment.this).commit();
-                Intent intent = new Intent(UserProfileFragment.this.getActivity(), LoginActivity.class);
+                Intent intent = new Intent(UserProfileFragment.this.getActivity(), ChooseActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
@@ -75,31 +83,29 @@ public class UserProfileFragment extends Fragment {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivityForResult(new Intent(UserProfileFragment.this.getActivity(),LoginActivity.class),1);
             }
         });
 
-        if(getArguments() != null){
+        if(getArguments() != null && getArguments().getSerializable("user") != null){
 
             user = (User) getArguments().getSerializable("user");
-
-            labelName.setText(user.getName());
-            email.setText(user.getEmail());
-            name.setText(user.getName());
-            number.setText(user.getNumber());
-            if(user.getUser_img() != null){
-                Glide.with(this).load(user.getUser_img()).diskCacheStrategy(DiskCacheStrategy.ALL).into(profile_user);
-            }
-
-            linearLayout.setVisibility(View.VISIBLE);
-            btnRegister.setVisibility(View.GONE);
-            logout.setVisibility(View.VISIBLE);
+            getUser();
 
         }else{
 
-            linearLayout.setVisibility(View.GONE);
-            btnRegister.setVisibility(View.VISIBLE);
-            logout.setVisibility(View.GONE);
+            userSingleton = UserSingleton.getInstance();
+            if(userSingleton.getUser() != null){
+
+                user = userSingleton.getUser();
+                getUser();
+
+            }else{
+
+                linearLayout.setVisibility(View.GONE);
+                btnRegister.setVisibility(View.VISIBLE);
+                logout.setVisibility(View.GONE);
+            }
         }
 
         editProfile = (Button) view.findViewById(R.id.edit_profile);
@@ -116,24 +122,48 @@ public class UserProfileFragment extends Fragment {
             }
         });
 
-        manageCC = (TextView) view.findViewById(R.id.manage_cc);
-        manageCC.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Bundle bundle = new Bundle();
-                bundle.putString("id_client",user.getId_iugu());
-
-                logout.setVisibility(View.GONE);
-                fragment = new CreditCardFragment();
-                fragment.setArguments(bundle);
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
-            }
-        });
-
-
+//        manageCC = (TextView) view.findViewById(R.id.manage_cc);
+//        manageCC.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                Bundle bundle = new Bundle();
+//                bundle.putString("id_client",user.getId_iugu());
+//
+//                logout.setVisibility(View.GONE);
+//                fragment = new CreditCardFragment();
+//                fragment.setArguments(bundle);
+//                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//                transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+//            }
+//        });
 
         return view;
+    }
+
+    private void getUser(){
+
+        labelName.setText(user.getName());
+        email.setText(user.getEmail());
+        name.setText(user.getName());
+        number.setText(user.getNumber());
+        if(user.getUser_img() != null){
+            Glide.with(this).load(user.getUser_img()).diskCacheStrategy(DiskCacheStrategy.ALL).into(profile_user);
+        }
+
+        linearLayout.setVisibility(View.VISIBLE);
+        btnRegister.setVisibility(View.GONE);
+        logout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if(requestCode == 1){
+            if(resultCode == RESULT_OK){
+                user = (User) data.getSerializableExtra("user");
+                getUser();
+            }
+        }
     }
 }

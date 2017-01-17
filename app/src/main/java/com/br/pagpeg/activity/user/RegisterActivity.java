@@ -24,6 +24,7 @@ import com.br.pagpeg.model.User;
 import com.br.pagpeg.retrofit.RetrofitService;
 import com.br.pagpeg.retrofit.ServiceGenerator;
 import com.br.pagpeg.retrofit.model.Client;
+import com.br.pagpeg.utils.UserSingleton;
 import com.br.pagpeg.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -273,9 +274,14 @@ public class RegisterActivity extends Activity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 User user = dataSnapshot.getValue(User.class);
-                Intent intent = new Intent(RegisterActivity.this,MainUserActivity.class);
-                intent.putExtra("user",user);
-                startActivity(intent);
+
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra("user",user);
+                setResult(Activity.RESULT_OK,returnIntent);
+                finish();
+
+                UserSingleton userSingleton = UserSingleton.getInstance();
+                userSingleton.setUser(user);
 
                 Utils.closeDialog(RegisterActivity.this);
             }
