@@ -22,9 +22,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.br.pagpeg.R;
 import com.br.pagpeg.activity.BarCodeActivity;
+import com.br.pagpeg.activity.user.LoginActivity;
 import com.br.pagpeg.activity.user.MainUserActivity;
 import com.br.pagpeg.adapter.user.ProductAdapter;
 import com.br.pagpeg.model.Cart;
@@ -37,6 +37,7 @@ import com.br.pagpeg.model.StoreCategory;
 import com.br.pagpeg.utils.DividerItemDecoration;
 import com.br.pagpeg.utils.EnumStatus;
 import com.br.pagpeg.utils.EnumToolBar;
+import com.br.pagpeg.utils.UserSingleton;
 import com.br.pagpeg.utils.Utils;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -80,11 +81,14 @@ public class ProductListFragment extends Fragment {
     private TextView noContentTxt;
     private LinearLayout llEmpty;
     private CoordinatorLayout coordinatorLayout;
+    private UserSingleton userSingleton;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        userSingleton = UserSingleton.getInstance();
 
         category = (StoreCategory) getArguments().getSerializable("category");
         store = (Store) getArguments().getSerializable("store");
@@ -230,21 +234,29 @@ public class ProductListFragment extends Fragment {
             @Override
             public void onClick(View view, int idx) {
 
-                selectedProduct = new ProductCart();
-                selectedProduct.setProduct(products.get(idx));
-                selectedProduct.setName(products.get(idx).getName());
+                if(userSingleton.getUser() != null){
 
-                if(selectedProduct.getProduct().isInCart()){
+                    selectedProduct = new ProductCart();
+                    selectedProduct.setProduct(products.get(idx));
+                    selectedProduct.setName(products.get(idx).getName());
 
-                    builder.show();
-                    Utils.openKeyboard(ProductListFragment.this.getActivity());
+                    if(selectedProduct.getProduct().isInCart()){
+
+                        builder.show();
+                        Utils.openKeyboard(ProductListFragment.this.getActivity());
+
+                    }else{
+
+                        removeProduct();
+
+                        Snackbar snackbarUndo = Snackbar.make(coordinatorLayout, "Produto removido.", Snackbar.LENGTH_LONG);
+                        snackbarUndo.show();
+                    }
 
                 }else{
 
-                    removeProduct();
+                    startActivityForResult(new Intent(ProductListFragment.this.getActivity(),LoginActivity.class),2);
 
-                    Snackbar snackbarUndo = Snackbar.make(coordinatorLayout, "Produto removido.", Snackbar.LENGTH_LONG);
-                    snackbarUndo.show();
                 }
             }
         };
@@ -272,7 +284,7 @@ public class ProductListFragment extends Fragment {
 
                     recyclerView.setVisibility(View.VISIBLE);
                     llEmpty.setVisibility(View.GONE);
-                    mAdapter = new ProductAdapter(onClickListenerCart(),onClickListener(),ProductListFragment.this.getContext(),products);
+                    mAdapter = new ProductAdapter(onClickListenerCart(),onClickListener(),ProductListFragment.this.getContext(),products,userSingleton);
                     recyclerView.setAdapter(mAdapter);
 
                 }else{
@@ -297,19 +309,14 @@ public class ProductListFragment extends Fragment {
 
     private void addProduct(){
 
-        if(FirebaseAuth.getInstance().getCurrentUser() != null) {
+      selectedProduct.setQuantity(Integer.parseInt(quantity.getText().toString()));
 
-            selectedProduct.setQuantity(Integer.parseInt(quantity.getText().toString()));
+      cart.setCount(cart.getCount() + 1);
+      ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
+      ((MainUserActivity)getActivity()).bottomBarBadge.show();
 
-            cart.setCount(cart.getCount() + 1);
-            ((MainUserActivity)getActivity()).bottomBarBadge.setCount(cart.getCount());
-            ((MainUserActivity)getActivity()).bottomBarBadge.show();
+      validatePromotionNetwork();
 
-            validatePromotionNetwork();
-
-        }else {
-        //TODO ir para a tela do login actitivyt
-        }
     }
 
     private void removeProduct(){

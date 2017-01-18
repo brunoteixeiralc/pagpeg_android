@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.Product;
+import com.br.pagpeg.utils.UserSingleton;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -30,12 +31,14 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     private ProductAdapter.ProductOnClickListener productOnClickListener;
     private ProductAdapter.CartOnClickListener cartOnClickListener;
     private final Context context;
+    private UserSingleton userSingleton;
 
-    public ProductAdapter(ProductAdapter.CartOnClickListener cartOnClickListener,ProductAdapter.ProductOnClickListener storeOnClickListener, Context context, List<Product> products) {
+    public ProductAdapter(ProductAdapter.CartOnClickListener cartOnClickListener,ProductAdapter.ProductOnClickListener storeOnClickListener, Context context, List<Product> products,UserSingleton userSingleton) {
         this.context = context;
         this.products = products;
         this.productOnClickListener = storeOnClickListener;
         this.cartOnClickListener = cartOnClickListener;
+        this.userSingleton = userSingleton;
     }
 
     @Override
@@ -85,13 +88,18 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             holder.cart.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   if(p.isInCart()){
-                        holder.cart.setImageResource(R.drawable.cart_add);
-                        p.setInCart(false);
-                    }else{
-                        holder.cart.setImageResource(R.drawable.cart_sucess);
-                        p.setInCart(true);
-                    }
+
+                   if(userSingleton.getUser() != null){
+
+                       if(p.isInCart()){
+                           holder.cart.setImageResource(R.drawable.cart_add);
+                           p.setInCart(false);
+                       }else{
+                           holder.cart.setImageResource(R.drawable.cart_sucess);
+                           p.setInCart(true);
+                       }
+                   }
+
                     cartOnClickListener.onClick(holder.cart, position);
                 }
             });

@@ -1,5 +1,6 @@
 package com.br.pagpeg.fragment.user;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.baoyachi.stepview.HorizontalStepView;
 import com.br.pagpeg.R;
+import com.br.pagpeg.activity.user.AddCreditCardActivity;
 import com.br.pagpeg.adapter.user.PickUpShopperSummaryAdapter;
 import com.br.pagpeg.model.Cart;
 import com.br.pagpeg.model.CreditCard;
@@ -29,6 +31,7 @@ import com.br.pagpeg.retrofit.RetrofitService;
 import com.br.pagpeg.retrofit.ServiceGenerator;
 import com.br.pagpeg.retrofit.model.Charge;
 import com.br.pagpeg.utils.EnumStatus;
+import com.br.pagpeg.utils.UserSingleton;
 import com.br.pagpeg.utils.Utils;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -237,6 +240,15 @@ public class PickUpShopperSummaryFragment extends Fragment {
                         creditCard = ss.getValue(CreditCard.class);
                         charge();
                     }
+
+                }else{
+
+                    UserSingleton userSingleton = UserSingleton.getInstance();
+                    Intent intent  = new Intent(PickUpShopperSummaryFragment.this.getContext(),AddCreditCardActivity.class);
+                    intent.putExtra("id_client",userSingleton.getUser().getId_iugu());
+
+                    startActivity(intent);
+
                 }
             }
 
