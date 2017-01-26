@@ -67,6 +67,7 @@ public class ProductListFragment extends Fragment {
     private ImageView mIconBarCode;
     private Snackbar snackbar;
     private AlertDialog builder = null;
+    private AlertDialog builderLogin = null;
     private StoreCategory category;
     private DatabaseReference mDatabase;
     private List<Product> products = new ArrayList<>();
@@ -255,8 +256,36 @@ public class ProductListFragment extends Fragment {
 
                 }else{
 
-                    startActivityForResult(new Intent(ProductListFragment.this.getActivity(),LoginActivity.class),2);
+                    builderLogin = new AlertDialog.Builder(getActivity(),R.style.Dialog_Quantity)
+                            .setPositiveButton("OK", null)
+                            .setNegativeButton("Cancelar", null)
+                            .setTitle("PagPeg")
+                            .setMessage("Para continuar é necessário fazer login ou se cadastrar.")
+                            .setIcon(R.mipmap.ic_launcher)
+                            .create();
+                    builderLogin.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            final Button btnAccept = builderLogin.getButton(AlertDialog.BUTTON_POSITIVE);
+                            btnAccept.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    builderLogin.dismiss();
+                                    startActivityForResult(new Intent(ProductListFragment.this.getActivity(),LoginActivity.class),2);
+                                }
+                            });
 
+                            final Button btnDecline = builderLogin.getButton(DialogInterface.BUTTON_NEGATIVE);
+                            btnDecline.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    builderLogin.dismiss();
+
+                                }
+                            });
+                        }
+                    });
+                    builderLogin.show();
                 }
             }
         };

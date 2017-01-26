@@ -21,7 +21,6 @@ import android.widget.TextView;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.activity.shopper.MainShopperActivity;
-import com.br.pagpeg.activity.user.MainUserActivity;
 import com.br.pagpeg.model.Cart;
 import com.br.pagpeg.model.Product;
 import com.br.pagpeg.model.ProductCart;
@@ -161,7 +160,7 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
                         int countUnity = 0;
                         for(Map.Entry<String, ProductCart> entry : order.getProducts().entrySet()) {
                             ProductCart value = entry.getValue();
-                            countUnity =+ value.getQuantity();
+                            countUnity = countUnity + value.getQuantity();
                         }
                         shopperOrder.setText(order.getProducts().size() + " itens ( " + String.valueOf(countUnity) + " unidades )");
 
@@ -170,15 +169,16 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
 
                         getStore(order.getNetwork(),order.getStore());
                         getUser(st.getKey());
-                    }
 
-                    //((MainShopperActivity)getActivity()).mBottomBar.makeBadgeForTabAt(1, getResources().getColor(R.color.colorPrimaryDark), 1);
+                        ((MainShopperActivity)getActivity()).bottomBarBadge.setCount(1);
+                    }
 
                 }else{
 
                     llNoOrder.setVisibility(View.VISIBLE);
                     llMain.setVisibility(View.GONE);
-                   // ((MainShopperActivity)getActivity()).mBottomBar.makeBadgeForTabAt(1, getResources().getColor(R.color.colorPrimaryDark), 0);
+
+                    ((MainShopperActivity)getActivity()).bottomBarBadge.setCount(0);
 
                 }
 
@@ -241,18 +241,22 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
 
                     userName.setText(user.getName());
                     userNumber.setText(user.getNumber());
-                    Glide.with(OrderFragment.this).load(user.getUser_img()).listener(new RequestListener<String, GlideDrawable>() {
-                        @Override
-                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            return false;
-                        }
+                    if(user.getUser_img() != null){
+                        Glide.with(OrderFragment.this).load(user.getUser_img()).listener(new RequestListener<String, GlideDrawable>() {
+                            @Override
+                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                                return false;
+                            }
 
-                        @Override
-                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            progressBar.setVisibility(View.GONE);
-                            return false;
-                        }
-                    }).diskCacheStrategy(DiskCacheStrategy.ALL).into(userImage);
+                            @Override
+                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                                progressBar.setVisibility(View.GONE);
+                                return false;
+                            }
+                        }).diskCacheStrategy(DiskCacheStrategy.ALL).into(userImage);
+                    }else{
+                        progressBar.setVisibility(View.GONE);
+                    }
 
                  Utils.closeDialog(OrderFragment.this.getContext());
 

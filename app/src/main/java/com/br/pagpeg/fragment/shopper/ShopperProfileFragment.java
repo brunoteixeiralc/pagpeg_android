@@ -63,18 +63,22 @@ public class ShopperProfileFragment extends Fragment {
         shopperNumber.setText(shopper.getNumber());
         shopperName.setText(shopper.getName());
         shopperEmail.setText(shopper.getEmail());
-        Glide.with(ShopperProfileFragment.this).load(shopper.getUser_img()).listener(new RequestListener<String, GlideDrawable>() {
-            @Override
-            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                return false;
-            }
+        if(shopper.getUser_img() != null){
+            Glide.with(ShopperProfileFragment.this).load(shopper.getUser_img()).listener(new RequestListener<String, GlideDrawable>() {
+                @Override
+                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    return false;
+                }
 
-            @Override
-            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                progressBar.setVisibility(View.GONE);
-                return false;
-            }
-        }).diskCacheStrategy(DiskCacheStrategy.ALL).into(shopperImage);
+                @Override
+                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+            }).diskCacheStrategy(DiskCacheStrategy.ALL).into(shopperImage);
+        }else{
+            progressBar.setVisibility(View.GONE);
+        }
 
         editProfile = (Button) view.findViewById(R.id.edit_profile);
         editProfile.setOnClickListener(new View.OnClickListener() {

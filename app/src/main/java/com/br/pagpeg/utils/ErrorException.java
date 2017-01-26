@@ -13,7 +13,7 @@ public final class ErrorException {
     public static String authFirebaseError(String exception,Context context){
 
         if (exception.contains("The email address is badly formatted.")) {
-            return context.getString(R.string.error_wrong_email);
+            return context.getString(R.string.error_wrong_email_pass);
         }
         else
         if (exception.contains("There is no user record corresponding to this identifier. The user may have been deleted.")) {
@@ -21,7 +21,7 @@ public final class ErrorException {
         }
         else
         if (exception.contains("The password is invalid or the user does not have a password")) {
-            return context.getString(R.string.error_wrong_password);
+            return context.getString(R.string.error_wrong_email_pass);
         }
 
         return "";

@@ -87,9 +87,8 @@
 
     <!-- Errors -->
     <string name="create_user_error">Erro ao se cadastrar o usuário , tente novamente mais tarde.</string>
-    <string name="error_wrong_email">Email incorreto, tente novamente.</string>
     <string name="error_user_not_exist">Usuário não existe no pagpeg.</string>
-    <string name="error_wrong_password">Senha incorreta, tente novamente.</string>
+    <string name="error_wrong_email_pass">Email e/ou senha incorreta, tente novamente.</string>
 
      <!-- Static -->
      <string name="desc_product_test">teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste</string>

@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.baoyachi.stepview.HorizontalStepView;
 import com.br.pagpeg.R;
@@ -20,6 +21,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +37,8 @@ public class FindShopperFragment extends Fragment {
     private List<Shopper> shoppers;
     private Fragment fragment;
     private HorizontalStepView stepView;
+    private AVLoadingIndicatorView avLoadingIndicatorView;
+    private LinearLayout ll_empty_shopper;
 
     public FindShopperFragment(){}
 
@@ -53,6 +57,12 @@ public class FindShopperFragment extends Fragment {
         }
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        ll_empty_shopper = (LinearLayout) view.findViewById(R.id.ll_empty_shopper);
+        ll_empty_shopper.setVisibility(View.GONE);
+
+        avLoadingIndicatorView = (AVLoadingIndicatorView) view.findViewById(R.id.avloadingIndicatorView);
+        avLoadingIndicatorView.setVisibility(View.VISIBLE);
 
         if(shoppers == null)
             shoppers = new ArrayList<>();
@@ -95,6 +105,10 @@ public class FindShopperFragment extends Fragment {
                     mDatabase.child("shoppers").child(shoppers.get(0).getKey()).child("is_free").setValue(false);
                     mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("shopper").setValue(shoppers.get(0).getKey());
                     mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("status").setValue(EnumStatus.Status.SHOPPER_BUYING.getName());
+
+                }else{
+                    ll_empty_shopper.setVisibility(View.VISIBLE);
+                    avLoadingIndicatorView.setVisibility(View.GONE);
                 }
             }
 

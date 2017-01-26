@@ -11,12 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
-import com.br.pagpeg.fragment.shopper.GraphFragment;
 import com.br.pagpeg.fragment.shopper.OrderFragment;
-import com.br.pagpeg.fragment.shopper.OrderHistoryFragment;
-import com.br.pagpeg.fragment.shopper.RatingFragment;
 import com.br.pagpeg.fragment.shopper.ShopperProfileFragment;
 import com.br.pagpeg.model.Shopper;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.OnMenuTabClickListener;
@@ -32,15 +31,19 @@ public class MainShopperActivity extends AppCompatActivity {
     public BottomBar mBottomBar;
     private Toolbar toolbar;
     private Fragment fragment;
+    public BottomBarBadge bottomBarBadge;
     private TextView mLogOut;
     private Bundle bundle;
     private Shopper shopper;
+    private DatabaseReference mDatabase;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_user_main);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Seu pedido");
@@ -76,15 +79,15 @@ public class MainShopperActivity extends AppCompatActivity {
 
                         break;
 
-                    case R.id.bottomBarItemThree:
-                        fragment = new OrderHistoryFragment();
-                        break;
-                    case R.id.bottomBarItemFour:
-                        fragment = new GraphFragment();
-                        break;
-                    case R.id.bottomBarItemFive:
-                        fragment = new RatingFragment();
-                        break;
+//                    case R.id.bottomBarItemThree:
+//                        fragment = new OrderHistoryFragment();
+//                        break;
+//                    case R.id.bottomBarItemFour:
+//                        fragment = new GraphFragment();
+//                        break;
+//                    case R.id.bottomBarItemFive:
+//                        fragment = new RatingFragment();
+//                        break;
 
                 }
 
@@ -112,15 +115,15 @@ public class MainShopperActivity extends AppCompatActivity {
                         fragment.setArguments(bundle);
 
                         break;
-                    case R.id.bottomBarItemThree:
-                        fragment = new OrderHistoryFragment();
-                        break;
-                    case R.id.bottomBarItemFour:
-                        fragment = new GraphFragment();
-                        break;
-                    case R.id.bottomBarItemFive:
-                        fragment = new RatingFragment();
-                        break;
+//                    case R.id.bottomBarItemThree:
+//                        fragment = new OrderHistoryFragment();
+//                        break;
+//                    case R.id.bottomBarItemFour:
+//                        fragment = new GraphFragment();
+//                        break;
+//                    case R.id.bottomBarItemFive:
+//                        fragment = new RatingFragment();
+//                        break;
                 }
 
                 if(fragment != null)
@@ -128,8 +131,9 @@ public class MainShopperActivity extends AppCompatActivity {
             }
         });
 
-        BottomBarBadge unreadMessages = mBottomBar.makeBadgeForTabAt(1, getResources().getColor(R.color.colorPrimaryDark), 1);
-        unreadMessages.setAutoShowAfterUnSelection(true);
+        bottomBarBadge = mBottomBar.makeBadgeForTabAt(1, getResources().getColor(R.color.colorPrimaryDark), 0);
+        bottomBarBadge.setAutoShowAfterUnSelection(true);
+
     }
 
     @Override

@@ -62,18 +62,22 @@ public class FindShopperProfileFragment extends Fragment {
         number.setText(shopper.getNumber());
         email.setText(shopper.getEmail());
         ratingBar.setNumStars(shopper.getRating());
-        Glide.with(FindShopperProfileFragment.this.getContext()).load(shopper.getUser_img()).listener(new RequestListener<String, GlideDrawable>() {
-            @Override
-            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                return false;
-            }
+        if(shopper.getUser_img() != null){
+            Glide.with(FindShopperProfileFragment.this.getContext()).load(shopper.getUser_img()).listener(new RequestListener<String, GlideDrawable>() {
+                @Override
+                public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                    return false;
+                }
 
-            @Override
-            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                progressBar.setVisibility(View.GONE);
-                return false;
-            }
-        }).diskCacheStrategy(DiskCacheStrategy.ALL).into(image);
+                @Override
+                public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                    progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+            }).diskCacheStrategy(DiskCacheStrategy.ALL).into(image);
+        }else{
+           progressBar.setVisibility(View.GONE);
+        }
 
         stepView.setStepsViewIndicatorComplectingPosition(1);
 

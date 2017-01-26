@@ -44,7 +44,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/dialog_price"
-            android:text=""
             android:hint="Preço (R$)"
             android:textColorHint="@color/white"
             android:textColor="@color/white"
@@ -53,7 +52,7 @@
             fontPath="fonts/Nexa-Bold.ttf"
             tools:ignore="MissingPrefix"
             android:background="@android:color/transparent"
-            android:inputType="number"
+            android:inputType="number|numberDecimal"
             android:focusable="true"/>
 
     </LinearLayout>
