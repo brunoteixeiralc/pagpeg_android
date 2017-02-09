@@ -9,7 +9,7 @@
     <item
         android:id="@+id/bottomBarItemTwo"
         android:icon="@drawable/ic_store"
-        android:title="Locais" />
+        android:title="Lojas" />
 
     <item
         android:id="@+id/bottomBarItemThree"

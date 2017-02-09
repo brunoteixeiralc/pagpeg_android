@@ -9,7 +9,7 @@
     <item
         android:id="@+id/bottomBarItemTwo"
         android:icon="@drawable/ic_order"
-        android:title="Pedido" />
+        android:title="Pedidos" />
 
     <item
         android:id="@+id/bottomBarItemThree"

@@ -24,6 +24,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -55,11 +57,11 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
     private View view;
     private SupportMapFragment mapFragment;
     private GoogleApiClient googleApiClient;
-    protected LatLng mCenterLocation;
     private ImageView mIconListImageView;
     private DatabaseReference mDatabase;
     private List<Store> storeList = new ArrayList<>();
     private ClusterMarkerLocation clickedClusterItem;
+    private ClusterManager<ClusterMarkerLocation> clusterManager;
     private Fragment fragment;
     private Bundle bundle;
     private Toolbar toolbar;
@@ -120,7 +122,8 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
 
             Utils.openDialog(MapFragment.this.getContext(),"Carregando lojas");
 
-            mCenterLocation = new LatLng(l.getLatitude(),l.getLongitude());
+            CameraUpdate zoom = CameraUpdateFactory.newLatLngZoom(new LatLng(l.getLatitude(),l.getLongitude()), 15);
+            gMap.animateCamera(zoom);
             initMarkers(l);
         }
     }
@@ -220,7 +223,7 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
 
     private void initMarkers(Location l) {
 
-        ClusterManager<ClusterMarkerLocation> clusterManager = new ClusterManager<ClusterMarkerLocation>( MapFragment.this.getContext(), gMap );
+        clusterManager = new ClusterManager<ClusterMarkerLocation>( MapFragment.this.getContext(), gMap );
 
         clusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<ClusterMarkerLocation>() {
             @Override
@@ -232,12 +235,26 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
 
         gMap.setOnMarkerClickListener(clusterManager);
         gMap.setOnCameraChangeListener(clusterManager);
-        gMap.setOnInfoWindowClickListener(new MyMarkerInfoWindowClickListener());
+        gMap.setOnInfoWindowClickListener(clusterManager);
         gMap.setInfoWindowAdapter(clusterManager.getMarkerManager());
 
         clusterManager.getMarkerCollection().setOnInfoWindowAdapter(new ClusterMarkerLocationAdapter());
         clusterManager.setRenderer(new ClusterRenderer(MapFragment.this.getContext(),gMap,clusterManager));
         getStores(clusterManager,l);
+
+        clusterManager.setOnClusterItemInfoWindowClickListener(new ClusterManager.OnClusterItemInfoWindowClickListener<ClusterMarkerLocation>() {
+            @Override
+            public void onClusterItemInfoWindowClick(ClusterMarkerLocation clusterMarkerLocation) {
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("store",clusterMarkerLocation.getStore());
+
+                fragment = new DetailStoreFragment();
+                fragment.setArguments(bundle);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.fragment_container, fragment).addToBackStack(null).commit();
+            }
+        });
     }
 
     public class ClusterMarkerLocationAdapter implements GoogleMap.InfoWindowAdapter{
@@ -254,22 +271,12 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
             TextView title = (TextView) view.findViewById(R.id.txtTitle);
             title.setText(clickedClusterItem.getTitle());
 
-            TextView snippet = (TextView) view.findViewById(R.id.txtSnippet);
-            snippet.setText(clickedClusterItem.getSnippet());
-
             return view;
         }
 
         @Override
         public View getInfoContents(Marker marker) {
             return null;
-        }
-    }
-
-    private class MyMarkerInfoWindowClickListener implements GoogleMap.OnInfoWindowClickListener {
-        @Override
-        public void onInfoWindowClick(Marker marker) {
-
         }
     }
 
@@ -300,7 +307,7 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
                                 store.setKeyStore(st.getKey());
 
                                 storeList.add(store);
-                                clManager.addItem(new ClusterMarkerLocation(new LatLng(store.getLat(), store.getLng()),store.getName(),store.getAddress()));
+                                clManager.addItem(new ClusterMarkerLocation(new LatLng(store.getLat(), store.getLng()),store.getName(),store.getAddress(),store));
                             }
                         }
 

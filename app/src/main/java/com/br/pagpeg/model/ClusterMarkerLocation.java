@@ -12,11 +12,13 @@ public class ClusterMarkerLocation implements ClusterItem{
     private LatLng position;
     private String title;
     private String snippet;
+    private Store store;
 
-    public ClusterMarkerLocation( LatLng latLng, String title, String snippet ) {
+    public ClusterMarkerLocation( LatLng latLng, String title, String snippet, Store store ) {
         this.position = latLng;
         this.title = title;
         this.snippet = snippet;
+        this.store = store;
     }
 
     @Override
@@ -42,5 +44,9 @@ public class ClusterMarkerLocation implements ClusterItem{
 
     public void setSnippet(String snippet) {
         this.snippet = snippet;
+    }
+
+    public Store getStore() {
+        return store;
     }
 }
