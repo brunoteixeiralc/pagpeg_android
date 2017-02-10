@@ -63,49 +63,51 @@
                 android:orientation="vertical"
                 android:padding="8dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="5dp">
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="horizontal"-->
+                    <!--android:layout_marginBottom="5dp">-->
 
-                    <Button
-                        android:id="@+id/btn_discount"
-                        android:layout_width="0dp"
-                        android:layout_weight="0.8"
-                        android:layout_height="30dp"
-                        android:text="@string/apply_discount"
-                        android:textSize="12sp"
-                        android:background="@color/colorPrimary"
-                        android:textColor="@android:color/white"/>
+                    <!--<Button-->
+                        <!--android:id="@+id/btn_discount"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_weight="0.8"-->
+                        <!--android:layout_height="30dp"-->
+                        <!--android:text="@string/apply_discount"-->
+                        <!--android:textSize="12sp"-->
+                        <!--android:background="@color/colorPrimary"-->
+                        <!--android:textColor="@android:color/white"/>-->
 
-                    <TextView
-                        android:id="@+id/discount"
-                        android:layout_width="0dp"
-                        android:layout_weight="1"
-                        android:layout_height="wrap_content"
-                        android:text="Desconto : R$ 00,00"
-                        android:textSize="14sp"
-                        android:gravity="right|center"
-                        android:textColor="@android:color/holo_red_light"/>
+                    <!--<TextView-->
+                        <!--android:id="@+id/discount"-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:text="Desconto : R$ 00,00"-->
+                        <!--android:textSize="14sp"-->
+                        <!--android:gravity="right|center"-->
+                        <!--android:textColor="@android:color/holo_red_light"/>-->
 
-                </LinearLayout>
+                <!--</LinearLayout>-->
 
                 <TextView
                     android:id="@+id/tax"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="Taxas estimadas : R$ 00,00"
-                    android:textSize="12sp"
-                    android:gravity="right"/>
+                    android:textSize="16sp"
+                    android:padding="5sp"
+                    android:gravity="center_vertical|left"/>
 
                 <TextView
                     android:id="@+id/total"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:text="Total estimado : R$ 00,00"
-                    android:textSize="12sp"
-                    android:gravity="right"/>
+                    android:textSize="16sp"
+                    android:padding="5sp"
+                    android:gravity="center_vertical|left"/>
 
             </LinearLayout>
 

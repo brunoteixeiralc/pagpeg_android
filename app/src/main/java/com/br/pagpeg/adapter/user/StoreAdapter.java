@@ -59,7 +59,6 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
         holder.distance.setText(String.valueOf(s.getDistance()) + " km");
         holder.name.setText(s.getName());
         holder.address.setText(s.getAddress());
-        holder.openClose.setText(s.getOpen() + "-" + s.getClose());
         Glide.with(context).load(s.getImg()).listener(new RequestListener<String, GlideDrawable>() {
             @Override
             public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -89,7 +88,7 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
 
     public static class StoreViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView name,address,openClose,distance;
+        public TextView name,address,distance;
         public ImageView img;
         public ProgressBar progressBar;
 
@@ -99,7 +98,6 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
           name = (TextView) view.findViewById(R.id.name);
           distance = (TextView) view.findViewById(R.id.distance);
           address = (TextView) view.findViewById(R.id.address);
-          openClose = (TextView) view.findViewById(R.id.openClose);
           img = (ImageView) view.findViewById(R.id.img);
           progressBar = (ProgressBar) view.findViewById(R.id.progress);
 

@@ -1,7 +1,6 @@
 package com.br.pagpeg.fragment.user;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -50,8 +49,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -66,11 +63,10 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
     private View view;
     protected RecyclerView recyclerView;
     private LinearLayoutManager mLayoutManager;
-    private ImageView mIconMapImageView;
     private Store store;
     private SupportMapFragment mapFragment;
     private Fragment fragment;
-    private TextView name,address,openClose,distance,txtCatalog;
+    private TextView name,address,distance,txtCatalog;
     private ProgressBar progressBar;
     public ImageView img;
     private DatabaseReference mDatabase;
@@ -79,7 +75,7 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
     private ImageView catalog;
     private Promotion promotion;
     private List<Promotion> promotions;
-
+    private StoreCategory category;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -118,7 +114,6 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
         validatePromotionNetwork();
 
         name = (TextView) view.findViewById(R.id.name);
-        openClose = (TextView) view.findViewById(R.id.openClose);
         address = (TextView) view.findViewById(R.id.address);
         distance = (TextView) view.findViewById(R.id.km);
         progressBar = (ProgressBar) view.findViewById(R.id.progress);
@@ -139,7 +134,6 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
         name.setText(store.getName());
         address.setText(store.getAddress());
         distance.setText(String.valueOf(store.getDistance()) + " km");
-        openClose.setText(store.getOpen() + "-" + store.getClose());
 
         if(recyclerView == null){
 
@@ -226,12 +220,15 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 storeCategories.clear();
+                category = new StoreCategory();
+                category.setName("Todos produtos em oferta");
+                storeCategories.add(category);
 
                 if (dataSnapshot.hasChildren()) {
 
                     for (DataSnapshot st : dataSnapshot.getChildren()) {
 
-                        StoreCategory category = new StoreCategory();
+                        category = new StoreCategory();
                         category.setName(st.getKey());
                         storeCategories.add(category);
                     }

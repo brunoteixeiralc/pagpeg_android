@@ -69,7 +69,7 @@ public class CartFragment  extends Fragment{
             productCarts = new ArrayList<>();
         }
 
-        txtDiscount = (TextView) view.findViewById(R.id.discount);
+        //txtDiscount = (TextView) view.findViewById(R.id.discount);
         //ccSelect = (TextView) view.findViewById(R.id.cc_select);
         txtTotal = (TextView) view.findViewById(R.id.total);
         txtTax = (TextView) view.findViewById(R.id.tax);
@@ -119,7 +119,7 @@ public class CartFragment  extends Fragment{
                     @Override
                     public void onClick(View v) {
 
-                        validadeDiscount(discount.getText().toString());
+                       // validadeDiscount(discount.getText().toString());
                         builder.dismiss();
                     }
                 });
@@ -133,14 +133,14 @@ public class CartFragment  extends Fragment{
             }
         });
 
-        btnDiscount = (Button) view.findViewById(R.id.btn_discount);
-        btnDiscount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                builder.show();
-            }
-        });
+//        btnDiscount = (Button) view.findViewById(R.id.btn_discount);
+//        btnDiscount.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                builder.show();
+//            }
+//        });
 
         btnBuy = (Button) view.findViewById(R.id.buy);
         btnBuy.setOnClickListener(new View.OnClickListener() {
@@ -219,10 +219,15 @@ public class CartFragment  extends Fragment{
                     if(productCarts.size() != 0){
 
                         totalDouble += totalPriceDouble;
-                        btnBuy.setText(String.valueOf(totalDouble));
-                        txtTotal.setText(String.valueOf(totalDouble));
+                        btnBuy.setText("Comprar: R$ " + String.valueOf(totalDouble));
+                        txtTotal.setText("Total estimado: R$ " + String.valueOf(totalDouble));
 
-                        toolbar.setTitle("Resumo do pedido ( " + String.format("%02d", productCarts.size()) + " itens )");
+                        int countUnity = 0;
+                        for (ProductCart product : productCarts) {
+                            countUnity = countUnity + product.getQuantity();
+                        }
+
+                        toolbar.setTitle("Resumo ( " + String.format("%02d", productCarts.size()) + " itens / " + String.format("%02d", countUnity) + " unidades )");
 
                         mAdapter = new CartAdapter(onClickListener(),cartOnClickListener(),CartFragment.this.getContext(),productCarts,mDatabase);
                         recyclerView.setAdapter(mAdapter);
@@ -243,26 +248,26 @@ public class CartFragment  extends Fragment{
         });
     }
 
-    private void validadeDiscount(String code){
-
-        mDatabase.child("discount").child(code).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.getValue() != null){
-                    discountDouble = Double.parseDouble(dataSnapshot.getValue().toString());
-                    txtDiscount.setText(String.valueOf(discountDouble));
-                    totalDouble -= discountDouble;
-                    btnBuy.setText(String.valueOf(totalDouble));
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-    }
+//    private void validadeDiscount(String code){
+//
+//        mDatabase.child("discount").child(code).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.getValue() != null){
+//                    discountDouble = Double.parseDouble(dataSnapshot.getValue().toString());
+//                    //txtDiscount.setText(String.valueOf(discountDouble));
+//                    totalDouble -= discountDouble;
+//                    btnBuy.setText(String.valueOf(totalDouble));
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//    }
 
 //    private void getDefaultCard() {
 //
@@ -293,9 +298,9 @@ public class CartFragment  extends Fragment{
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 taxDouble = Double.parseDouble(dataSnapshot.getValue().toString());
-                txtTax.setText(String.valueOf(taxDouble));
+                txtTax.setText("Taxa estimada: R$ " + String.valueOf(taxDouble));
                 totalDouble += taxDouble;
-                btnBuy.setText(String.valueOf(totalDouble));
+                btnBuy.setText("Comprar: R$ " + String.valueOf(totalDouble));
             }
 
             @Override

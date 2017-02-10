@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.br.pagpeg.R;
 import com.br.pagpeg.activity.BarCodeActivity;
 import com.br.pagpeg.activity.user.LoginActivity;
@@ -126,7 +127,42 @@ public class ProductListFragment extends Fragment {
         mIconBarCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+            if(userSingleton.getUser() != null){
                 IntentIntegrator.forSupportFragment(ProductListFragment.this).setCaptureActivity(BarCodeActivity.class).initiateScan();
+
+            }else{
+                builderLogin = new AlertDialog.Builder(getActivity(),R.style.Dialog_Quantity)
+                        .setPositiveButton("OK", null)
+                        .setNegativeButton("Cancelar", null)
+                        .setTitle("PagPeg")
+                        .setMessage("Para continuar é necessário fazer login ou se cadastrar.")
+                        .setIcon(R.mipmap.ic_launcher)
+                        .create();
+                builderLogin.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        final Button btnAccept = builderLogin.getButton(AlertDialog.BUTTON_POSITIVE);
+                        btnAccept.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                builderLogin.dismiss();
+                                startActivityForResult(new Intent(ProductListFragment.this.getActivity(),LoginActivity.class),3);
+                            }
+                        });
+
+                        final Button btnDecline = builderLogin.getButton(DialogInterface.BUTTON_NEGATIVE);
+                        btnDecline.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                builderLogin.dismiss();
+
+                            }
+                        });
+                    }
+                });
+                builderLogin.show();
+             }
             }
         });
 
@@ -200,17 +236,23 @@ public class ProductListFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(result != null) {
-            if(result.getContents() != null){
-                getBarCode(result.getContents());
+
+        if(requestCode == 3){
+            IntentIntegrator.forSupportFragment(ProductListFragment.this).setCaptureActivity(BarCodeActivity.class).initiateScan();
+
+        }else{
+            IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+            if(result != null) {
+                if(result.getContents() != null){
+                    getBarCode(result.getContents());
+                } else {
+                    Toast.makeText(getActivity(), "Produto não encontrado", Toast.LENGTH_LONG).show();
+                }
             } else {
-                Toast.makeText(getActivity(), "Produto não encontrado", Toast.LENGTH_LONG).show();
+                super.onActivityResult(requestCode, resultCode, data);
             }
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
         }
-    }
+     }
 
     private ProductAdapter.ProductOnClickListener onClickListener() {
         return new ProductAdapter.ProductOnClickListener() {
@@ -243,6 +285,7 @@ public class ProductListFragment extends Fragment {
 
                     if(selectedProduct.getProduct().isInCart()){
 
+                        builder.setTitle(selectedProduct.getName());
                         builder.show();
                         Utils.openKeyboard(ProductListFragment.this.getActivity());
 
@@ -384,7 +427,7 @@ public class ProductListFragment extends Fragment {
                     productCart.setPrice_unit(wholesale_price == 0.0 ? selectedProduct.getProduct().getPrice() : wholesale_price);
                     productCart.setPrice_total(selectedProduct.getQuantity() * (wholesale_price == 0.0 ? selectedProduct.getProduct().getPrice() : wholesale_price));
 
-                    mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getProduct().getName()).setValue(productCart);
+                    mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("products").child(selectedProduct.getName()).setValue(productCart);
                     mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("store").setValue(store.getKeyStore());
                     mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("network").setValue(store.getNetwork());
                 }
@@ -411,6 +454,7 @@ public class ProductListFragment extends Fragment {
                         selectedProduct.setProduct(st.getValue(Product.class));
                         selectedProduct.setName(st.getKey());
 
+                        builder.setTitle(selectedProduct.getName());
                         builder.show();
                     }
                 }

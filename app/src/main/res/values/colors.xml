@@ -3,4 +3,5 @@
     <color name="colorPrimary">#3fa9f5</color>
     <color name="colorPrimaryDark">#808080</color>
     <color name="colorAccent">#ffffff</color>
+    <color name="colorFacebook">#3b5998</color>
 </resources>

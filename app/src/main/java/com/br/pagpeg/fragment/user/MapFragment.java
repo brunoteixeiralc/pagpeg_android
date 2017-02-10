@@ -310,7 +310,7 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
                                 clManager.addItem(new ClusterMarkerLocation(new LatLng(store.getLat(), store.getLng()),store.getName(),store.getAddress(),store));
                             }
                         }
-
+                        stopLocationUpdates();
                         Utils.closeDialog(MapFragment.this.getContext());
                     }
                 }

@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.br.pagpeg.BuildConfig;
 import com.br.pagpeg.R;
 import com.br.pagpeg.fragment.user.CartFragment;
 import com.br.pagpeg.fragment.user.MapFragment;
@@ -134,7 +135,11 @@ public class MainUserActivity extends AppCompatActivity {
             }
         });
 
-        bottomBarBadge = mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), 0);
+        if(BuildConfig.BUILD_TYPE.toString() == "debug"){
+            bottomBarBadge = mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), 999);
+        }else{
+            bottomBarBadge = mBottomBar.makeBadgeForTabAt(2, getResources().getColor(R.color.colorPrimary), 0);
+        }
         bottomBarBadge.setAutoShowAfterUnSelection(true);
         bottomBarBadge.show();
     }

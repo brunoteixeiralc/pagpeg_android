@@ -93,6 +93,14 @@ public class LoginActivity extends Activity {
         email = (EditText) findViewById(R.id.user_email);
         password = (EditText) findViewById(R.id.user_password);
 
+        if(com.br.pagpeg.BuildConfig.BUILD_TYPE.toString() == "debug"){
+            email.setText("b@gmail.com");
+            password.setText("12345678");
+        }else if(com.br.pagpeg.BuildConfig.BUILD_TYPE.toString() == "homolog"){
+            email.setText("ricardo@openin.com.br");
+            password.setText("12345678");
+        }
+
         txtCreateUser = (TextView) findViewById(R.id.createUser);
         txtCreateUser.setOnClickListener(new View.OnClickListener() {
             @Override
