@@ -14,6 +14,7 @@ public class EnumStatus {
         SHOPPER_PAYING("Shopper Paying"),
         SHOPPER_PAYED("Shopper Payed"),
         USER_RECEIVED("User Received"),
+        SHOPPER_DECLINED("Shopper Declined"),
 
         PRODUCT_NOT_FIND("Not Find"),
         PRODUCT_WAITING("Waiting Status"),

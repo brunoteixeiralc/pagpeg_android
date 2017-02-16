@@ -14,7 +14,7 @@
     <string name="name">Nome Completo</string>
     <string name="email">Email</string>
     <string name="phone">Telefone</string>
-    <string name="wait_shopper_buy">Aguarde o shopper fazer sua compra.</string>
+    <string name="wait_shopper_buy">Aguarde, o shopper já está fazendo sua compra.</string>
     <string name="wait_user_to_get">Shopper está lhe aguardando para entregar a sua compra.</string>
     <string name="instructions">Instruções</string>
     <string name="route">Rota</string>
@@ -67,6 +67,7 @@
     <!-- Buttons -->
     <string name="save">Salvar</string>
     <string name="confirm">Confirmar</string>
+    <string name="not_see_orders">Não aceitar pedido</string>
     <string name="see_orders">Ver o pedido</string>
     <string name="ok_confirm_shopper">OK, pode comprar</string>
     <string name="ok_summary">OK, tudo certo.Finalizar!</string>

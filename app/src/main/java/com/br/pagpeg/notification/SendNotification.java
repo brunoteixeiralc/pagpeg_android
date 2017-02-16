@@ -98,6 +98,9 @@ public class SendNotification {
             if(status.equalsIgnoreCase(EnumStatus.Status.SHOPPER_PAYED.getName())){
                 strJsonBody.append(",\"buttons\": [{\"id\": \"visualizar_compra_pronta\", \"text\": \"Visualizar\"}]"
                         + "}");
+            }else if(status.equalsIgnoreCase(EnumStatus.Status.SHOPPER_DECLINED.getName())){
+                strJsonBody.append(",\"buttons\": [{\"id\": \"visualizar_carrinho\", \"text\": \"Visualizar Carrinho\"}]"
+                        + "}");
             }else{
                 strJsonBody.append(",\"buttons\": [{\"id\": \"visualizar_ordem_shopper\", \"text\": \"Visualizar a compra do shopper\"}]"
                         + "}");

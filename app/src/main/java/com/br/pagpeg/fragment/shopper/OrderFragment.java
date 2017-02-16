@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -26,6 +27,8 @@ import com.br.pagpeg.model.Product;
 import com.br.pagpeg.model.ProductCart;
 import com.br.pagpeg.model.Store;
 import com.br.pagpeg.model.User;
+import com.br.pagpeg.notification.SendNotification;
+import com.br.pagpeg.utils.EnumStatus;
 import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
 import com.bumptech.glide.Glide;
@@ -65,7 +68,7 @@ import permissions.dispatcher.RuntimePermissions;
 public class OrderFragment extends Fragment implements OnMapReadyCallback,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     private View view;
-    private Button btnSeeOrder,btnCall;
+    private Button btnSeeOrder,btnCall,btnNotSeeOrder;
     private Fragment fragment;
     private SupportMapFragment mapFragment;
     private DatabaseReference mDatabase;
@@ -86,6 +89,12 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.content_order, container, false);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
@@ -121,6 +130,37 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
             }
         });
 
+        btnNotSeeOrder = (Button) view.findViewById(R.id.not_see_order);
+        btnNotSeeOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mDatabase.child("users").child(order.getUser()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        User user = dataSnapshot.getValue(User.class);
+                        SendNotification.sendNotificationUser(user.getName(),user.getOne_signal_key(),dataSnapshot.getKey(), EnumStatus.Status.SHOPPER_DECLINED.getName()," o shopper não aceitou seu pedido.\nClique no carrinho novamente ou no botão abaixo.");
+
+                        order.setStatus(EnumStatus.Status.SHOPPER_DECLINED.getName().toString());
+                        mDatabase.child("history").push().child(order.getShopper()).setValue(order);
+
+                        order.setShopper(null);
+                        order.setStatus(null);
+                        mDatabase.child("cart_online").child(order.getUser().toString()).child("status").removeValue();
+                        mDatabase.child("cart_online").child(order.getUser().toString()).child("shopper").removeValue();
+                        mDatabase.child("shoppers").child(getArguments().get("shopper_uid") == null ? FirebaseAuth.getInstance().getCurrentUser().getUid().toString() : (String)getArguments().get("shopper_uid")).child("is_free").setValue(true);
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+
+            }
+        });
+
         btnCall = (Button) view.findViewById(R.id.btn_call);
         btnCall.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,7 +169,55 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
             }
         });
 
-        getOrder(getArguments().get("shopper_uid") == null ? FirebaseAuth.getInstance().getCurrentUser().getUid().toString() : (String)getArguments().get("shopper_uid"));
+        mDatabase.child("cart_online").orderByChild("shopper").equalTo(getArguments().get("shopper_uid") == null ? FirebaseAuth.getInstance().getCurrentUser().getUid().toString() : (String)getArguments().get("shopper_uid")).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                if(OrderFragment.this.getContext() != null){
+
+                    Utils.openDialog(OrderFragment.this.getContext(),"Carregando pedido");
+
+                    if (dataSnapshot.hasChildren()) {
+
+                        for (DataSnapshot st : dataSnapshot.getChildren()) {
+                            order = st.getValue(Cart.class);
+                            order.setUser(st.getKey());
+
+                            int countUnity = 0;
+                            for(Map.Entry<String, ProductCart> entry : order.getProducts().entrySet()) {
+                                ProductCart value = entry.getValue();
+                                countUnity = countUnity + value.getQuantity();
+                            }
+                            shopperOrder.setText(order.getProducts().size() + " itens ( " + String.valueOf(countUnity) + " unidades )");
+
+                            llNoOrder.setVisibility(View.GONE);
+                            llMain.setVisibility(View.VISIBLE);
+
+                            getStore(order.getNetwork(),order.getStore());
+                            getUser(st.getKey());
+
+                            ((MainShopperActivity)getActivity()).bottomBarBadge.setCount(1);
+                        }
+
+                    }else{
+
+                        llNoOrder.setVisibility(View.VISIBLE);
+                        llMain.setVisibility(View.GONE);
+
+                        ((MainShopperActivity)getActivity()).bottomBarBadge.setCount(0);
+
+                    }
+
+                    Utils.closeDialog(OrderFragment.this.getContext());
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         return view;
     }
@@ -141,56 +229,6 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
         googleMap.addMarker(new MarkerOptions().position(new LatLng(orderStore.getLat(), orderStore.getLng())));
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(orderStore.getLat(),orderStore.getLng()), 5f);
         googleMap.moveCamera(cameraUpdate);
-    }
-
-    private void getOrder(String uid) {
-
-        Utils.openDialog(OrderFragment.this.getContext(),"Carregando pedido");
-
-        mDatabase.child("cart_online").orderByChild("shopper").equalTo(uid).limitToFirst(1).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.hasChildren()) {
-
-                    for (DataSnapshot st : dataSnapshot.getChildren()) {
-                        order = st.getValue(Cart.class);
-                        order.setUser(st.getKey());
-
-                        int countUnity = 0;
-                        for(Map.Entry<String, ProductCart> entry : order.getProducts().entrySet()) {
-                            ProductCart value = entry.getValue();
-                            countUnity = countUnity + value.getQuantity();
-                        }
-                        shopperOrder.setText(order.getProducts().size() + " itens ( " + String.valueOf(countUnity) + " unidades )");
-
-                        llNoOrder.setVisibility(View.GONE);
-                        llMain.setVisibility(View.VISIBLE);
-
-                        getStore(order.getNetwork(),order.getStore());
-                        getUser(st.getKey());
-
-                        ((MainShopperActivity)getActivity()).bottomBarBadge.setCount(1);
-                    }
-
-                }else{
-
-                    llNoOrder.setVisibility(View.VISIBLE);
-                    llMain.setVisibility(View.GONE);
-
-                    ((MainShopperActivity)getActivity()).bottomBarBadge.setCount(0);
-
-                }
-
-                Utils.closeDialog(OrderFragment.this.getContext());
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
     }
 
     private void getStore(String network, String store){

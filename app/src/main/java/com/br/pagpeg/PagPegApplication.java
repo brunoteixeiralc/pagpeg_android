@@ -63,7 +63,8 @@ public class PagPegApplication extends Application {
                     startActivity(intent);
 
                 }else if (result.action.actionID.equalsIgnoreCase("visualizar_ordem_shopper") ||
-                        result.action.actionID.equalsIgnoreCase("visualizar_compra_pronta")){
+                        result.action.actionID.equalsIgnoreCase("visualizar_compra_pronta") ||
+                        result.action.actionID.equalsIgnoreCase("visualizar_carrinho")){
 
                     String uid = (String) data.opt("user_uid");
                     String status = (String) data.opt("status");

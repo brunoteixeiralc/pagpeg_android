@@ -16,6 +16,7 @@ import com.br.pagpeg.fragment.user.MapFragment;
 import com.br.pagpeg.fragment.user.StepToPickUpFragment;
 import com.br.pagpeg.fragment.user.UserProfileFragment;
 import com.br.pagpeg.model.User;
+import com.br.pagpeg.utils.EnumStatus;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.BottomBarBadge;
 import com.roughike.bottombar.OnMenuTabClickListener;
@@ -87,7 +88,7 @@ public class MainUserActivity extends AppCompatActivity {
 
                     case R.id.bottomBarItemThree:
 
-                        if(userUid == null){
+                        if(userUid == null || status.equalsIgnoreCase(EnumStatus.Status.SHOPPER_DECLINED.getName().toString())){
                             fragment = new CartFragment();
                         }else{
                             fragment = new StepToPickUpFragment(status,userUid);

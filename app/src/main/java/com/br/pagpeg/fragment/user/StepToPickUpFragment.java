@@ -87,6 +87,8 @@ public class StepToPickUpFragment extends Fragment{
                 fragment = new PickUpSummaryFragment(stepView);
                 break;
             default:
+                stepView.setVisibility(View.GONE);
+                fragment = new CartFragment();
                 break;
         }
 

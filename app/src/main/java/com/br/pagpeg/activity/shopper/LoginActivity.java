@@ -58,6 +58,11 @@ public class LoginActivity extends Activity {
         accessCode = (EditText) findViewById(R.id.code);
         email = (EditText) findViewById(R.id.email);
 
+        if(com.br.pagpeg.BuildConfig.BUILD_TYPE.toString() == "debug"){
+            email.setText("r@gmail.com");
+            accessCode.setText("12345678");
+        }
+
         btnConfirm = (Button) findViewById(R.id.btnConfirm);
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
