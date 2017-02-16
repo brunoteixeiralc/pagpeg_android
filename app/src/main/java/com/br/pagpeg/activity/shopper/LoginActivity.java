@@ -61,6 +61,9 @@ public class LoginActivity extends Activity {
         if(com.br.pagpeg.BuildConfig.BUILD_TYPE.toString() == "debug"){
             email.setText("r@gmail.com");
             accessCode.setText("12345678");
+        }else if(com.br.pagpeg.BuildConfig.BUILD_TYPE.toString() == "homolog"){
+            email.setText("ricardo@openin.com.br");
+            accessCode.setText("12345678");
         }
 
         btnConfirm = (Button) findViewById(R.id.btnConfirm);
