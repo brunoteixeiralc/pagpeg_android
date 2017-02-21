@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -54,13 +55,22 @@ public class PickUpShopperSummaryAdapter extends RecyclerView.Adapter<PickUpShop
 
         final ProductCart pc = products.get(position);
 
+        if(pc.getShopper_price_unit() == null && pc.getShopper_quantity() == null &&  pc.getShopper_price_total() == null){
+            holder.linearLayout.setVisibility(View.GONE);
+            holder.productNotFind.setVisibility(View.VISIBLE);
+
+        }else{
+            holder.linearLayout.setVisibility(View.VISIBLE);
+            holder.productNotFind.setVisibility(View.GONE);
+            holder.priceShopper.setText("R$ " + pc.getShopper_price_total());
+            holder.priceUnitShopper.setText("R$ " + pc.getShopper_price_unit());
+            holder.quantityShopper.setText(String.valueOf(pc.getShopper_quantity()) + " X");
+        }
+
         holder.name.setText(pc.getProduct().getName() + " " + pc.getProduct().getUnit_quantity());
         holder.price.setText("R$ " + pc.getPrice_total());
         holder.priceUnit.setText("R$ " + pc.getPrice_unit());
-        holder.priceUnitShopper.setText("R$ " + pc.getShopper_price_unit());
-        holder.priceShopper.setText("R$ " + pc.getShopper_price_total());
         holder.quantity.setText(String.valueOf(pc.getQuantity()) + " X");
-        holder.quantityShopper.setText(String.valueOf(pc.getShopper_quantity()) + " X");
         Glide.with(context).load(pc.getProduct().getImg()).listener(new RequestListener<String, GlideDrawable>() {
             @Override
             public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -94,12 +104,15 @@ public class PickUpShopperSummaryAdapter extends RecyclerView.Adapter<PickUpShop
     // ViewHolder com as views
     public static class PickUpSummaryViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView name,price,priceShopper,quantity,quantityShopper,priceUnitShopper,priceUnit;
+        public TextView name,price,priceShopper,quantity,quantityShopper,priceUnitShopper,priceUnit,productNotFind;
         public ImageView img;
         public ProgressBar progressBar;
+        public LinearLayout linearLayout;
 
         public PickUpSummaryViewHolder(View view) {
             super(view);
+            linearLayout = (LinearLayout) view.findViewById(R.id.ll);
+            productNotFind = (TextView) view.findViewById(R.id.product_not_find);
             quantity = (TextView) view.findViewById(R.id.quantity);
             quantityShopper = (TextView) view.findViewById(R.id.quantity_shopper);
             name = (TextView) view.findViewById(R.id.name);

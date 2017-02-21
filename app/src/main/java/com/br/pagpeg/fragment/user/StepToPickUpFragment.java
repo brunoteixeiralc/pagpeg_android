@@ -15,6 +15,8 @@ import com.br.pagpeg.R;
 import com.br.pagpeg.utils.EnumStatus;
 import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,7 @@ public class StepToPickUpFragment extends Fragment{
     private Toolbar toolbar;
     private String status = EnumStatus.Status.FINDING_SHOPPER.getName();
     private String userUid;
+    private DatabaseReference mDatabase;
 
     public StepToPickUpFragment(){}
 
@@ -48,6 +51,8 @@ public class StepToPickUpFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.content_step_to_pickup, container, false);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Localizando shopper");

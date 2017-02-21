@@ -102,7 +102,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
                         productCart.setShopper_price_unit(Double.parseDouble(dialogPrice.getText().toString()));
                         productCart.setShopper_quantity(Integer.parseInt(dialogQuantity.getText().toString()));
-                        productCart.setShopper_price_total(Integer.parseInt(dialogQuantity.getText().toString()) * productCart.getProduct().getPrice());
+                        productCart.setShopper_price_total(Double.parseDouble(String.valueOf(Integer.parseInt(dialogQuantity.getText().toString()) * productCart.getPrice_unit())));
                         Intent returnIntent = new Intent();
                         returnIntent.putExtra("productCart",productCart);
                         setResult(Activity.RESULT_OK,returnIntent);

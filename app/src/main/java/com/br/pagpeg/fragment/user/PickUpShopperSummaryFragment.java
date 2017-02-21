@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baoyachi.stepview.HorizontalStepView;
@@ -68,6 +69,7 @@ public class PickUpShopperSummaryFragment extends Fragment {
     private Button btnBuyOrder;
     private User user;
     private CreditCard creditCard;
+    private TextView totalUser,totalShopper;
 
     public PickUpShopperSummaryFragment(){}
 
@@ -97,6 +99,9 @@ public class PickUpShopperSummaryFragment extends Fragment {
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Lista de produtos encontrados");
+
+        totalUser = (TextView) view.findViewById(R.id.total_user);
+        totalShopper = (TextView) view.findViewById(R.id.total_shopper);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLayoutManager = new LinearLayoutManager(PickUpShopperSummaryFragment.this.getActivity());
@@ -160,6 +165,8 @@ public class PickUpShopperSummaryFragment extends Fragment {
                                 }
 
                                 if (count >= order.getProducts().size()) {
+
+                                    setTotal();
 
                                     mAdapter = new PickUpShopperSummaryAdapter(onClickListener(), PickUpShopperSummaryFragment.this.getContext(), productCarts);
                                     recyclerView.setAdapter(mAdapter);
@@ -289,6 +296,22 @@ public class PickUpShopperSummaryFragment extends Fragment {
                 Toast.makeText(getContext(),"Erro na chamada ao servidor", Toast.LENGTH_SHORT);
             }
         });
+
+    }
+
+    private void setTotal(){
+
+        Double totalUserDouble = 0.0;
+        Double totalShopperDouble = 0.0;
+
+        for (ProductCart productCart:productCarts) {
+            totalUserDouble = totalUserDouble + productCart.getPrice_total();
+            if(productCart.getShopper_price_total() != null)
+                totalShopperDouble = totalShopperDouble + productCart.getShopper_price_total();
+        }
+
+        totalShopper.setText("Shopper pedido: R$ " + totalShopperDouble);
+        totalUser.setText("Pedido: R$ " + totalUserDouble);
 
     }
 }

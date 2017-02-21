@@ -25,7 +25,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -82,7 +81,7 @@ public class OrderListItemFragment extends Fragment {
                 productCartSelect.setStatus(EnumStatus.Status.PRODUCT_NOT_FIND.getName());
                 mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("status").setValue(EnumStatus.Status.PRODUCT_NOT_FIND.getName());
                 productCartsAll.remove(idx);
-                updateView(productCartsAll);
+                updateView();
 
                 Toast.makeText(getActivity(), "Produto não foi achado", Toast.LENGTH_LONG).show();
             }
@@ -106,7 +105,7 @@ public class OrderListItemFragment extends Fragment {
                 productCartsAll.get(idxSelected).setShopper_quantity(productCartSelect.getShopper_quantity());
                 productCartsAll.remove(idxSelected);
 
-                updateView(productCartsAll);
+                updateView();
 
             }
             if (resultCode == Activity.RESULT_CANCELED) {}
@@ -146,9 +145,7 @@ public class OrderListItemFragment extends Fragment {
   
     }
 
-    public void updateView(List<ProductCart> productCarts){
-        productCartsAll = new ArrayList<>();
-        productCartsAll.addAll(productCarts);
+    public void updateView(){
         mAdapter.notifyDataSetChanged();
     }
 }

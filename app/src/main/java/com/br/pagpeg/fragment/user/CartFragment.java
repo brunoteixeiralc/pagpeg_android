@@ -219,7 +219,7 @@ public class CartFragment  extends Fragment{
                     if(productCarts.size() != 0){
 
                         totalDouble += totalPriceDouble;
-                        btnBuy.setText("Comprar: R$ " + String.valueOf(totalDouble));
+                        btnBuy.setText("Comprar agora:  R$ " + String.valueOf(totalDouble));
                         txtTotal.setText("Total estimado: R$ " + String.valueOf(totalDouble));
 
                         int countUnity = 0;
@@ -300,7 +300,7 @@ public class CartFragment  extends Fragment{
                 taxDouble = Double.parseDouble(dataSnapshot.getValue().toString());
                 txtTax.setText("Taxa estimada: R$ " + String.valueOf(taxDouble));
                 totalDouble += taxDouble;
-                btnBuy.setText("Comprar: R$ " + String.valueOf(totalDouble));
+                btnBuy.setText("Comprar agora: R$ " + String.valueOf(totalDouble));
             }
 
             @Override

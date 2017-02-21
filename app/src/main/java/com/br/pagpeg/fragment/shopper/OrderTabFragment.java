@@ -1,6 +1,6 @@
 package com.br.pagpeg.fragment.shopper;
 
-import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.annotation.Nullable;
@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,8 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
 /**
@@ -59,6 +58,7 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
     private Toolbar toolbar;
     private DatabaseReference mDatabase;
     private Button btnFinishOrder;
+    private AlertDialog builder = null;
 
     @Nullable
     @Override
@@ -136,6 +136,26 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
                         SendNotification.sendNotificationUser(user.getName(),user.getOne_signal_key(),dataSnapshot.getKey(), EnumStatus.Status.WAITING_USER_APPROVE.getName()," o shopper já pegou suas compras. Estamos esperando sua aprovação");
                         mDatabase.child("cart_online").child(dataSnapshot.getKey()).child("status").setValue(EnumStatus.Status.WAITING_USER_APPROVE.getName());
                         mDatabase.child("cart_online").child(dataSnapshot.getKey()).child("total_shopper").setValue(0.0);
+
+                        builder = new AlertDialog.Builder(getActivity(),R.style.Dialog_Quantity)
+                                .setPositiveButton("OK", null)
+                                .setTitle("PagPeg")
+                                .setMessage("Notificação enviada com sucesso!\nAguarde o usuário fazer a aprovação.")
+                                .setIcon(R.mipmap.ic_launcher)
+                                .create();
+                        builder.setOnShowListener(new DialogInterface.OnShowListener() {
+                            @Override
+                            public void onShow(DialogInterface dialog) {
+                                final Button btnAccept = builder.getButton(AlertDialog.BUTTON_POSITIVE);
+                                btnAccept.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        builder.dismiss();
+                                    }
+                                });
+                            }
+                        });
+                        builder.show();
                     }
 
                     @Override
@@ -169,7 +189,7 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
 
                 switch (position) {
                     case 0: {
-                        ((OrderListItemFragment) mFragmentList.get(0)).updateView(productCartsAll);
+                        ((OrderListItemFragment) mFragmentList.get(0)).updateView();
                         break;
                     }
                     case 1: {
