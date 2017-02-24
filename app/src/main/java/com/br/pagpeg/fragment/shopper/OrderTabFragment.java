@@ -103,6 +103,26 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
                         User user = dataSnapshot.getValue(User.class);
                         SendNotification.sendNotificationUser(user.getName(),user.getOne_signal_key(),dataSnapshot.getKey(), EnumStatus.Status.SHOPPER_PAYED.getName()," o shopper fez o pagamento com sucesso.");
                         mDatabase.child("cart_online").child(dataSnapshot.getKey()).child("status").setValue(EnumStatus.Status.SHOPPER_PAYED.getName());
+
+                        builder = new AlertDialog.Builder(getActivity(),R.style.Dialog_Quantity)
+                                .setPositiveButton("OK", null)
+                                .setTitle("PagPeg")
+                                .setMessage("Notificação de compra finalizada foi enviada com sucesso.")
+                                .setIcon(R.mipmap.ic_launcher)
+                                .create();
+                        builder.setOnShowListener(new DialogInterface.OnShowListener() {
+                            @Override
+                            public void onShow(DialogInterface dialog) {
+                                final Button btnAccept = builder.getButton(AlertDialog.BUTTON_POSITIVE);
+                                btnAccept.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        builder.dismiss();
+                                    }
+                                });
+                            }
+                        });
+                        builder.show();
                     }
 
                     @Override

@@ -15,8 +15,12 @@ import com.br.pagpeg.R;
 import com.br.pagpeg.utils.EnumStatus;
 import com.br.pagpeg.utils.EnumToolBar;
 import com.br.pagpeg.utils.Utils;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +57,41 @@ public class StepToPickUpFragment extends Fragment{
         view = inflater.inflate(R.layout.content_step_to_pickup, container, false);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("status").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                status = dataSnapshot.getValue().toString();
+                if(userUid == null)
+                    userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                fragment = null;
+
+                switch (status){
+
+                    case "Waiting User To Approve":
+                        fragment = new PickUpShopperSummaryFragment(stepView,userUid);
+                        break;
+                    case "Shopper Payed":
+                        fragment = new PickUpReadyFragment(stepView,userUid);
+                        break;
+                    case "User Received":
+                        //fragment = new PickUpSummaryFragment(stepView);
+                        break;
+                    default:
+                        break;
+                }
+
+                if(fragment != null){
+                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                    transaction.replace(R.id.fragment_container_step, fragment).commit();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
         toolbar =(Toolbar)getActivity().findViewById(R.id.toolbar);
         toolbar.setTitle("Localizando shopper");

@@ -88,7 +88,7 @@
                     android:textSize="15dp"
                     android:background="@color/white"
                     android:textColor="@color/colorPrimary"
-                    android:id="@+id/textView"/>
+                    android:id="@+id/instructions"/>
 
                 <View
                     android:layout_width="1dp"

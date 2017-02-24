@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -53,10 +54,21 @@ public class PickUpSummaryAdapter extends RecyclerView.Adapter<PickUpSummaryAdap
 
         final ProductCart pc = products.get(position);
 
+
+        if(pc.getShopper_price_unit() == null && pc.getShopper_quantity() == null &&  pc.getShopper_price_total() == null) {
+            holder.linearLayout.setVisibility(View.GONE);
+            holder.productNotFind.setVisibility(View.VISIBLE);
+
+        }else{
+            holder.linearLayout.setVisibility(View.VISIBLE);
+            holder.productNotFind.setVisibility(View.GONE);
+            holder.price.setText("R$ " + pc.getShopper_price_unit());
+            holder.priceTotal.setText("R$ " + pc.getShopper_price_total());
+            holder.quantity.setText(String.valueOf(pc.getShopper_quantity()) + " X");
+
+        }
+
         holder.name.setText(pc.getProduct().getName());
-        holder.price.setText("R$ " + pc.getShopper_price_unit());
-        holder.priceTotal.setText("R$ " + pc.getShopper_price_total());
-        holder.quantity.setText(String.valueOf(pc.getShopper_quantity()) + " X");
         Glide.with(context).load(pc.getProduct().getImg()).listener(new RequestListener<String, GlideDrawable>() {
             @Override
             public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
@@ -69,17 +81,19 @@ public class PickUpSummaryAdapter extends RecyclerView.Adapter<PickUpSummaryAdap
                 return false;
             }
         }).diskCacheStrategy(DiskCacheStrategy.ALL).into(holder.img);
-
     }
 
     public static class PickUpSummaryViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView img;
-        private TextView name,quantity,price,priceTotal;
+        private TextView name,quantity,price,priceTotal,productNotFind;
         private ProgressBar progressBar;
+        public LinearLayout linearLayout;
 
         public PickUpSummaryViewHolder(View view) {
             super(view);
+            linearLayout = (LinearLayout) view.findViewById(R.id.ll);
+            productNotFind = (TextView) view.findViewById(R.id.product_not_find);
             name = (TextView) view.findViewById(R.id.name);
             quantity = (TextView) view.findViewById(R.id.quantity);
             price = (TextView) view.findViewById(R.id.price_unit);

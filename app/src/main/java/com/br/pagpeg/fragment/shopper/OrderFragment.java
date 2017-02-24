@@ -183,20 +183,25 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
                             order = st.getValue(Cart.class);
                             order.setUser(st.getKey());
 
-                            int countUnity = 0;
-                            for(Map.Entry<String, ProductCart> entry : order.getProducts().entrySet()) {
-                                ProductCart value = entry.getValue();
-                                countUnity = countUnity + value.getQuantity();
+                            if(order.getStatus().equalsIgnoreCase(EnumStatus.Status.SHOPPER_PAYING.getName())){
+                                getProducts();
+
+                            }else{
+                                int countUnity = 0;
+                                for(Map.Entry<String, ProductCart> entry : order.getProducts().entrySet()) {
+                                    ProductCart value = entry.getValue();
+                                    countUnity = countUnity + value.getQuantity();
+                                }
+                                shopperOrder.setText(order.getProducts().size() + " itens ( " + String.valueOf(countUnity) + " unidades )");
+
+                                llNoOrder.setVisibility(View.GONE);
+                                llMain.setVisibility(View.VISIBLE);
+
+                                getStore(order.getNetwork(),order.getStore());
+                                getUser(st.getKey());
+
+                                ((MainShopperActivity)getActivity()).bottomBarBadge.setCount(1);
                             }
-                            shopperOrder.setText(order.getProducts().size() + " itens ( " + String.valueOf(countUnity) + " unidades )");
-
-                            llNoOrder.setVisibility(View.GONE);
-                            llMain.setVisibility(View.VISIBLE);
-
-                            getStore(order.getNetwork(),order.getStore());
-                            getUser(st.getKey());
-
-                            ((MainShopperActivity)getActivity()).bottomBarBadge.setCount(1);
                         }
 
                     }else{

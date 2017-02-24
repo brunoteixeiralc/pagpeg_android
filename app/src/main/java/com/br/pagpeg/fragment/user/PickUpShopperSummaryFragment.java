@@ -201,12 +201,13 @@ public class PickUpShopperSummaryFragment extends Fragment {
                 if (dataSnapshot.hasChildren()) {
 
                         Shopper shopper = dataSnapshot.getValue(Shopper.class);
-                        SendNotification.sendNotificationShopper(shopper.getName(), shopper.getOne_signal_key(), dataSnapshot.getKey(), "Usuário aprovou sua compra ",false);
+                        SendNotification.sendNotificationShopper(shopper.getName(), shopper.getOne_signal_key(), dataSnapshot.getKey(), "O usuário autorizou sua compra ",true);
                         mDatabase.child("cart_online").child(userUid).child("status").setValue(EnumStatus.Status.SHOPPER_PAYING.getName());
 
                         btnBuyOrder.setEnabled(false);
                         btnBuyOrder.setText("Aguarde um momento, shopper pagando!");
                         btnBuyOrder.setBackgroundColor(R.color.green_button);
+
                 }
             }
 

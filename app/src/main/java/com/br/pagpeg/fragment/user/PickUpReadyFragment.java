@@ -1,5 +1,6 @@
 package com.br.pagpeg.fragment.user;
 
+import android.content.DialogInterface;
 import android.location.Location;
 import android.os.Bundle;
 import android.os.StrictMode;
@@ -7,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.InflateException;
@@ -71,7 +73,7 @@ public class PickUpReadyFragment extends Fragment implements OnMapReadyCallback,
     private GoogleApiClient googleApiClient;
     private Location storeLocation;
     private Store orderStore;
-    private TextView storeName,storeAddress,storeKm,shopperName, storeCloseTime,storeTimeDayToGet;
+    private TextView storeName,storeAddress,storeKm,shopperName, storeCloseTime,storeTimeDayToGet,instructions;
     private ImageView shopperImg,storeImg;
     private Toolbar toolbar;
     private ProgressBar progressBar;
@@ -79,6 +81,7 @@ public class PickUpReadyFragment extends Fragment implements OnMapReadyCallback,
     private Fragment fragment;
     private Cart order;
     private Shopper shopper;
+    private AlertDialog builder = null;
 
     public PickUpReadyFragment(){}
 
@@ -109,10 +112,35 @@ public class PickUpReadyFragment extends Fragment implements OnMapReadyCallback,
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setTitle("Hora de pegar seu produto");
+        toolbar.setTitle("Hora de pegar sua compra");
 
         stepView.setStepsViewIndicatorComplectingPosition(3);
 
+        instructions = (TextView) view.findViewById(R.id.instructions);
+        instructions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                builder = new AlertDialog.Builder(getActivity(),R.style.Dialog_Quantity)
+                        .setPositiveButton("OK", null)
+                        .setTitle("PagPeg")
+                        .setMessage("Hora de pegar sua compra com o shopper do PagPeg.\nPode se dirigir ao estacionamento do " + orderStore.getName() + " e pegar a sua compra com " + shopper.getName())
+                        .setIcon(R.mipmap.ic_launcher)
+                        .create();
+                builder.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        final Button btnAccept = builder.getButton(AlertDialog.BUTTON_POSITIVE);
+                        btnAccept.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                builder.dismiss();
+                            }
+                        });
+                    }
+                });
+                builder.show();
+            }
+        });
         storeAddress = (TextView) view.findViewById(R.id.store_address);
         storeName = (TextView) view.findViewById(R.id.store_name);
         storeKm = (TextView) view.findViewById(R.id.store_km);

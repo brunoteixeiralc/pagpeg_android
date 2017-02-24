@@ -62,18 +62,28 @@
 
         </LinearLayout>
 
+            <TextView
+                android:id="@+id/product_not_find"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Não foi encontrado"
+                android:textColor="@color/colorPrimary"
+                android:visibility="gone"/>
+
          <LinearLayout
+                android:id="@+id/ll"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="5dp"
-                android:padding="5dp">
+                android:padding="5dp"
+                android:visibility="visible">
 
                 <TextView
                     android:background="@color/colorPrimary"
                     android:id="@+id/quantity"
                     android:layout_width="0dp"
-                    android:layout_weight="0.1"
+                    android:layout_weight="0.2"
                     android:layout_height="wrap_content"
                     android:text="0 x"
                     android:padding="2dp"
