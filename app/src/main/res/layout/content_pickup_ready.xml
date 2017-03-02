@@ -9,26 +9,27 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
-        <View
-            android:layout_width="match_parent"
-            android:background="@color/colorPrimary"
-            android:layout_height="150dp"/>
+        <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:background="@color/colorPrimary"-->
+            <!--android:layout_height="50dp"/>-->
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/img"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/image_user"
-            app:civ_border_width="2dp"
-            app:civ_border_color="@color/white"
-            android:layout_gravity="center|top"/>
+        <!--<de.hdodenhof.circleimageview.CircleImageView-->
+            <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+            <!--android:id="@+id/img"-->
+            <!--android:layout_width="100dp"-->
+            <!--android:layout_height="100dp"-->
+            <!--android:src="@drawable/image_user"-->
+            <!--app:civ_border_width="2dp"-->
+            <!--app:civ_border_color="@color/white"-->
+            <!--android:layout_gravity="center|top"/>-->
 
         <TextView
+            android:background="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/wait_user_to_get"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:textColor="@color/white"
             android:layout_gravity="bottom"
             android:padding="16dp"
@@ -194,15 +195,15 @@
                             android:textSize="12sp"
                             android:gravity="start"/>
 
-                        <TextView
-                            android:id="@+id/store_time"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/open_until"
-                            android:textSize="12sp"
-                            android:textColor="@color/colorPrimary"
-                            android:textStyle="normal|bold"
-                            android:layout_gravity="left"/>
+                        <!--<TextView-->
+                            <!--android:id="@+id/store_time"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/open_until"-->
+                            <!--android:textSize="12sp"-->
+                            <!--android:textColor="@color/colorPrimary"-->
+                            <!--android:textStyle="normal|bold"-->
+                            <!--android:layout_gravity="left"/>-->
 
                     </LinearLayout>
 

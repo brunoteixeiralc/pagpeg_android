@@ -116,6 +116,7 @@ public class PickUpShopperSummaryFragment extends Fragment {
         btnBuyOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Utils.openDialog(PickUpShopperSummaryFragment.this.getContext(), "Aguarde...");
                 getUser(order.getUser());
             }
         });
@@ -135,7 +136,7 @@ public class PickUpShopperSummaryFragment extends Fragment {
 
     private void getOrder() {
 
-        Utils.openDialog(PickUpShopperSummaryFragment.this.getContext(), "Carregando pedido");
+        //Utils.openDialog(PickUpShopperSummaryFragment.this.getContext(), "Carregando pedido");
 
         mDatabase.child("cart_online").child(userUid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -171,7 +172,7 @@ public class PickUpShopperSummaryFragment extends Fragment {
                                     mAdapter = new PickUpShopperSummaryAdapter(onClickListener(), PickUpShopperSummaryFragment.this.getContext(), productCarts);
                                     recyclerView.setAdapter(mAdapter);
 
-                                    Utils.closeDialog(PickUpShopperSummaryFragment.this.getContext());
+                                    //Utils.closeDialog(PickUpShopperSummaryFragment.this.getContext());
                                 }
                             }
 
@@ -207,6 +208,8 @@ public class PickUpShopperSummaryFragment extends Fragment {
                         btnBuyOrder.setEnabled(false);
                         btnBuyOrder.setText("Aguarde um momento, shopper pagando!");
                         btnBuyOrder.setBackgroundColor(R.color.green_button);
+
+                        Utils.closeDialog(PickUpShopperSummaryFragment.this.getContext());
 
                 }
             }
@@ -257,6 +260,8 @@ public class PickUpShopperSummaryFragment extends Fragment {
 
                     startActivity(intent);
 
+                    Utils.closeDialog(PickUpShopperSummaryFragment.this.getContext());
+
                 }
             }
 
@@ -289,12 +294,16 @@ public class PickUpShopperSummaryFragment extends Fragment {
                 }else{
                     Toast.makeText(getContext(),"Resposta não foi sucesso", Toast.LENGTH_SHORT).show();
                     ResponseBody errorBody = response.errorBody();
+
+                    Utils.closeDialog(PickUpShopperSummaryFragment.this.getContext());
                 }
             }
 
             @Override
             public void onFailure(Call<Charge> call, Throwable t) {
                 Toast.makeText(getContext(),"Erro na chamada ao servidor", Toast.LENGTH_SHORT);
+
+                Utils.closeDialog(PickUpShopperSummaryFragment.this.getContext());
             }
         });
 

@@ -60,31 +60,32 @@ public class StepToPickUpFragment extends Fragment{
         mDatabase.child("cart_online").child(FirebaseAuth.getInstance().getCurrentUser().getUid().toString()).child("status").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                status = dataSnapshot.getValue().toString();
-                if(userUid == null)
-                    userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-                fragment = null;
 
-                switch (status){
+                if(dataSnapshot.getValue() != null){
 
-                    case "Waiting User To Approve":
-                        fragment = new PickUpShopperSummaryFragment(stepView,userUid);
-                        break;
-                    case "Shopper Payed":
-                        fragment = new PickUpReadyFragment(stepView,userUid);
-                        break;
-                    case "User Received":
-                        //fragment = new PickUpSummaryFragment(stepView);
-                        break;
-                    default:
-                        break;
+                    status = dataSnapshot.getValue().toString();
+                    if(userUid == null)
+                        userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                    fragment = null;
+
+                    switch (status){
+
+                        case "Waiting User To Approve":
+                            fragment = new PickUpShopperSummaryFragment(stepView,userUid);
+                            break;
+                        case "Shopper Payed":
+                            fragment = new PickUpReadyFragment(stepView,userUid);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if(fragment != null){
+                        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                        transaction.replace(R.id.fragment_container_step, fragment).commit();
+                    }
+
                 }
-
-                if(fragment != null){
-                    FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                    transaction.replace(R.id.fragment_container_step, fragment).commit();
-                }
-
             }
 
             @Override
@@ -121,12 +122,12 @@ public class StepToPickUpFragment extends Fragment{
             case "Shopper Buying":
                 fragment = new FindShopperProfileFragment(stepView);
                 break;
-            case "Waiting User To Approve":
-                fragment = new PickUpShopperSummaryFragment(stepView,userUid);
-                break;
-            case "Shopper Payed":
-                fragment = new PickUpReadyFragment(stepView,userUid);
-                break;
+//            case "Waiting User To Approve":
+//                fragment = new PickUpShopperSummaryFragment(stepView,userUid);
+//                break;
+//            case "Shopper Payed":
+//                fragment = new PickUpReadyFragment(stepView,userUid);
+//                break;
             case "User Received":
                 fragment = new PickUpSummaryFragment(stepView);
                 break;

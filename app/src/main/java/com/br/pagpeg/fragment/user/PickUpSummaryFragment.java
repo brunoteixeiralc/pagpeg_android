@@ -107,6 +107,7 @@ public class PickUpSummaryFragment extends Fragment{
             @Override
             public void onClick(View v) {
 
+                mDatabase.child("shoppers").child(order.getShopper()).child("is_free").setValue(true);
                 mDatabase.child("history").push().child(order.getShopper()).setValue(order);
                 mDatabase.child("history").orderByChild("rated").equalTo(true).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

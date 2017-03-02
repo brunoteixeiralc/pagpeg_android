@@ -56,8 +56,6 @@ import java.util.Date;
 import permissions.dispatcher.NeedsPermission;
 import permissions.dispatcher.RuntimePermissions;
 
-import static com.br.pagpeg.R.id.img;
-
 /**
  * Created by brunolemgruber on 21/07/16.
  */
@@ -145,9 +143,9 @@ public class PickUpReadyFragment extends Fragment implements OnMapReadyCallback,
         storeName = (TextView) view.findViewById(R.id.store_name);
         storeKm = (TextView) view.findViewById(R.id.store_km);
         storeImg = (ImageView) view.findViewById(R.id.store_img);
-        storeCloseTime = (TextView) view.findViewById(R.id.store_time);
+        //storeCloseTime = (TextView) view.findViewById(R.id.store_time);
         storeTimeDayToGet = (TextView) view.findViewById(R.id.txt_day_time_get);
-        shopperImg = (ImageView) view.findViewById(img);
+        //shopperImg = (ImageView) view.findViewById(img);
         shopperName = (TextView) view.findViewById(R.id.txt_img);
         progressBar = (ProgressBar) view.findViewById(R.id.progress);
         btnPickedProduct = (Button) view.findViewById(R.id.picked_up);
@@ -225,7 +223,7 @@ public class PickUpReadyFragment extends Fragment implements OnMapReadyCallback,
 
                     storeName.setText(orderStore.getName());
                     storeAddress.setText(orderStore.getAddress());
-                    storeCloseTime.setText("Aberta até as " + orderStore.getClose());
+                    //storeCloseTime.setText("Aberta até as " + orderStore.getClose());
                     storeLocation=new Location("storeLocation");
                     storeLocation.setLatitude(orderStore.getLat());
                     storeLocation.setLongitude(orderStore.getLng());
@@ -273,17 +271,17 @@ public class PickUpReadyFragment extends Fragment implements OnMapReadyCallback,
                     shopper = dataSnapshot.getValue(Shopper.class);
 
                     shopperName.setText(shopper.getName() + " está lhe aguardando para entregar a sua compra");
-                    Glide.with(PickUpReadyFragment.this.getContext()).load(shopper.getUser_img()).listener(new RequestListener<String, GlideDrawable>() {
-                        @Override
-                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-                            return false;
-                        }
-                    }).diskCacheStrategy(DiskCacheStrategy.ALL).into(shopperImg);
+//                    Glide.with(PickUpReadyFragment.this.getContext()).load(shopper.getUser_img()).listener(new RequestListener<String, GlideDrawable>() {
+//                        @Override
+//                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+//                            return false;
+//                        }
+//
+//                        @Override
+//                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+//                            return false;
+//                        }
+//                    }).diskCacheStrategy(DiskCacheStrategy.ALL).into(shopperImg);
                 }
             }
 
@@ -308,7 +306,8 @@ public class PickUpReadyFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void stopLocationUpdates(){
-        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+        if(googleApiClient.isConnected())
+            LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
     }
 
     private void startLocationUpdates(){
