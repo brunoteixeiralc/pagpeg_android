@@ -285,7 +285,7 @@ public class ProductListFragment extends Fragment {
 
                     if(selectedProduct.getProduct().isInCart()){
 
-                        builder.setTitle(selectedProduct.getName());
+                        builder.setTitle(selectedProduct.getName() + " " + selectedProduct.getProduct().getUnit_quantity());
                         builder.show();
                         Utils.openKeyboard(ProductListFragment.this.getActivity());
 

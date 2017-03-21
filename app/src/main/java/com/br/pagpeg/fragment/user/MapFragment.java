@@ -38,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.clustering.ClusterManager;
 
 import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -301,7 +302,11 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
                                 storeLocation.setLongitude(store.getLng());
 
                                 Float distanceTo = l.distanceTo(storeLocation) / 1000;
-                                store.setDistance(distanceTo);
+
+                                DecimalFormat df = new DecimalFormat();
+                                df.setMaximumFractionDigits(2);
+
+                                store.setDistance(Float.valueOf(df.format(distanceTo)));
 
                                 store.setNetwork(nt.getKey());
                                 store.setKeyStore(st.getKey());

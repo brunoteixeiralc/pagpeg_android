@@ -1,8 +1,10 @@
 package com.br.pagpeg;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+
 import com.br.pagpeg.activity.shopper.MainShopperActivity;
 import com.br.pagpeg.activity.user.MainUserActivity;
 import com.google.firebase.auth.FirebaseAuth;
@@ -38,6 +40,12 @@ public class PagPegApplication extends Application {
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        //MultiDex.install(this);
     }
 
     private class NotificationOpenedHandler implements OneSignal.NotificationOpenedHandler {

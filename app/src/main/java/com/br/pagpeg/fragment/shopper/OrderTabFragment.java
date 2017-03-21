@@ -189,8 +189,8 @@ public class OrderTabFragment extends Fragment implements TabLayout.OnTabSelecte
         tabLayout = (TabLayout) view.findViewById(R.id.tabLayout);
         int color = getContext().getResources().getColor(R.color.white);
         int colorSelected = getContext().getResources().getColor(R.color.colorPrimaryDark);
-        tabLayout.setTabTextColors(color, colorSelected);
-        tabLayout.setSelectedTabIndicatorColor(colorSelected);
+        tabLayout.setTabTextColors(colorSelected, color);
+        tabLayout.setSelectedTabIndicatorColor(color);
         tabLayout.addTab(tabLayout.newTab().setText("Itens"));
         tabLayout.addTab(tabLayout.newTab().setText("Achados"));
         tabLayout.addTab(tabLayout.newTab().setText("Não achados"));

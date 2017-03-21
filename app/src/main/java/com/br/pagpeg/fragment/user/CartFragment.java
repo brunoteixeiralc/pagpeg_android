@@ -32,6 +32,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,10 +53,11 @@ public class CartFragment  extends Fragment{
     private List<ProductCart> productCarts;
     private Toolbar toolbar;
     private ProductCart productCart;
-    private TextView txtDiscount,ccSelect,txtTotal,txtTax;
+    private TextView txtDiscount,ccSelect,txtTotal,txtTax,txtTaxPercent;
     private Double totalDouble = 0.0;
     private Double totalPriceDouble = 0.0;
     private Double taxDouble = 0.0;
+    private Double taxPercentDouble = 0.0;
     private Double discountDouble = 0.0;
 
     @Nullable
@@ -73,6 +75,7 @@ public class CartFragment  extends Fragment{
         //ccSelect = (TextView) view.findViewById(R.id.cc_select);
         txtTotal = (TextView) view.findViewById(R.id.total);
         txtTax = (TextView) view.findViewById(R.id.tax);
+        txtTaxPercent = (TextView) view.findViewById(R.id.tax_percent);
 
         if(recyclerView == null){
 
@@ -219,8 +222,8 @@ public class CartFragment  extends Fragment{
                     if(productCarts.size() != 0){
 
                         totalDouble += totalPriceDouble;
-                        btnBuy.setText("Comprar agora:  R$ " + String.valueOf(totalDouble));
-                        txtTotal.setText("Total estimado: R$ " + String.valueOf(totalDouble));
+                        btnBuy.setText("Comprar agora:  R$ " + String.valueOf(taxPercentDouble + totalDouble));
+                        txtTotal.setText("Compra estimada: R$ " + String.valueOf(totalDouble));
 
                         int countUnity = 0;
                         for (ProductCart product : productCarts) {
@@ -297,10 +300,16 @@ public class CartFragment  extends Fragment{
         mDatabase.child("tax").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                DecimalFormat df = new DecimalFormat();
+                df.setMaximumFractionDigits(2);
+
                 taxDouble = Double.parseDouble(dataSnapshot.getValue().toString());
-                txtTax.setText("Taxa estimada: R$ " + String.valueOf(taxDouble));
-                totalDouble += taxDouble;
-                btnBuy.setText("Comprar agora: R$ " + String.valueOf(totalDouble));
+                //totalDouble += taxDouble;
+                taxPercentDouble = totalDouble * (taxDouble/100);
+                txtTaxPercent.setText("Valor da taxa: " + String.valueOf(taxDouble) + "%");
+                txtTax.setText("Taxa estimada: R$ " + String.valueOf(df.format(taxPercentDouble)));
+                btnBuy.setText("Comprar agora: R$ " + String.valueOf(df.format(taxPercentDouble  + totalDouble)));
             }
 
             @Override
