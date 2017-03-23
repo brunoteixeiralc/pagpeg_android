@@ -1,16 +1,19 @@
 package com.br.pagpeg.fragment.shopper;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.br.pagpeg.R;
@@ -75,15 +78,48 @@ public class OrderListItemFragment extends Fragment {
             }
 
             @Override
-            public void onClickButton(View view, int idx) {
+            public void onClickButton(View view, final int idx) {
 
                 productCartSelect = productCartsAll.get(idx);
-                productCartSelect.setStatus(EnumStatus.Status.PRODUCT_NOT_FIND.getName());
-                mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("status").setValue(EnumStatus.Status.PRODUCT_NOT_FIND.getName());
-                productCartsAll.remove(idx);
-                updateView();
 
-                Toast.makeText(getActivity(), "Produto não foi achado", Toast.LENGTH_LONG).show();
+                final AlertDialog builder = new AlertDialog.Builder(getActivity(),R.style.Dialog_Quantity)
+                        .setPositiveButton("Sim", null)
+                        .setNegativeButton("Cancelar", null)
+                        .setTitle("PagPeg")
+                        .setMessage("Tem certeza que não contêm " + productCartSelect.getProduct().getName() + " " + productCartSelect.getProduct().getUnit_quantity() + " ?")
+                        .setIcon(R.mipmap.ic_launcher)
+                        .create();
+
+                builder.setOnShowListener(new DialogInterface.OnShowListener() {
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+                        final Button btnAccept = builder.getButton(AlertDialog.BUTTON_POSITIVE);
+                        btnAccept.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                builder.dismiss();
+
+                                productCartSelect.setStatus(EnumStatus.Status.PRODUCT_NOT_FIND.getName());
+                                mDatabase.child("cart_online").child(user).child("products").child(productCartSelect.getProduct().getName()).child("status").setValue(EnumStatus.Status.PRODUCT_NOT_FIND.getName());
+                                productCartsAll.remove(idx);
+                                updateView();
+
+                                Toast.makeText(getActivity(), "Produto não foi achado", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                        final Button btnDecline = builder.getButton(DialogInterface.BUTTON_NEGATIVE);
+                        btnDecline.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                builder.dismiss();
+
+                            }
+                        });
+                    }
+                });
+
+                builder.show();
             }
         };
     }

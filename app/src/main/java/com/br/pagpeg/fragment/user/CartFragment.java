@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.br.pagpeg.R;
@@ -54,6 +55,7 @@ public class CartFragment  extends Fragment{
     private Toolbar toolbar;
     private ProductCart productCart;
     private TextView txtDiscount,ccSelect,txtTotal,txtTax,txtTaxPercent;
+    private LinearLayout llEmptyCart,llNotEmptyCart;
     private Double totalDouble = 0.0;
     private Double totalPriceDouble = 0.0;
     private Double taxDouble = 0.0;
@@ -76,6 +78,11 @@ public class CartFragment  extends Fragment{
         txtTotal = (TextView) view.findViewById(R.id.total);
         txtTax = (TextView) view.findViewById(R.id.tax);
         txtTaxPercent = (TextView) view.findViewById(R.id.tax_percent);
+        llEmptyCart  = (LinearLayout) view.findViewById(R.id.ll_empty_cart);
+        llNotEmptyCart  = (LinearLayout) view.findViewById(R.id.ll_not_empty_cart);
+
+        llEmptyCart.setVisibility(View.VISIBLE);
+        llNotEmptyCart.setVisibility(View.GONE);
 
         if(recyclerView == null){
 
@@ -210,6 +217,9 @@ public class CartFragment  extends Fragment{
 
                 if (dataSnapshot.hasChildren()) {
 
+                    llEmptyCart.setVisibility(View.GONE);
+                    llNotEmptyCart.setVisibility(View.VISIBLE);
+
                     for (DataSnapshot st : dataSnapshot.getChildren()) {
 
                         productCart = st.getValue(ProductCart.class);
@@ -239,6 +249,9 @@ public class CartFragment  extends Fragment{
                     Utils.closeDialog(CartFragment.this.getContext());
 
                 }else{
+
+                    llEmptyCart.setVisibility(View.VISIBLE);
+                    llNotEmptyCart.setVisibility(View.GONE);
 
                     Utils.closeDialog(CartFragment.this.getContext());
                 }

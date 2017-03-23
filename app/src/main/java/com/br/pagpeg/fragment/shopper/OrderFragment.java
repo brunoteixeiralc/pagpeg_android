@@ -55,6 +55,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -267,7 +268,11 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
                     if(l != null){
                         Float distanceTo = l.distanceTo(storeLocation) / 1000;
                         orderStore.setDistance(distanceTo);
-                        storeKm.setText(String.valueOf(orderStore.getDistance()) + " km");
+
+                        DecimalFormat df = new DecimalFormat();
+                        df.setMaximumFractionDigits(2);
+
+                        storeKm.setText(String.valueOf(df.format(orderStore.getDistance())) + " km");
                     }
 
                     mapFragment = (com.google.android.gms.maps.SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.store_map);
@@ -353,7 +358,11 @@ public class OrderFragment extends Fragment implements OnMapReadyCallback,Google
         if(location != null && storeLocation != null){
             Float distanceTo = location.distanceTo(storeLocation) / 1000;
             orderStore.setDistance(distanceTo);
-            storeKm.setText(String.valueOf(orderStore.getDistance()) + " km");
+
+            DecimalFormat df = new DecimalFormat();
+            df.setMaximumFractionDigits(2);
+
+            storeKm.setText(String.valueOf(df.format(orderStore.getDistance())) + " km");
         }
 
     }

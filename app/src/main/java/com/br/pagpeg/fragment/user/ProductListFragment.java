@@ -186,6 +186,9 @@ public class ProductListFragment extends Fragment {
 
                         removeProduct();
 
+                        selectedProduct.getProduct().setInCart(false);
+                        mAdapter.notifyDataSetChanged();
+
                         Snackbar snackbarUndo = Snackbar.make(ProductListFragment.this.getView(), "Produto removido.", Snackbar.LENGTH_SHORT);
                         snackbarUndo.show();
                     }

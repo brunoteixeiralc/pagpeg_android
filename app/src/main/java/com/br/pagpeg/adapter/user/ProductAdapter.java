@@ -59,6 +59,11 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
 
        final Product p = products.get(position);
 
+       if(p.isInCart()){
+           holder.cart.setImageResource(R.drawable.cart_sucess);
+       }else{
+           holder.cart.setImageResource(R.drawable.cart_add);
+       }
        holder.name.setText(p.getName() + " " + p.getUnit_quantity());
        holder.price.setText("R$ " + p.getPrice());
        Glide.with(context).load(p.getImg()).listener(new RequestListener<String, GlideDrawable>() {
