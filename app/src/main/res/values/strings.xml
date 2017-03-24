@@ -83,7 +83,7 @@
     <string name="buy">Comprar agora</string>
     <string name="found">Pronto,achei!</string>
     <string name="login">Login</string>
-    <string name="facebook">Facebook</string>
+    <string name="facebook">Login com facebook</string>
     <string name="do_login">Fazer login ou me cadastrar</string>
     <string name="register">Cadastrar</string>
 
@@ -95,6 +95,9 @@
      <!-- Static -->
      <string name="desc_product_test">teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste teste</string>
     <string name="undo">Desfazer</string>
+
+    <!-- Faceboook -->
+    <string name="facebook_app_id">1826098607653297</string>
 
 </resources>
 

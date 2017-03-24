@@ -11,15 +11,25 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.model.User;
 import com.br.pagpeg.utils.ErrorException;
 import com.br.pagpeg.utils.UserSingleton;
 import com.br.pagpeg.utils.Utils;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +37,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.Arrays;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -36,7 +48,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class LoginActivity extends Activity {
 
-    private Button btnLogin;
+    private Button btnLogin, btnFacebook;
     private TextView txtCreateUser;
     private EditText email,password;
     private FirebaseAuth mAuth;
@@ -44,6 +56,7 @@ public class LoginActivity extends Activity {
     private DatabaseReference mDatabase;
     private String userUID;
     private String status;
+    private CallbackManager callbackManager;
 
     @Override
     public void onStart() {
@@ -66,6 +79,25 @@ public class LoginActivity extends Activity {
         FirebaseAuth.getInstance().signOut();
         setContentView(R.layout.activity_login_user);
         Utils.hideKeyboard(LoginActivity.this);
+
+        //Facebook
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                loginUserFaceBook("facebook", loginResult.getAccessToken());
+            }
+
+            @Override
+            public void onCancel() {
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Toast.makeText(getApplicationContext(), "" + error.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
 
         userUID = getIntent().getStringExtra("user_uid");
         status = getIntent().getStringExtra("status");
@@ -117,6 +149,15 @@ public class LoginActivity extends Activity {
             public void onClick(View v) {
                 Utils.hideKeyboard(LoginActivity.this);
                 loginUser();
+            }
+        });
+
+        btnFacebook = (Button) findViewById(R.id.btnFacebook);
+        btnFacebook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Utils.hideKeyboard(LoginActivity.this);
+                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Arrays.asList("public_profile", "email"));
             }
         });
     }
@@ -181,8 +222,26 @@ public class LoginActivity extends Activity {
                 });
     }
 
+    private void loginUserFaceBook(String provider,AccessToken accessToken){
+        String token=accessToken.getToken();
+        if( token != null ){
+            AuthCredential credential = FacebookAuthProvider.getCredential(token);
+            mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    Log.d("facebook", "signInWithCredential:onComplete:" + task.isSuccessful());
+                    startActivityForResult(new Intent(LoginActivity.this,RegisterActivity.class),1);
+                }
+            });
+
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == 1){
             if(resultCode == RESULT_OK){
