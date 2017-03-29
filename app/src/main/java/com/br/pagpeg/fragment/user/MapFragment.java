@@ -235,7 +235,7 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
         });
 
         gMap.setOnMarkerClickListener(clusterManager);
-        gMap.setOnCameraChangeListener(clusterManager);
+        //gMap.setOnCameraChangeListener(clusterManager);
         gMap.setOnInfoWindowClickListener(clusterManager);
         gMap.setInfoWindowAdapter(clusterManager.getMarkerManager());
 
@@ -306,7 +306,7 @@ public class MapFragment extends Fragment implements com.google.android.gms.maps
                                 DecimalFormat df = new DecimalFormat();
                                 df.setMaximumFractionDigits(2);
 
-                                store.setDistance(Float.valueOf(df.format(distanceTo)));
+                                store.setDistance(Float.valueOf(df.format(distanceTo).replace(",",".")));
 
                                 store.setNetwork(nt.getKey());
                                 store.setKeyStore(st.getKey());

@@ -3,6 +3,7 @@ package com.br.pagpeg;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.support.multidex.MultiDex;
 import android.util.Log;
 
 import com.br.pagpeg.activity.shopper.MainShopperActivity;
@@ -45,7 +46,7 @@ public class PagPegApplication extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        //MultiDex.install(this);
+        MultiDex.install(this);
     }
 
     private class NotificationOpenedHandler implements OneSignal.NotificationOpenedHandler {

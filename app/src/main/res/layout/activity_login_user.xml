@@ -69,6 +69,15 @@
             android:textColor="@color/colorPrimary"
             android:layout_marginTop="10dp"/>
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="OU"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:textSize="16dp"
+            android:padding="10dp"/>
+
         <Button
             android:id="@+id/btnFacebook"
             android:layout_width="match_parent"
