@@ -17,6 +17,7 @@ import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -55,8 +56,11 @@ public class StoreAdapter extends RecyclerView.Adapter<StoreAdapter.StoreViewHol
 
         Store s = stores.get(position);
 
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+
         holder.progressBar.setVisibility(View.VISIBLE);
-        holder.distance.setText(String.valueOf(s.getDistance()) + " km");
+        holder.distance.setText(String.valueOf(df.format(s.getDistance()) + " km"));
         holder.name.setText(s.getName());
         holder.address.setText(s.getAddress());
         Glide.with(context).load(s.getImg()).listener(new RequestListener<String, GlideDrawable>() {

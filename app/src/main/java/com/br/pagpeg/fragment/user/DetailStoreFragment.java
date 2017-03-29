@@ -49,6 +49,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -133,7 +134,11 @@ public class DetailStoreFragment extends Fragment implements OnMapReadyCallback,
 
         name.setText(store.getName());
         address.setText(store.getAddress());
-        distance.setText(String.valueOf(store.getDistance()) + " km");
+
+        DecimalFormat df = new DecimalFormat();
+        df.setMaximumFractionDigits(2);
+
+        distance.setText(String.valueOf(df.format(store.getDistance())) + " km");
 
         if(recyclerView == null){
 
