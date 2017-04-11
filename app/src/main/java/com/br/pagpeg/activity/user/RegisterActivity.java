@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -47,6 +49,7 @@ import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.net.URL;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
@@ -76,12 +79,18 @@ public class RegisterActivity extends Activity {
     private String one_signal_key = "";
     private User user;
     private String actualNumber;
+    private boolean isFacebook = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_user);
         Utils.hideKeyboard(this);
+
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -125,6 +134,25 @@ public class RegisterActivity extends Activity {
         });
 
         RegisterActivityPermissionsDispatcher.getDeviceIdWithCheck(RegisterActivity.this);
+
+        user = (User) getIntent().getSerializableExtra("user_fb");
+        if(user != null){
+            isFacebook = true;
+            name.setText(user.getName());
+            nameLabel.setText(user.getName());
+            email.setText(user.getEmail());
+            try {
+
+                URL url = new URL(user.getUser_img());
+                bitmapUserImage = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                circleImageView.setImageBitmap(bitmapUserImage);
+                circleImageView.setDrawingCacheEnabled(true);
+                circleImageView.buildDrawingCache();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -161,23 +189,32 @@ public class RegisterActivity extends Activity {
 
     private void createUser(){
 
-        mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d("Firebase", "createUserWithEmail:onComplete:" + task.isSuccessful());
-                        if (!task.isSuccessful()) {
-                            Log.e("Firebase", task.getException().getMessage());
-                            Utils.closeDialog(RegisterActivity.this.getApplicationContext());
-                        }else{
-                            if(bitmapUserImage != null)
-                                saveImageStorage();
-                            else{
-                                saveUser();
+        if(isFacebook){
+            if(bitmapUserImage != null)
+                saveImageStorage();
+            else{
+                saveUser();
+            }
+        }else{
+            mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            Log.d("Firebase", "createUserWithEmail:onComplete:" + task.isSuccessful());
+                            if (!task.isSuccessful()) {
+                                Log.e("Firebase", task.getException().getMessage());
+                                Utils.closeDialog(RegisterActivity.this.getApplicationContext());
+                            }else{
+                                if(bitmapUserImage != null)
+                                    saveImageStorage();
+                                else{
+                                    saveUser();
+                                }
                             }
                         }
-                    }
-                });
+                    });
+        }
+
     }
 
     private void saveUser(){

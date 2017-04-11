@@ -49,7 +49,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 public class LoginActivity extends Activity {
 
     private Button btnLogin, btnFacebook;
-    private TextView txtCreateUser;
+    private TextView txtCreateUser,version;
     private EditText email,password;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -225,12 +225,44 @@ public class LoginActivity extends Activity {
     private void loginUserFaceBook(String provider,AccessToken accessToken){
         String token=accessToken.getToken();
         if( token != null ){
+
             AuthCredential credential = FacebookAuthProvider.getCredential(token);
             mAuth.signInWithCredential(credential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
+                public void onComplete(@NonNull final Task<AuthResult> task) {
                     Log.d("facebook", "signInWithCredential:onComplete:" + task.isSuccessful());
-                    startActivityForResult(new Intent(LoginActivity.this,RegisterActivity.class),1);
+
+                    mDatabase = FirebaseDatabase.getInstance().getReference();
+                    mDatabase.child("users/" + task.getResult().getUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            if(dataSnapshot.hasChildren()){
+                                User user = dataSnapshot.getValue(User.class);
+                                Intent returnIntent = new Intent();
+                                returnIntent.putExtra("user",user);
+                                setResult(Activity.RESULT_OK,returnIntent);
+                                finish();
+
+                                UserSingleton userSingleton = UserSingleton.getInstance();
+                                userSingleton.setUser(user);
+
+                            }else{
+                                Intent intent = new Intent(LoginActivity.this,RegisterActivity.class);
+                                User user = new User();
+                                user.setName(task.getResult().getUser().getDisplayName());
+                                user.setEmail(task.getResult().getUser().getEmail());
+                                user.setUser_img(task.getResult().getUser().getPhotoUrl().toString());
+                                intent.putExtra("user_fb", user);
+                                startActivity(intent);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
             });
 

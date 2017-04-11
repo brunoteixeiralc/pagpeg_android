@@ -91,4 +91,5 @@ public class User implements Serializable {
     public void setId_iugu(String id_iugu) {
         this.id_iugu = id_iugu;
     }
+
 }
