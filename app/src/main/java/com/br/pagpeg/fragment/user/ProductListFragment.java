@@ -21,12 +21,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.br.pagpeg.R;
 import com.br.pagpeg.activity.BarCodeActivity;
 import com.br.pagpeg.activity.user.LoginActivity;
 import com.br.pagpeg.activity.user.MainUserActivity;
+import com.br.pagpeg.activity.user.ProductRegisterActivity;
 import com.br.pagpeg.adapter.user.ProductAdapter;
 import com.br.pagpeg.model.Cart;
 import com.br.pagpeg.model.Product;
@@ -66,9 +66,11 @@ public class ProductListFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private Fragment fragment;
     private ImageView mIconBarCode;
+    private ImageView mIconRegisterProduct;
     private Snackbar snackbar;
     private AlertDialog builder = null;
     private AlertDialog builderLogin = null;
+    private AlertDialog builderNotFind = null;
     private StoreCategory category;
     private DatabaseReference mDatabase;
     private List<Product> products = new ArrayList<>();
@@ -166,6 +168,14 @@ public class ProductListFragment extends Fragment {
             }
         });
 
+        mIconRegisterProduct = (ImageView) toolbar.findViewById(R.id.ic_register_product);
+        mIconRegisterProduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(ProductListFragment.this.getActivity(), ProductRegisterActivity.class));
+            }
+        });
+
         if(recyclerView == null){
 
             recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
@@ -249,7 +259,39 @@ public class ProductListFragment extends Fragment {
                 if(result.getContents() != null){
                     getBarCode(result.getContents());
                 } else {
-                    Toast.makeText(getActivity(), "Produto não encontrado", Toast.LENGTH_LONG).show();
+
+                    builderNotFind = new AlertDialog.Builder(getActivity(),R.style.Dialog_Quantity)
+                            .setPositiveButton("Sim", null)
+                            .setNegativeButton("Não", null)
+                            .setTitle("PagPeg")
+                            .setMessage("Produto não encontrado, deseja inserir ?")
+                            .setIcon(R.mipmap.ic_launcher)
+                            .create();
+                    builderNotFind.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface dialog) {
+                            final Button btnAccept = builderLogin.getButton(AlertDialog.BUTTON_POSITIVE);
+                            btnAccept.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    builderNotFind.dismiss();
+                                    startActivityForResult(new Intent(ProductListFragment.this.getActivity(),LoginActivity.class),2);
+                                }
+                            });
+
+                            final Button btnDecline = builderLogin.getButton(DialogInterface.BUTTON_NEGATIVE);
+                            btnDecline.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    builderNotFind.dismiss();
+
+                                }
+                            });
+                        }
+                    });
+                    builderNotFind.show();
+
+                    //Toast.makeText(getActivity(), "Produto não encontrado", Toast.LENGTH_LONG).show();
                 }
             } else {
                 super.onActivityResult(requestCode, resultCode, data);

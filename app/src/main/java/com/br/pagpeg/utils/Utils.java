@@ -23,7 +23,7 @@ public final class Utils {
 
     private static SimpleArcDialog simpleArcDialog;
     private static ArcConfiguration arcConfiguration;
-    private static ImageView mIconList,mIconMap,mIconBarcode,mIconCreditCard,mIconShopperComplete;
+    private static ImageView mIconList,mIconMap,mIconBarcode,mIconCreditCard,mIconShopperComplete,mIconRegisterProduct;
     private static TextView mIconLogout;
 
     public static void hideKeyboard(Activity activity) {
@@ -74,6 +74,7 @@ public final class Utils {
         mIconBarcode = (ImageView) toolbar.findViewById(R.id.ic_bar_code);
         mIconCreditCard = (ImageView) toolbar.findViewById(R.id.ic_add_credit_card);
         mIconShopperComplete = (ImageView) toolbar.findViewById(R.id.ic_order_completed);
+        mIconRegisterProduct = (ImageView) toolbar.findViewById(R.id.ic_register_product);
 
         mIconList.setVisibility(View.GONE);
         mIconMap.setVisibility(View.GONE);
@@ -81,6 +82,7 @@ public final class Utils {
         mIconBarcode.setVisibility(View.GONE);
         mIconCreditCard.setVisibility(View.GONE);
         mIconShopperComplete.setVisibility(View.GONE);
+        mIconRegisterProduct.setVisibility(View.GONE);
 
         switch (enumIconBar){
             case STORELIST:{
@@ -103,6 +105,7 @@ public final class Utils {
             }
             case STOREPRODUCTS:{
                 mIconBarcode.setVisibility(View.VISIBLE);
+                mIconRegisterProduct.setVisibility(View.VISIBLE);
                 break;
             }
             case ADDCREDITCARD:{

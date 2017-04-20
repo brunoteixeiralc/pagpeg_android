@@ -3,6 +3,10 @@ apply plugin: 'android-apt'
 
 android {
 
+    packagingOptions {
+        pickFirst 'META-INF/LICENSE.txt' // picks the JavaMail license file
+    }
+
     lintOptions {
         checkReleaseBuilds false
     }
@@ -122,6 +126,8 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile 'com.sun.mail:android-mail:1.5.5'
+    compile 'com.sun.mail:android-activation:1.5.5'
     compile project(':creditcardguide')
 }
 

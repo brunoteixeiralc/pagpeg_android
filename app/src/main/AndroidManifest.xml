@@ -80,6 +80,10 @@
             android:configChanges="keyboardHidden"
             android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
 
+        <activity android:name=".activity.user.ProductRegisterActivity" android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden"
+            android:windowSoftInputMode="adjustResize|stateAlwaysHidden"/>
+
         <activity android:name="activity.AnyOrientationCaptureActivity"
             android:screenOrientation="fullSensor"
             android:stateNotNeeded="true"
